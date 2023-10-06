@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "berserk-online-server", "berserk-online-server\berserk-online-server.csproj", "{294A3631-52F5-46CC-866B-30D9EA6011D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97E0B5F6-5015-4EEB-862B-F3327023BD10}
+	EndGlobalSection
+EndGlobal
