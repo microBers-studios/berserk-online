@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "berserk-online-server", "berserk-online-server\berserk-online-server.csproj", "{294A3631-52F5-46CC-866B-30D9EA6011D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{E8CB4133-E1D8-49AA-825D-B91783870321}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{294A3631-52F5-46CC-866B-30D9EA6011D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8CB4133-E1D8-49AA-825D-B91783870321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8CB4133-E1D8-49AA-825D-B91783870321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8CB4133-E1D8-49AA-825D-B91783870321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8CB4133-E1D8-49AA-825D-B91783870321}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
