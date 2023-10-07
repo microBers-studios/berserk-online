@@ -36,7 +36,7 @@ namespace berserk_online_server.Facades
         {
             var matchingUser = db.Users.Where(
                 dbUser => dbUser.Email == user.Email
-                ).Select(dbUser => dbUser).First();
+                ).Select(dbUser => dbUser).FirstOrDefault();
             if (matchingUser == null)
                 return ExistanceStatus.NotExists;
             if (matchingUser.Password == user.Password)

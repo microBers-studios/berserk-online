@@ -25,7 +25,7 @@ namespace berserk_online_server.Controllers
             var userStatus = db.IsExists(user);
             if (userStatus == ExistanceStatus.Exists) 
             {
-                await Authenticate(user);
+                await authenticate(user);
                 return Results.Ok();
             }
             return Results.BadRequest(createStringFromStatus(userStatus));
@@ -36,7 +36,7 @@ namespace berserk_online_server.Controllers
         {
             return User.Claims.Select(claim => new { Type = claim.Type, Value = claim.Value }).ToList();
         }
-        private async Task Authenticate(User user)
+        private async Task authenticate(User user)
         {
             var claims = new[] {
                 new Claim(ClaimTypes.Name, user.Name),
@@ -53,7 +53,7 @@ namespace berserk_online_server.Controllers
             if (db.IsUnique(user))
             {
                 db.AddUser(user);
-                await Authenticate(user);
+                await authenticate(user);
                 return Results.Ok();
             }
             else return Results.BadRequest("This user already exist");
@@ -67,7 +67,7 @@ namespace berserk_online_server.Controllers
                 case ExistanceStatus.NotExists:
                     return "User with this email not exists.";
             }
-            throw new InvalidEnumArgumentException(nameof(status) + "not matching with implemented");
+            throw new InvalidEnumArgumentException(nameof(status) + " not matching with implemented");
         }
     }
 }
