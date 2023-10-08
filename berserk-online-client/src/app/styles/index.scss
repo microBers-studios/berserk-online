@@ -2,6 +2,9 @@
 @import 'reset';
 
 @font-face {
-    font-family: "Abril";
-    src: url('../../shared/assets/fonts/AbrilFatface-Regular.ttf')
+    font-family: "Sans";
+    src: url('../../shared/assets/fonts/PT Sans/PTSans-Regular.ttf'),
+        url('../../shared/assets/fonts/PT Sans/PTSans-Bold.ttf'),
+        url('../../shared/assets/fonts/PT Sans/PTSans-Italic.ttf'),
+        url('../../shared/assets/fonts/PT Sans/PTSans-BoldItalic.ttf')
 }

@@ -5,10 +5,13 @@
     position: absolute;
     top: 0;
     right: 0;
+    user-select: none;
 }
 
 .LoginModal {
+    font-family: 'Sans';
     position: absolute;
+    max-height: 565px;
     top: 10%;
     bottom: 10%;
     left: 35%;
@@ -16,13 +19,31 @@
     z-index: 10;
     display: grid;
     grid-template-areas: "header"
+        "header"
         "inputs"
+        "inputs"
+        "remember"
+        "buttons"
         "buttons";
     // flex-direction: column;
     // align-items: center;
     background-color: mintcream;
     border: 1px black;
     border-radius: 50px;
+
+
+}
+
+.opened {
+    animation: open 0.3s;
+}
+
+.closed {
+    animation: close 0.4s;
+}
+
+.animated {
+    animation: tran 1s;
 }
 
 .FormLabel {
@@ -30,8 +51,8 @@
     width: 90%;
     display: flex;
     flex-direction: column;
-    font-family: 'Abril';
     font-weight: bold;
+
     // align-items: center;
     // justify-content: space-between;
 }
@@ -45,18 +66,29 @@
 }
 
 .FormInput {
-    height: 16px;
+    box-sizing: border-box;
+    background-color: rgb(236, 229, 229);
+    height: 30px;
     width: 87%;
+    border-radius: 4px;
+    border: none;
+    font-size: 17px;
+}
+
+.FormInput:focus {
+    outline: none;
+    border-bottom: 2px solid black;
+    transition: border-bottom 0.07s ease-in;
 }
 
 .FormButton {
+    margin-bottom: 10px;
     font-weight: bold;
-    height: 30px;
-    width: 300px;
+    height: 40px;
+    width: 350px;
     background-color: yellow;
     border: none;
     border-radius: 20px;
-    font-family: "Abril";
     cursor: pointer;
 }
 
@@ -82,7 +114,7 @@
 }
 
 .buttonsWrapper {
-    margin-top: 20%;
+    margin-top: 10%;
     grid-area: buttons;
     // justify-self: flex-end;
     display: flex;
@@ -92,4 +124,93 @@
 
 .changeFormButton {
     cursor: pointer;
+}
+
+.passwordEye {
+    margin-left: 10px;
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+}
+
+.passwordInput {
+    // width: 90%;
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+}
+
+.rememberLabel {
+    margin-left: 5%;
+    height: 20px;
+    font-weight: bold;
+    grid-area: remember;
+    display: flex;
+    align-items: center;
+}
+
+.rememberInput {
+    display: none;
+}
+
+.red {
+    color: red;
+    font-weight: normal;
+}
+
+.checkboxImage {
+    width: 25px;
+    margin-right: 5px;
+}
+
+.checkboxAnimated {
+    animation: checkboxTran 1s ease-out;
+}
+
+@keyframes close {
+    from {
+        transform: translateY(0)
+    }
+
+    to {
+        transform: translateY(-100vh)
+    }
+}
+
+@keyframes open {
+    from {
+        transform: translateY(-100vh)
+    }
+
+    to {
+        transform: translateY(0)
+    }
+}
+
+@keyframes tran {
+    0% {
+        transform: translateX(0)
+    }
+
+    49% {
+        transform: translateX(-70vw)
+    }
+
+    50% {
+        transform: translateX(70vw)
+    }
+
+    100% {
+        transform: translateX(0)
+    }
+}
+
+@keyframes checkboxTran {
+    from {
+        transform: rotate(0)
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
