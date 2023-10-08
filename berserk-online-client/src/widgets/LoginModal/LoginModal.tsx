@@ -20,10 +20,15 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const [isRegistration, setIsRegistration] = useState(false)
 
     const [name, setName] = useState<string>('')
+    const [nameError, setNameError] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('')
+    const [emailError, setEmailError] = useState<boolean>(false)
     const [password, setPassword] = useState<string>('')
+    const [passwordError, setPasswordError] = useState<boolean>(false)
 
-    const onRegClick = () => {
+    const [regStatus, setRegStatus] = useState<number>(0)
+
+    const onFormChangeClick = () => {
         setIsAnimation(true)
         setIsRegistration(!isRegistration)
     }
@@ -43,13 +48,40 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
         setTimeout(() => setModal(false), 300)
     }
 
-    const onSubmitClick = async (e: React.MouseEvent<HTMLElement>) => {
+    const onRegClick = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        const code: number = await APIController.registrateUser({ name, email, password })
-        alert(code)
 
-        closeModal()
+        setRegStatus(0)
+        if (!name && isRegistration) {
+            setNameError(true)
+            return
+        } else {
+            setNameError(false)
+        }
+
+        if (!email) {
+            setEmailError(true)
+            return
+        } else {
+            setEmailError(false)
+        }
+
+        if (!password) {
+            setPasswordError(true)
+            return
+        } else {
+            setPasswordError(false)
+        }
+
+        const { code, text } = isRegistration
+            ? await APIController.registrateUser({ name, email, password })
+            : await APIController.loginUser({ email, password })
+
+        setRegStatus(code)
+        if (code === 200) closeModal()
+        else console.log(text)
     }
+
     return (
 
         <div
@@ -81,9 +113,14 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                                 type="name"
                                 name="name"
                                 className={cls.FormInput}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    if (name) setNameError(false)
+                                    setName(e.target.value)
+                                }}
                                 required
                             />
+                            {nameError &&
+                                <span className={cls.redAlert}>*Заполните это поле</span>}
                         </label>
                     }
                     <label className={cls.FormLabel}>
@@ -93,25 +130,37 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                             type="email"
                             name="email"
                             className={cls.FormInput}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                if (email) setEmailError(false)
+                                setEmail(e.target.value)
+                            }}
                             required
                         />
+                        {emailError &&
+                            <span className={cls.redAlert}>*Заполните это поле</span>}
                     </label>
-                    <PasswordInput value={{ password, setPassword }} />
+                    <PasswordInput value={{ password, setPassword }} error={{ passwordError, setPasswordError }} />
+                    {isRegistration && regStatus === 400 &&
+                        <span className={cls.redAlert}>*Пользователь уже существует</span>
+                    }
                 </div>
 
                 {!isRegistration &&
                     <CheckboxInput />
                 }
 
+
                 <div className={cls.buttonsWrapper}>
-                    <button className={cls.FormButton} onClick={onSubmitClick}>
+                    <button
+                        className={cls.FormButton}
+                        onClick={onRegClick}
+                    >
                         {isRegistration
                             ? 'Зарегистрироваться'
                             : 'Войти'}
                     </button>
                     <span
-                        onClick={onRegClick}
+                        onClick={onFormChangeClick}
                         className={cls.changeFormButton}
                     >{isRegistration
                         ? 'Войти'

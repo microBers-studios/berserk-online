@@ -47,6 +47,7 @@
 }
 
 .FormLabel {
+    position: relative;
     color: var(--primary-color);
     width: 90%;
     display: flex;
@@ -66,6 +67,7 @@
 }
 
 .FormInput {
+    position: relative;
     box-sizing: border-box;
     background-color: rgb(236, 229, 229);
     height: 30px;
@@ -104,6 +106,7 @@
 }
 
 .inputsWrapper {
+    position: relative;
     width: 100%;
     padding-left: 10%;
     justify-self: center;
@@ -156,6 +159,14 @@
 .red {
     color: red;
     font-weight: normal;
+}
+
+.redAlert {
+    color: red;
+    position: absolute;
+    bottom: -16px;
+    font-weight: 200;
+    font-size: 14px;
 }
 
 .checkboxImage {

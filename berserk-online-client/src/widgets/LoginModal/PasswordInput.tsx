@@ -8,9 +8,13 @@ interface PasswordInputProps {
         password: string
         setPassword: (str: string) => void
     }
+    error: {
+        passwordError: boolean;
+        setPasswordError: (b: boolean) => void
+    };
 }
 
-export const PasswordInput = ({ value }: PasswordInputProps) => {
+export const PasswordInput = ({ value, error }: PasswordInputProps) => {
     const [isHidden, setIsHidden] = useState<boolean>(true)
     const { password, setPassword } = value
 
@@ -27,7 +31,10 @@ export const PasswordInput = ({ value }: PasswordInputProps) => {
                     type={isHidden ? "password" : "input"}
                     name="password"
                     className={cls.FormInput}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        if (password) error.setPasswordError(false)
+                        setPassword(e.target.value)
+                    }}
                     required
                 />
                 <img
@@ -36,6 +43,8 @@ export const PasswordInput = ({ value }: PasswordInputProps) => {
                     onClick={onEyeClick}
                 />
             </div>
+            {error.passwordError &&
+                <span className={cls.redAlert}>*Заполните это поле</span>}
         </label>
     );
 }
