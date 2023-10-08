@@ -48,12 +48,12 @@ namespace berserk_online_server.Facades
         }
         private bool isMatchingPasswords(User providedUser, User dbUser)
         {
-            switch(hasher.VerifyHashedPassword(dbUser, dbUser.Password, providedUser.Password))
+            switch (hasher.VerifyHashedPassword(dbUser, dbUser.Password, providedUser.Password))
             {
                 case PasswordVerificationResult.Success: return true;
                 case PasswordVerificationResult.Failed: return false;
                 case PasswordVerificationResult.SuccessRehashNeeded:
-                    rehashUserPassword(dbUser);
+                    Task.Run(() => rehashUserPassword(dbUser));
                     return true;
             }
             throw new Exception();
