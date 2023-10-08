@@ -1,10 +1,10 @@
+using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
-using System.ComponentModel;
 using System.Security.Claims;
 
 namespace berserk_online_server.Controllers
@@ -22,30 +22,26 @@ namespace berserk_online_server.Controllers
         [HttpPost("login")]
         public async Task<IResult> Login(User user)
         {
-            var userStatus = db.IsExists(user);
-            if (userStatus == ExistanceStatus.Exists) 
+            // REFACTOR
+            try
             {
-                await authenticate(user);
+                var matchingUser = db.FindMatchingUser(user);
+                await authenticate(matchingUser);
                 return Results.Ok();
             }
-            return Results.BadRequest(createStringFromStatus(userStatus));
-
+            catch (ArgumentException)
+            {
+                return userEmailNotFound(user);
+            }
+            catch (UserPasswordException)
+            {
+                return userPasswordNotMatching(user);
+            }
         }
         [HttpGet("test")]
         public IEnumerable Test()
         {
             return User.Claims.Select(claim => new { Type = claim.Type, Value = claim.Value }).ToList();
-        }
-        private async Task authenticate(User user)
-        {
-            var claims = new[] {
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Email, user.Email),
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, 
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity));
         }
         [HttpPost("register")]
         public async Task<IResult> Register(User user)
@@ -58,16 +54,18 @@ namespace berserk_online_server.Controllers
             }
             else return Results.BadRequest("This user already exist");
         }
-        private string createStringFromStatus(ExistanceStatus status)
+        private async Task authenticate(User user)
         {
-            switch (status)
-            {
-                case ExistanceStatus.InvalidPassword:
-                    return "Password not matching with user password stored in DB.";
-                case ExistanceStatus.NotExists:
-                    return "User with this email not exists.";
-            }
-            throw new InvalidEnumArgumentException(nameof(status) + " not matching with implemented");
+            var claims = new[] {
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
+            var claimsIdentity = new ClaimsIdentity(claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity));
         }
+        private IResult userPasswordNotMatching(User user) => Results.BadRequest($"User with password {user.Password} not Found.");
+        private IResult userEmailNotFound(User user) => Results.BadRequest($"{user.Email} not found");
     }
 }
