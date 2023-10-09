@@ -75,7 +75,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             return
         }
 
-        if (!password || !regulars.PASSWORD_REGULAR.test(password)) {
+        if (!password || !regulars.PASSWORD_REGULAR.test(password) && isRegistration) {
             setPasswordError(password ? regulars.PASSWORD_REGULAR.test(password) ? 0 : 2 : 1)
             return
         }
