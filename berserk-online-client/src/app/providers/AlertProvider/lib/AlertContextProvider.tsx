@@ -1,28 +1,27 @@
 import { useMemo, useState } from "react";
 import { AlertContext } from "..";
+import { IAlert } from "./types/types";
 
 interface AlertContextProviderProps {
     children: React.ReactNode
 }
 
 export const AlertContextProvider = ({ children }: AlertContextProviderProps) => {
-    const [alertsArray, setAlertsArray] = useState<string[]>([])
+    const [alertsArray, setAlertsArray] = useState<IAlert[]>([])
+
     const defaultValue = useMemo(() => {
         return {
             alerts: alertsArray,
 
-            setAlert: (alert: string) => {
-                setAlertsArray(() => [...alertsArray, alert])
+            setAlert: (message: string) => {
+                setAlertsArray(() => [...alertsArray, { id: alertsArray.length, message }])
             },
 
-            deleteAlert: (alert: string) => {
-                const newAlerts = [...alertsArray]
-                newAlerts.splice(newAlerts.indexOf(alert), 1)
-
-                setAlertsArray(() => newAlerts)
+            deleteAlert: (id: number) => {
+                setAlertsArray(() => alertsArray.filter(a => a.id !== id))
             }
         }
-    }, [])
+    }, [alertsArray])
 
     return (
         <AlertContext.Provider value={defaultValue}>

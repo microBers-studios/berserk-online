@@ -1,23 +1,22 @@
-import { useEffect } from "react";
 import cls from "./Alert.module.scss"
-import { AlertContext } from "../../app/providers/AlertProvider";
-import { useRequiredContext } from "../../helpers/hooks/useRequiredContext";
-import { AlertContextProps } from "../../app/providers/AlertProvider/lib/AlertContext";
+import { AlertContext } from "src/app/providers/AlertProvider";
+import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
+import { AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
+import { IAlert } from "src/app/providers/AlertProvider/lib/types/types";
 
 interface AlertProps {
-    message: string
+    alert: IAlert;
 }
 
-export const Alert = ({ message }: AlertProps) => {
+export const Alert = ({ alert }: AlertProps) => {
     const { deleteAlert } = useRequiredContext<AlertContextProps>(AlertContext)
 
-    useEffect(() => {
-        deleteAlert(message)
-    }, [])
-
     return (
-        <div className={cls.Alert} >
-            {message}
+        <div
+            className={cls.Alert}
+            onAnimationEnd={() => deleteAlert(alert.id)}
+        >
+            {alert.message}
         </div >
     );
 }

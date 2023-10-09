@@ -1,9 +1,10 @@
 import { createContext } from "react";
+import { IAlert } from "./types/types";
 
 export interface AlertContextProps {
-    alerts: string[];
-    setAlert: (str: string) => void;
-    deleteAlert: (str: string) => void;
+    alerts: IAlert[];
+    setAlert: (message: string) => void;
+    deleteAlert: (id: number) => void;
 }
 
 export const AlertContext = createContext<AlertContextProps | null>(null)

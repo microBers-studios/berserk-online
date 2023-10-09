@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import cls from "./LoginModal.module.scss"
-import eyeOpened from "../../shared/assets/images/eye-opened.png"
-import eyeClosed from "../../shared/assets/images/eye-closed.svg"
+import cls from "../LoginModal.module.scss"
+import eyeOpened from "../../../shared/assets/images/eye-opened.png"
+import eyeClosed from "../../../shared/assets/images/eye-closed.svg"
 
 interface PasswordInputProps {
     value: {

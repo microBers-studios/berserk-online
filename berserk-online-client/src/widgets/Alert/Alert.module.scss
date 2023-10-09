@@ -4,4 +4,26 @@
     background: white;
     position: fixed;
     top: 50px;
+    right: 0;
+    z-index: 1000;
+    animation: openAlert 5s;
+}
+
+@keyframes openAlert {
+    from {
+        transform: translateX(100vw);
+    }
+
+    50% {
+        transform: translateX(0);
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100vw);
+    }
 }

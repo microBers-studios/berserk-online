@@ -1,4 +1,4 @@
-import cls from "./LoginModal.module.scss"
+import cls from "../LoginModal.module.scss"
 
 interface EmailInputProps {
     email: string;

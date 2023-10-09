@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { PasswordInput } from "./PasswordInput";
+import APIController from 'src/API/Controller';
+import { IAnimator, useAnimate } from 'src/helpers/hooks/useAnimate';
+import { PasswordInput } from "./Inputs/PasswordInput";
+import { CheckboxInput } from './Inputs/CheckboxInput';
+import { LoginInput } from './Inputs/LoginInput';
+import { EmailInput } from './Inputs/EmailInput';
+import { AlertContext } from 'src/app/providers/AlertProvider';
+import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
+import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
+import crossImage from "src/shared/assets/images/cross.png"
 import cls from "./LoginModal.module.scss"
-import crossImage from "../../shared/assets/images/cross.png"
-import { CheckboxInput } from './CheckboxInput';
-import { IAnimator, useAnimate } from '../../helpers/hooks/useAnimate';
-import APIController from '../../API/Controller';
-import { LoginInput } from './LoginInput';
-import { EmailInput } from './EmailInput';
-import { useRequiredContext } from '../../helpers/hooks/useRequiredContext';
-import { AlertContext } from '../../app/providers/AlertProvider';
-import { AlertContextProps } from '../../app/providers/AlertProvider/lib/AlertContext';
 
 interface LoginModalProps {
     setModal: (isModal: boolean) => void;
@@ -77,7 +77,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
 
         if (!password || !regulars.PASSWORD_REGULAR.test(password)) {
             setPasswordError(password ? regulars.PASSWORD_REGULAR.test(password) ? 0 : 2 : 1)
-            // return
+            return
         }
 
         console.log(nameError, emailError, passwordError)
