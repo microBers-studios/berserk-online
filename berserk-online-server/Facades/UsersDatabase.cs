@@ -9,7 +9,6 @@ namespace berserk_online_server.Facades
     public class UsersDatabase
     {
         private readonly Databases db;
-        private readonly IPasswordHasher<User> hasher = new PasswordHasher<User>();
         public UsersDatabase(Databases db)
         {
             this.db = db;
@@ -17,7 +16,7 @@ namespace berserk_online_server.Facades
 
         public void AddUser(User user)
         {
-            user.Password = hasher.HashPassword(user, user.Password);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             db.Users.Add(user);
             db.SaveChanges();
         }
@@ -42,26 +41,13 @@ namespace berserk_online_server.Facades
                 ).Select(dbUser => dbUser).FirstOrDefault();
             if (matchingUser == null)
                 throw new ArgumentException($"User with email: {user.Email} not found!");
-            if (!isMatchingPasswords(user, matchingUser))
+            if (!tryVerifyPassword(user, matchingUser))
                 throw new UserPasswordException($"User with password: {user.Password} not found!");
             return matchingUser;
         }
-        private bool isMatchingPasswords(User providedUser, User dbUser)
+        private bool tryVerifyPassword(User providedUser, User dbUser)
         {
-            switch(hasher.VerifyHashedPassword(dbUser, dbUser.Password, providedUser.Password))
-            {
-                case PasswordVerificationResult.Success: return true;
-                case PasswordVerificationResult.Failed: return false;
-                case PasswordVerificationResult.SuccessRehashNeeded:
-                    rehashUserPassword(dbUser);
-                    return true;
-            }
-            throw new Exception();
-        }
-        private void rehashUserPassword(User user)
-        {
-            user.Password = hasher.HashPassword(user, user.Password);
-            UpdateUser(user);
+            return BCrypt.Net.BCrypt.Verify(providedUser.Password, dbUser.Password);
         }
     }
 }

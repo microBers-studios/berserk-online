@@ -27,7 +27,7 @@ namespace berserk_online_server.Controllers
             {
                 var matchingUser = db.FindMatchingUser(user);
                 await authenticate(matchingUser);
-                return Results.Ok();
+                return Results.Ok(outputUser(matchingUser));
             }
             catch (ArgumentException)
             {
@@ -52,7 +52,7 @@ namespace berserk_online_server.Controllers
                 await authenticate(user);
                 return Results.Ok();
             }
-            else return Results.BadRequest("This user already exist");
+            else return userAlreadyExists(user);
         }
         private async Task authenticate(User user)
         {
@@ -65,7 +65,12 @@ namespace berserk_online_server.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
         }
-        private IResult userPasswordNotMatching(User user) => Results.BadRequest($"User with password {user.Password} not Found.");
-        private IResult userEmailNotFound(User user) => Results.BadRequest($"{user.Email} not found");
+        private IResult userPasswordNotMatching(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
+        private IResult userEmailNotFound(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
+        private IResult userAlreadyExists(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, user));
+        private User outputUser(User user)
+        {
+            return new User() { Email = user.Email, Password = "", Name = user.Name };
+        }
     }
 }
