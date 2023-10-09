@@ -9,7 +9,6 @@ interface LoginInputProps {
 
 export const LoginInput = ({ name, setName, nameError, setNameError }: LoginInputProps) => {
 
-
     return (
         <label className={cls.FormLabel}>
             <span>Введите логин: <span className={cls.red}> *</span></span>
