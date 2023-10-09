@@ -161,12 +161,17 @@
     font-weight: normal;
 }
 
-.redAlert {
+.redAlert,
+.longRedAlert {
     color: red;
     position: absolute;
     bottom: -16px;
     font-weight: 200;
     font-size: 14px;
+}
+
+.longRedAlert {
+    bottom: -35px;
 }
 
 .checkboxImage {

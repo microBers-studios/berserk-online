@@ -22,7 +22,7 @@ export default class APIController {
     static async loginUser(obj: ILogin): Promise<IResponseCode> {
         const path = URL + Paths.LOGIN
 
-        console.log(obj)
+        console.log(path)
         const response: Response = await fetch(path, {
             method: 'POST',
             headers: {
