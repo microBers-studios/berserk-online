@@ -1,13 +1,27 @@
 // import { MainPage } from '../pages/MainPage/MainPage'
-import { Navbar } from '../widgets/Navbar/Navbar'
-import { AppRouter } from './providers/router/AppRouter'
+import { Navbar } from 'src/widgets/Navbar/Navbar'
+import { AlertContext } from 'src/app/providers/AlertProvider'
+import { AppRouter } from 'src/app/providers/router/AppRouter'
 import './styles/index.scss'
+import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext'
+import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext'
+import { useEffect } from 'react'
+import { AlertsContainer } from 'src/widgets/Alert/AlertsContainer'
 
 function App() {
+  const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
+
+  useEffect(() => {
+    console.log(alerts)
+  }, [alerts])
 
   return (
     <>
       <Navbar />
+
+      {Boolean(alerts.length) &&
+        <AlertsContainer alerts={alerts} />
+      }
       <AppRouter />
     </>
   )

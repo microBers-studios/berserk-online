@@ -1,13 +1,23 @@
 import { useState } from 'react';
-import { PasswordInput } from "./PasswordInput";
+import APIController from 'src/API/Controller';
+import { IAnimator, useAnimate } from 'src/helpers/hooks/useAnimate';
+import { PasswordInput } from "./Inputs/PasswordInput";
+import { CheckboxInput } from './Inputs/CheckboxInput';
+import { LoginInput } from './Inputs/LoginInput';
+import { EmailInput } from './Inputs/EmailInput';
+import { AlertContext } from 'src/app/providers/AlertProvider';
+import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
+import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
+import crossImage from "src/shared/assets/images/cross.png"
 import cls from "./LoginModal.module.scss"
-import crossImage from "../../shared/assets/images/cross.png"
-import { CheckboxInput } from './CheckboxInput';
-import { IAnimator, useAnimate } from '../../helpers/hooks/useAnimate';
-import APIController from '../../API/Controller';
 
 interface LoginModalProps {
     setModal: (isModal: boolean) => void;
+}
+
+const regulars = {
+    EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    PASSWORD_REGULAR: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@#$%^&+=]).{8,}$/u
 }
 
 export const LoginModal = ({ setModal }: LoginModalProps) => {
@@ -17,14 +27,16 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
+    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+
     const [isRegistration, setIsRegistration] = useState(false)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
     const [email, setEmail] = useState<string>('')
-    const [emailError, setEmailError] = useState<boolean>(false)
+    const [emailError, setEmailError] = useState<number>(0)
     const [password, setPassword] = useState<string>('')
-    const [passwordError, setPasswordError] = useState<boolean>(false)
+    const [passwordError, setPasswordError] = useState<number>(0)
 
     const [regStatus, setRegStatus] = useState<number>(0)
 
@@ -52,38 +64,39 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
         e.preventDefault()
 
         setRegStatus(0)
+
         if (!name && isRegistration) {
             setNameError(true)
             return
-        } else {
-            setNameError(false)
         }
 
-        if (!email) {
-            setEmailError(true)
+        if (!email || !regulars.EMAIL_REGULAR.test(email)) {
+            setEmailError(email ? regulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
             return
-        } else {
-            setEmailError(false)
         }
 
-        if (!password) {
-            setPasswordError(true)
+        if (!password || !regulars.PASSWORD_REGULAR.test(password) && isRegistration) {
+            setPasswordError(password ? regulars.PASSWORD_REGULAR.test(password) ? 0 : 2 : 1)
             return
-        } else {
-            setPasswordError(false)
         }
+
+        console.log(nameError, emailError, passwordError)
 
         const { code, text } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
             : await APIController.loginUser({ email, password })
 
         setRegStatus(code)
-        if (code === 200) closeModal()
+        if (code === 200) {
+            closeModal()
+            setAlert(isRegistration
+                ? 'Вы зарегистрированы'
+                : 'Вы вошли в аккаунт')
+        }
         else console.log(text)
     }
 
     return (
-
         <div
             className={cls.wrapper}
         >
@@ -106,39 +119,19 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
 
                 <div className={cls.inputsWrapper}>
                     {isRegistration &&
-                        <label className={cls.FormLabel}>
-                            <span>Введите логин: <span className={cls.red}> *</span></span>
-                            <input
-                                value={name}
-                                type="name"
-                                name="name"
-                                className={cls.FormInput}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    if (name) setNameError(false)
-                                    setName(e.target.value)
-                                }}
-                                required
-                            />
-                            {nameError &&
-                                <span className={cls.redAlert}>*Заполните это поле</span>}
-                        </label>
-                    }
-                    <label className={cls.FormLabel}>
-                        <span>Введите адрес электронной почты:<span className={cls.red}> *</span></span>
-                        <input
-                            value={email}
-                            type="email"
-                            name="email"
-                            className={cls.FormInput}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                if (email) setEmailError(false)
-                                setEmail(e.target.value)
-                            }}
-                            required
+                        <LoginInput
+                            name={name}
+                            setName={setName}
+                            setNameError={setNameError}
+                            nameError={nameError}
                         />
-                        {emailError &&
-                            <span className={cls.redAlert}>*Заполните это поле</span>}
-                    </label>
+                    }
+                    <EmailInput
+                        email={email}
+                        setEmail={setEmail}
+                        emailError={emailError}
+                        setEmailError={setEmailError}
+                    />
                     <PasswordInput value={{ password, setPassword }} error={{ passwordError, setPasswordError }} />
                     {isRegistration && regStatus === 400 &&
                         <span className={cls.redAlert}>*Пользователь уже существует</span>
@@ -148,7 +141,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                 {!isRegistration &&
                     <CheckboxInput />
                 }
-
 
                 <div className={cls.buttonsWrapper}>
                     <button

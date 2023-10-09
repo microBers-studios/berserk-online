@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import cls from "./Navbar.module.scss"
 import { useState } from "react";
-import { LoginModal } from "../LoginModal/LoginModal";
+import { Link } from "react-router-dom";
+import { LoginModal } from "src/widgets/LoginModal/LoginModal";
+import cls from "./Navbar.module.scss"
 
 enum Paths {
     MAIN = '/',

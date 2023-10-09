@@ -12,6 +12,7 @@
     font-family: 'Sans';
     position: absolute;
     max-height: 565px;
+    max-width: 500px;
     top: 10%;
     bottom: 10%;
     left: 35%;
@@ -30,8 +31,6 @@
     background-color: mintcream;
     border: 1px black;
     border-radius: 50px;
-
-
 }
 
 .opened {
@@ -43,7 +42,7 @@
 }
 
 .animated {
-    animation: tran 1s;
+    animation: tran 0.7s;
 }
 
 .FormLabel {
@@ -53,9 +52,6 @@
     display: flex;
     flex-direction: column;
     font-weight: bold;
-
-    // align-items: center;
-    // justify-content: space-between;
 }
 
 .crossImage {
@@ -161,12 +157,17 @@
     font-weight: normal;
 }
 
-.redAlert {
+.redAlert,
+.longRedAlert {
     color: red;
     position: absolute;
     bottom: -16px;
     font-weight: 200;
     font-size: 14px;
+}
+
+.longRedAlert {
+    bottom: -35px;
 }
 
 .checkboxImage {
@@ -204,11 +205,11 @@
     }
 
     49% {
-        transform: translateX(-70vw)
+        transform: translateX(-100vw)
     }
 
     50% {
-        transform: translateX(70vw)
+        transform: translateX(100vw)
     }
 
     100% {
@@ -223,5 +224,54 @@
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+@media(max-width: 1300px) {
+    .LoginModal {
+        left: 30%;
+        right: 30%;
+    }
+}
+
+@media(max-width: 978px) {
+    .LoginModal {
+        left: 25%;
+        right: 25%;
+    }
+}
+
+@media(max-width: 768px) {
+    .LoginModal {
+        left: 20%;
+        right: 20%;
+    }
+}
+
+@media(max-width: 600px) {
+    .LoginModal {
+        left: 15%;
+        right: 15%;
+    }
+}
+
+@media(max-width: 500px) {
+    .LoginModal {
+        left: 5%;
+        right: 5%;
+    }
+}
+
+@media(max-width: 400px) {
+    .LoginModal {
+        left: 3%;
+        right: 3%;
+    }
+}
+
+@media(min-width: 1800px) {
+    .LoginModal {
+        left: calc((100% - 500px) / 2);
+        right: calc((100% - 500px) / 2);
     }
 }
