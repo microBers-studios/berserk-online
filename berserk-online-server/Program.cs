@@ -17,6 +17,16 @@ builder.Services.AddDbContext<Databases>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
 builder.Services.AddTransient<UsersDatabase>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration.GetValue<String>("FrontendPath"));
+    });
+});
 
 var app = builder.Build();
 
@@ -28,6 +38,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
