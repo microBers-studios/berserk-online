@@ -96,8 +96,19 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             setAlert(isRegistration
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
+        } else if (code === 400 && !isRegistration) {
+            switch (JSON.parse(text).message.trim()) {
+                case 'User with this password not found':
+                    setPasswordError(3)
+                    break;
+                case 'User with this email not found.':
+                    setEmailError(3)
+                    break;
+            }
         }
-        else console.log(text)
+        else {
+            console.log(text)
+        }
     }
 
     return (

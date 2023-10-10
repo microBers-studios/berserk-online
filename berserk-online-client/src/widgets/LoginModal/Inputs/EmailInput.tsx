@@ -27,6 +27,8 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError }: Email
                 <span className={cls.redAlert}>*Заполните это поле</span>}
             {emailError === 2 &&
                 <span className={cls.redAlert}>*Адрес невалиден</span>}
+            {emailError === 3 &&
+                <span className={cls.redAlert}>Пользователь не найден</span>}
         </label>
     );
 }
