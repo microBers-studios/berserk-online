@@ -8,17 +8,21 @@ interface AlertContextProviderProps {
 
 export const AlertContextProvider = ({ children }: AlertContextProviderProps) => {
     const [alertsArray, setAlertsArray] = useState<IAlert[]>([])
+    const IDsArray: number[] = []
 
     const defaultValue = useMemo(() => {
         return {
             alerts: alertsArray,
 
             setAlert: (message: string) => {
-                setAlertsArray(() => [...alertsArray, { id: alertsArray.length, message }])
+                const id = IDsArray.includes(alertsArray.length) ? Math.max(...IDsArray) : alertsArray.length;
+                setAlertsArray([...alertsArray, { id, message }])
+                IDsArray.push(id)
             },
 
             deleteAlert: (id: number) => {
-                setAlertsArray(() => alertsArray.filter(a => a.id !== id))
+                setAlertsArray(alertsArray.filter(a => a.id !== id))
+                console.log('deleteAlert: ', alertsArray.filter(a => a.id !== id))
             }
         }
     }, [alertsArray])
