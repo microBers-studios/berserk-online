@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Contexts;
+﻿using BCrypt.Net;
+using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Models;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +48,14 @@ namespace berserk_online_server.Facades
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {
-            return BCrypt.Net.BCrypt.Verify(providedUser.Password, dbUser.Password);
+            try
+            {
+                return BCrypt.Net.BCrypt.Verify(providedUser.Password, dbUser.Password);
+            }
+            catch (SaltParseException)
+            {
+                throw new SaltParseException($"provided password: {providedUser.Password}, hash: {dbUser.Password}");
+            }
         }
     }
 }
