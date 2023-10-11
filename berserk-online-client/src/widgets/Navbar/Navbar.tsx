@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LoginModal } from "src/widgets/LoginModal/LoginModal";
 import cls from "./Navbar.module.scss"
+import { Burger } from "./Burger";
 
 enum Paths {
     MAIN = '/',
@@ -12,11 +13,12 @@ enum Paths {
 export const Navbar = () => {
     const [current, setCurrent] = useState<Paths>(Paths.MAIN)
     const [isLogin, setIsLogin] = useState<boolean>(false)
+    const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
 
     const changeCurrent = (event: React.MouseEvent<HTMLElement>) => {
         const target: HTMLElement = event.currentTarget as HTMLElement
         const id = target.id
-        console.log(target)
+        setIsBurgerClicked(false)
 
         if (id !== current) {
             setCurrent(id === Paths.MAIN ? Paths.MAIN : Paths.ROOMS)
@@ -31,22 +33,28 @@ export const Navbar = () => {
     return (
         <>
             <div className={cls.Navbar}>
-                <Link
-                    to={Paths.MAIN}
-                    id={Paths.MAIN}
-                    onClick={changeCurrent}
-                    className={`${cls.NavbarLink}`}
-                >
-                    <span className={`${current === Paths.MAIN ? cls.active : ''}`}>Главная</span>
-                </Link>
-                <Link
-                    to={Paths.ROOMS}
-                    id={Paths.ROOMS}
-                    onClick={changeCurrent}
-                    className={`${cls.NavbarLink}`}
-                >
-                    <span className={`${current === Paths.ROOMS ? cls.active : ''}`}>Комнаты</span>
-                </Link>
+                <Burger
+                    isBurgerClicked={isBurgerClicked}
+                    setIsBurgerClicked={setIsBurgerClicked}
+                />
+                <div className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
+                    <Link
+                        to={Paths.MAIN}
+                        id={Paths.MAIN}
+                        onClick={changeCurrent}
+                        className={`${cls.NavbarLink}`}
+                    >
+                        <span className={`${current === Paths.MAIN ? cls.active : ''}`}>Главная</span>
+                    </Link>
+                    <Link
+                        to={Paths.ROOMS}
+                        id={Paths.ROOMS}
+                        onClick={changeCurrent}
+                        className={`${cls.NavbarLink}`}
+                    >
+                        <span className={`${current === Paths.ROOMS ? cls.active : ''}`}>Комнаты</span>
+                    </Link>
+                </div>
 
                 <span
                     onClick={onLoginClick}
