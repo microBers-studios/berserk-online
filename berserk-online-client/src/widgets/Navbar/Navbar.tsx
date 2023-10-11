@@ -3,26 +3,18 @@ import { Link } from "react-router-dom";
 import { LoginModal } from "src/widgets/LoginModal/LoginModal";
 import cls from "./Navbar.module.scss"
 import { Burger } from "./Burger";
+import { RouterPaths } from "src/app/providers/router/router-paths";
 
-enum Paths {
-    MAIN = '/',
-    ROOMS = '/rooms',
-    LOGIN = '/login'
+interface NavbarProps {
+    currentPage: RouterPaths;
 }
 
-export const Navbar = () => {
-    const [current, setCurrent] = useState<Paths>(Paths.MAIN)
+export const Navbar = ({ currentPage }: NavbarProps) => {
     const [isLogin, setIsLogin] = useState<boolean>(false)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
 
-    const changeCurrent = (event: React.MouseEvent<HTMLElement>) => {
-        const target: HTMLElement = event.currentTarget as HTMLElement
-        const id = target.id
+    const onLinkClick = () => {
         setIsBurgerClicked(false)
-
-        if (id !== current) {
-            setCurrent(id === Paths.MAIN ? Paths.MAIN : Paths.ROOMS)
-        }
     }
 
     const onLoginClick = () => {
@@ -39,20 +31,18 @@ export const Navbar = () => {
                 />
                 <div className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
                     <Link
-                        to={Paths.MAIN}
-                        id={Paths.MAIN}
-                        onClick={changeCurrent}
+                        to={RouterPaths.MAIN}
+                        onClick={onLinkClick}
                         className={`${cls.NavbarLink}`}
                     >
-                        <span className={`${current === Paths.MAIN ? cls.active : ''}`}>Главная</span>
+                        <span className={`${currentPage === RouterPaths.MAIN ? cls.active : ''}`}>Главная</span>
                     </Link>
                     <Link
-                        to={Paths.ROOMS}
-                        id={Paths.ROOMS}
-                        onClick={changeCurrent}
+                        to={RouterPaths.ROOMS}
+                        onClick={onLinkClick}
                         className={`${cls.NavbarLink}`}
                     >
-                        <span className={`${current === Paths.ROOMS ? cls.active : ''}`}>Комнаты</span>
+                        <span className={`${currentPage === RouterPaths.ROOMS ? cls.active : ''}`}>Комнаты</span>
                     </Link>
                 </div>
 
