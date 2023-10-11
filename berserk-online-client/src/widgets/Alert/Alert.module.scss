@@ -19,16 +19,23 @@
     font-family: Sans;
     animation: openAlert 4s;
     animation-fill-mode: forwards;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .CrossImage {
-    width: 10px;
+    width: 20px;
     height: auto;
+    fill: var(--secondary-color);
+    cursor: pointer;
 }
 
-.CrossImage * {
-    fill: var(--secondary-color);
-}
+// .CrossImage path {
+// fill: var(--secondary-color);
+// }
+
+
 
 @keyframes openAlert {
     from {

@@ -3,8 +3,8 @@ import { AlertContext } from "src/app/providers/AlertProvider/index";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import { AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
 import { IAlert } from "src/app/providers/AlertProvider/lib/types/types";
-import CrossImage from "src/shared/assets/images/cross.svg";
-
+// import { CrossSvg } from "../CrossSvg/CrossSvg";
+import { CrossSvg } from "../CrossSvg/CrossSvg";
 interface AlertProps {
     alert: IAlert;
 }
@@ -18,10 +18,11 @@ export const Alert = ({ alert }: AlertProps) => {
             onAnimationEnd={() => deleteAlert(alert.id)}
         >
             {alert.message}
-            <img
-                src={CrossImage}
+            <CrossSvg
                 className={cls.CrossImage}
+                fill={'var(--secondary-color)'}
+                onClick={() => deleteAlert(alert.id)}
             />
-        </div >
+        </div>
     )
 }
