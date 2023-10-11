@@ -1,13 +1,41 @@
-.Alert {
-    width: 100px;
-    height: 75px;
-    background: white;
+.AlertsContainer {
+    width: 10vw;
     position: fixed;
     top: 50px;
     right: 0;
     z-index: 1000;
-    animation: openAlert 5s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
 }
+
+.Alert {
+    padding: 10px;
+    background: var(--primary-color);
+    border-radius: 7px;
+    border: 1px solid var(--secondary-color);
+    color: white;
+    font-family: Sans;
+    animation: openAlert 4s;
+    animation-fill-mode: forwards;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.CrossImage {
+    width: 20px;
+    height: auto;
+    fill: var(--secondary-color);
+    cursor: pointer;
+}
+
+// .CrossImage path {
+// fill: var(--secondary-color);
+// }
+
+
 
 @keyframes openAlert {
     from {
@@ -24,6 +52,5 @@
 
     to {
         opacity: 0;
-        transform: translateX(100vw);
     }
 }

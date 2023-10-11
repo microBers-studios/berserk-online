@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import APIController from 'src/API/Controller';
 import { IAnimator, useAnimate } from 'src/helpers/hooks/useAnimate';
 import { PasswordInput } from "./Inputs/PasswordInput";
@@ -8,7 +8,7 @@ import { EmailInput } from './Inputs/EmailInput';
 import { AlertContext } from 'src/app/providers/AlertProvider';
 import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
-import crossImage from "src/shared/assets/images/cross.png"
+import crossImage from "src/shared/assets/images/cross.svg"
 import cls from "./LoginModal.module.scss"
 
 interface LoginModalProps {
@@ -39,6 +39,10 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const [passwordError, setPasswordError] = useState<number>(0)
 
     const [regStatus, setRegStatus] = useState<number>(0)
+
+    useEffect(() => {
+        setAlert(email)
+    }, [email])
 
     const onFormChangeClick = () => {
         setIsAnimation(true)
@@ -80,8 +84,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             return
         }
 
-        console.log(nameError, emailError, passwordError)
-
         const { code, text } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
             : await APIController.loginUser({ email, password })
@@ -92,8 +94,19 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             setAlert(isRegistration
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
+        } else if (code === 400 && !isRegistration) {
+            switch (Number(JSON.parse(text).id)) {
+                case 2:
+                    setPasswordError(3)
+                    break;
+                case 1:
+                    setEmailError(3)
+                    break;
+            }
         }
-        else console.log(text)
+        else {
+            console.log(text)
+        }
     }
 
     return (

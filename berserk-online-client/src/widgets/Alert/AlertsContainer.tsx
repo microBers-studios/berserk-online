@@ -9,7 +9,11 @@ interface AlertsContainerProps {
 export const AlertsContainer = ({ alerts }: AlertsContainerProps) => {
     return (
         <div className={cls.AlertsContainer} >
-            {alerts.map(alert => <Alert key={alert.id} alert={alert} />)}
+            {alerts.map(alert =>
+                <Alert
+                    key={`${alert.message}${alert.id}`}
+                    alert={alert}
+                />)}
         </div >
     );
 }

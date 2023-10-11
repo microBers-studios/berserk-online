@@ -47,6 +47,8 @@ export const PasswordInput = ({ value, error }: PasswordInputProps) => {
                 <span className={cls.redAlert}>*Заполните это поле</span>}
             {error.passwordError === 2 &&
                 <span className={cls.longRedAlert}>*Пароль не должен быть короче 8 символов и должен содержать буквы, цифры и символы</span>}
+            {error.passwordError === 3 &&
+                <span className={cls.redAlert}>Пароль неверный.</span>}
         </label>
     );
 }
