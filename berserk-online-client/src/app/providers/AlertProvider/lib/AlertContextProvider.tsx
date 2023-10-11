@@ -22,7 +22,6 @@ export const AlertContextProvider = ({ children }: AlertContextProviderProps) =>
 
             deleteAlert: (id: number) => {
                 setAlertsArray(alertsArray.filter(a => a.id !== id))
-                console.log('deleteAlert: ', alertsArray.filter(a => a.id !== id))
             }
         }
     }, [alertsArray])

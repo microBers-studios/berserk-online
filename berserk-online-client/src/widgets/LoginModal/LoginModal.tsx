@@ -84,8 +84,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             return
         }
 
-        console.log(nameError, emailError, passwordError)
-
         const { code, text } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
             : await APIController.loginUser({ email, password })
@@ -97,11 +95,11 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
         } else if (code === 400 && !isRegistration) {
-            switch (JSON.parse(text).message.trim()) {
-                case 'User with this password not found':
+            switch (Number(JSON.parse(text).id)) {
+                case 2:
                     setPasswordError(3)
                     break;
-                case 'User with this email not found.':
+                case 1:
                     setEmailError(3)
                     break;
             }
