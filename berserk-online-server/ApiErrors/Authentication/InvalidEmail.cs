@@ -1,7 +1,7 @@
 ﻿using berserk_online_server.Facades;
 using berserk_online_server.Interfaces;
 
-namespace berserk_online_server.ApiErrors
+namespace berserk_online_server.ApiErrors.Authentication
 {
     public class InvalidEmail : ApiError
     {
