@@ -9,10 +9,12 @@ namespace berserk_online_server.Facades
     public class UsersDatabase
     {
         private readonly Databases _db;
-        public UsersDatabase(Databases db)
+        public UsersDatabase(Databases db, StaticContentService staticContent)
         {
             this._db = db;
+            _avatarUrlBase = staticContent.AvatarsUrl;
         }
+        private readonly string _avatarUrlBase;
 
         public void AddUser(User user)
         {
@@ -39,6 +41,7 @@ namespace berserk_online_server.Facades
             var foundedUser = findUserFromRequest(userRequest);
             if (foundedUser != null)
             {
+                processUserAvatar(foundedUser);
                 return new UserInfo(foundedUser);
             }
             else
@@ -55,13 +58,14 @@ namespace berserk_online_server.Facades
                 throw new ArgumentException($"User with email: {user.Email} not found!");
             if (!tryVerifyPassword(user, matchingUser))
                 throw new UserPasswordException($"User with password: {user.Password} not found!");
+            processUserAvatar(matchingUser);
             return new UserInfo(matchingUser);
         }
-        public void addAvatar(string email, string avatarPath)
+        public void AddAvatarPath(string avatarName, string email)
         {
             var user = _db.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) throw new NotFoundException("user with this email not found.");
-            user.AvatarUrl = avatarPath;
+            user.AvatarUrl = avatarName;
             _db.Users.Update(user);
             _db.SaveChanges();
         }
@@ -81,6 +85,11 @@ namespace berserk_online_server.Facades
             return _db.Users.FirstOrDefault(u => (request.Name == null || request.Name == u.Name)
                 && (request.Email == null || request.Email == u.Email)
                 && (request.Id == null || request.Id == u.Id));
+        }
+        private void processUserAvatar(User user)
+        {
+            if (user.AvatarUrl != null)
+                user.AvatarUrl = _avatarUrlBase + user.AvatarUrl;
         }
     }
 }

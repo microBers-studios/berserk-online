@@ -2,6 +2,13 @@ using berserk_online_server.Contexts;
 using berserk_online_server.Facades;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+
+var staticContentPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(staticContentPath))
+{
+    Directory.CreateDirectory(staticContentPath);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,6 +24,7 @@ builder.Services.AddDbContext<Databases>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
 builder.Services.AddTransient<UsersDatabase>();
+builder.Services.AddTransient<StaticContentService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -37,6 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors();
 

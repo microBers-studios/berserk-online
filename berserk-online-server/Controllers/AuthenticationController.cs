@@ -27,7 +27,7 @@ namespace berserk_online_server.Controllers
             {
                 UserInfo matchingUser = db.VerifyUser(authRequest);
                 await authenticate(matchingUser, authRequest.RememberMe);
-                return Results.Ok(new UserInfo(authRequest));
+                return Results.Ok(matchingUser);
             }
             catch (ArgumentException)
             {

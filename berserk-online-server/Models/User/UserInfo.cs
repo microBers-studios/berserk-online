@@ -7,6 +7,7 @@
             Name = user.Name;
             Email = user.Email;
             Id = user.Id != 0 ? user.Id : null;
+            AvatarUrl = user.AvatarUrl;
         }
         public UserInfo()
         {
