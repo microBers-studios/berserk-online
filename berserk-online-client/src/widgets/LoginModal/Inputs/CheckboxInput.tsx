@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import cls from "./LoginModal.module.scss"
-import checked from "../../shared/assets/images/checked.svg"
-import unchecked from "../../shared/assets/images/unchecked.svg"
+import cls from "../LoginModal.module.scss"
+import checked from "../../../shared/assets/images/checked.svg"
+import unchecked from "../../../shared/assets/images/unchecked.svg"
 
 export const CheckboxInput = () => {
     const [isChecked, setIsChecked] = useState<boolean>(false)
