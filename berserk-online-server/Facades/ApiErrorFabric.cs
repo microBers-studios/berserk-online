@@ -1,4 +1,5 @@
 ﻿using berserk_online_server.ApiErrors;
+using berserk_online_server.ApiErrors.Authentication;
 using berserk_online_server.Interfaces;
 
 namespace berserk_online_server.Facades
@@ -8,6 +9,7 @@ namespace berserk_online_server.Facades
         InvalidEmail = 1,
         InvalidPassword,
         UserAlreadyExists,
+        NotFound,
     }
     public static class ApiErrorFabric
     {
@@ -21,6 +23,8 @@ namespace berserk_online_server.Facades
                     return new InvalidPassword(ctx);
                 case ApiErrorType.UserAlreadyExists: 
                     return new UserAlreadyExists(ctx);
+                case ApiErrorType.NotFound:
+                    return new NotFound(ctx);
             }
             throw new NotImplementedException();
         }
