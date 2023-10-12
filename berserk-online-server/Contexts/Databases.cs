@@ -1,4 +1,4 @@
-﻿using berserk_online_server.Models;
+﻿using berserk_online_server.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace berserk_online_server.Contexts
