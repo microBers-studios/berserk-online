@@ -94,6 +94,8 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             setAlert(isRegistration
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
+
+            APIController.getMe()
         } else if (code === 400 && !isRegistration) {
             switch (Number(JSON.parse(text).id)) {
                 case 2:

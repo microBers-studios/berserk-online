@@ -15,6 +15,7 @@ export default class APIController {
         })
 
         const text = await response.text()
+        console.log(response.headers.get('Set-Cookie'))
 
         return { code: response.status, text }
     }
@@ -24,17 +25,35 @@ export default class APIController {
 
         const response: Response = await fetch(path, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify(obj)
         })
 
         const text = await response.text()
+        const cookie = response.headers.getSetCookie()
+
+        console.log(cookie)
 
         return { code: response.status, text }
     }
 
+    static async getMe(): Promise<any> {
+        const path = URL + Paths.GET_ME
+
+        const response: Response = await fetch(path, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        })
+
+        const obj = await response.json()
+
+        console.log(obj)
+    }
 
 }
