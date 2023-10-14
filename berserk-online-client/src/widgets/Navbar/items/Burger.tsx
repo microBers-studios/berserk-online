@@ -1,4 +1,4 @@
-import cls from "./Navbar.module.scss"
+import cls from "../Navbar.module.scss"
 
 interface BurgerProps {
     isBurgerClicked: boolean;

@@ -1,3 +1,4 @@
+import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { IRegistration, ILogin, IResponseCode } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 
@@ -25,12 +26,12 @@ export default class APIController {
 
         const response: Response = await fetch(path, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify(obj),
-            credentials: "include"
         })
 
         const text = await response.text()
@@ -38,5 +39,20 @@ export default class APIController {
         return { code: response.status, text }
     }
 
+    static async getMe(): Promise<IUser> {
+        const path = URL + Paths.GET_ME
+
+        const response: Response = await fetch(path, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            credentials: 'include'
+        })
+
+        const obj = await response.json()
+
+        return obj
+    }
 
 }

@@ -10,6 +10,8 @@ import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertCont
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import crossImage from "src/shared/assets/images/cross.svg"
 import cls from "./LoginModal.module.scss"
+import { UserContext } from 'src/app/providers/UserProvider';
+import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
 
 interface LoginModalProps {
     setModal: (isModal: boolean) => void;
@@ -28,6 +30,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     }: IAnimator = useAnimate()
 
     const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState(false)
 
@@ -37,6 +40,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const [emailError, setEmailError] = useState<number>(0)
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
+    const [isChecked, setIsChecked] = useState<boolean>(false)
 
     const [regStatus, setRegStatus] = useState<number>(0)
 
@@ -86,7 +90,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
 
         const { code, text } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
-            : await APIController.loginUser({ email, password })
+            : await APIController.loginUser({ email, password, rememberMe: isChecked })
 
         setRegStatus(code)
         if (code === 200) {
@@ -94,6 +98,9 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
             setAlert(isRegistration
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
+
+            const user = await APIController.getMe()
+            setUser(user)
         } else if (code === 400 && !isRegistration) {
             switch (Number(JSON.parse(text).id)) {
                 case 2:
@@ -152,7 +159,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                 </div>
 
                 {!isRegistration &&
-                    <CheckboxInput />
+                    <CheckboxInput isChecked={isChecked} setIsChecked={setIsChecked} />
                 }
 
                 <div className={cls.buttonsWrapper}>

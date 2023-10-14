@@ -6,7 +6,6 @@
 appsettings.json
 appsettings.Development.json
 wwwroot/
-urls.ts
 
 # User-specific files
 *.rsuser
