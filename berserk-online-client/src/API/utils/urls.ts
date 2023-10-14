@@ -1,4 +1,4 @@
-export const URL = 'http://localhost:5200'
+export const URL = 'https://localhost:7283'
 
 export enum Paths {
     REGISTRATION = '/Authentication/register',

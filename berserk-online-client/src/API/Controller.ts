@@ -32,7 +32,6 @@ export default class APIController {
                 'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify(obj),
-            credentials: "include"
         })
 
         const text = await response.text()
