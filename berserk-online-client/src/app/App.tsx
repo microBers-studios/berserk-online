@@ -8,14 +8,17 @@ import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext'
 import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext'
 import { AlertsContainer } from 'src/widgets/Alert/AlertsContainer'
 import { RouterPaths } from './providers/router/router-paths'
+import { UserContextProps } from './providers/UserProvider/lib/types/types'
+import { UserContext } from './providers/UserProvider'
 
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
+  const { user } = useRequiredContext<UserContextProps>(UserContext)
   const [currentPage, setCurrentPage] = useState<RouterPaths>(RouterPaths.MAIN)
 
   return (
     <>
-      <Navbar currentPage={currentPage} />
+      <Navbar currentPage={currentPage} user={user} />
 
       {Boolean(alerts.length) &&
         <AlertsContainer alerts={alerts} />

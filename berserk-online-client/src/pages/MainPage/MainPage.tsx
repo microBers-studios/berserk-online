@@ -14,7 +14,7 @@ export const MainPage = ({ setPage }: MainPageProps) => {
 
     return (
         <div className={cls.MainPage}>
-            MAIN
+            ГЛАВНАЯ
         </div>
     );
 }

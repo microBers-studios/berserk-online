@@ -10,6 +10,8 @@ import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertCont
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import crossImage from "src/shared/assets/images/cross.svg"
 import cls from "./LoginModal.module.scss"
+import { UserContext } from 'src/app/providers/UserProvider';
+import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
 
 interface LoginModalProps {
     setModal: (isModal: boolean) => void;
@@ -28,6 +30,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     }: IAnimator = useAnimate()
 
     const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState(false)
 
@@ -95,7 +98,8 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
 
-            APIController.getMe()
+            const user = await APIController.getMe()
+            setUser(user)
         } else if (code === 400 && !isRegistration) {
             switch (Number(JSON.parse(text).id)) {
                 case 2:

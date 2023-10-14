@@ -14,7 +14,7 @@ export const RoomsPage = ({ setPage }: RoomsPageProps) => {
 
     return (
         <div className={cls.RoomsPage} >
-            ROOMS
+            КОМНАТЫ
         </div>
     );
 }
