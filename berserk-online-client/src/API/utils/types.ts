@@ -11,5 +11,6 @@ export interface IResponseCode {
 
 export interface ILogin {
     email: string;
-    password: string
+    password: string;
+    rememberMe: boolean;
 }

@@ -40,6 +40,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const [emailError, setEmailError] = useState<number>(0)
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
+    const [isChecked, setIsChecked] = useState<boolean>(false)
 
     const [regStatus, setRegStatus] = useState<number>(0)
 
@@ -89,7 +90,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
 
         const { code, text } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
-            : await APIController.loginUser({ email, password })
+            : await APIController.loginUser({ email, password, rememberMe: isChecked })
 
         setRegStatus(code)
         if (code === 200) {
@@ -158,7 +159,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                 </div>
 
                 {!isRegistration &&
-                    <CheckboxInput />
+                    <CheckboxInput isChecked={isChecked} setIsChecked={setIsChecked} />
                 }
 
                 <div className={cls.buttonsWrapper}>

@@ -3,8 +3,12 @@ import cls from "../LoginModal.module.scss"
 import checked from "../../../shared/assets/images/checked.svg"
 import unchecked from "../../../shared/assets/images/unchecked.svg"
 
-export const CheckboxInput = () => {
-    const [isChecked, setIsChecked] = useState<boolean>(false)
+interface CheckboxInputProps {
+    isChecked: boolean;
+    setIsChecked: (b: boolean) => void
+}
+
+export const CheckboxInput = ({ isChecked, setIsChecked }: CheckboxInputProps) => {
     const [isAnimated, setIsAnimated] = useState<boolean>(false)
 
 
