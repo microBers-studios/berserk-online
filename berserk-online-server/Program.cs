@@ -20,7 +20,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
-        options.Cookie.HttpOnly = false;
+        //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        //options.Cookie.SameSite = SameSiteMode.None;
     });
 builder.Services.AddDbContext<Databases>(options =>
 {
@@ -35,7 +36,8 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins(builder.Configuration.GetValue<String>("FrontendPath"));
+            .WithOrigins(builder.Configuration.GetValue<String>("FrontendPath"))
+            .WithExposedHeaders("Set-Cookie");
     });
 });
 

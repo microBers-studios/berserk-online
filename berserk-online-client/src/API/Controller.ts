@@ -11,6 +11,7 @@ export default class APIController {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
+            credentials: "include",
             body: JSON.stringify(obj)
         })
 
@@ -30,7 +31,8 @@ export default class APIController {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(obj),
+            credentials: "include"
         })
 
         const text = await response.text()
