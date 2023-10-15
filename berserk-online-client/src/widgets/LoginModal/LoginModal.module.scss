@@ -1,23 +1,9 @@
-.wrapper {
-    background-color: rgb(0, 0, 0, 0.5);
-    width: 100vw;
-    height: 100vh;
+.Form {
     position: absolute;
-    top: 0;
-    right: 0;
-    user-select: none;
-}
-
-.LoginModal {
-    font-family: 'Sans';
-    position: absolute;
-    max-height: 565px;
-    max-width: 500px;
     top: 10%;
-    bottom: 10%;
-    left: 35%;
-    right: 35%;
-    z-index: 10;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: grid;
     grid-template-areas: "header"
         "header"
@@ -26,23 +12,6 @@
         "remember"
         "buttons"
         "buttons";
-    // flex-direction: column;
-    // align-items: center;
-    background-color: mintcream;
-    border: 1px black;
-    border-radius: 50px;
-}
-
-.opened {
-    animation: open 0.3s;
-}
-
-.closed {
-    animation: close 0.4s;
-}
-
-.animated {
-    animation: tran 0.7s;
 }
 
 .FormLabel {
@@ -52,14 +21,6 @@
     display: flex;
     flex-direction: column;
     font-weight: bold;
-}
-
-.crossImage {
-    width: 30px;
-    height: auto;
-    align-self: flex-end;
-    margin: 20px 30px 0 0;
-    cursor: pointer;
 }
 
 .FormInput {
@@ -179,44 +140,6 @@
     animation: checkboxTran 1s ease-out;
 }
 
-@keyframes close {
-    from {
-        transform: translateY(0)
-    }
-
-    to {
-        transform: translateY(-100vh)
-    }
-}
-
-@keyframes open {
-    from {
-        transform: translateY(-100vh)
-    }
-
-    to {
-        transform: translateY(0)
-    }
-}
-
-@keyframes tran {
-    0% {
-        transform: translateX(0)
-    }
-
-    49% {
-        transform: translateX(-100vw)
-    }
-
-    50% {
-        transform: translateX(100vw)
-    }
-
-    100% {
-        transform: translateX(0)
-    }
-}
-
 @keyframes checkboxTran {
     from {
         transform: rotate(0)
@@ -224,54 +147,5 @@
 
     to {
         transform: rotate(360deg);
-    }
-}
-
-@media(max-width: 1300px) {
-    .LoginModal {
-        left: 30%;
-        right: 30%;
-    }
-}
-
-@media(max-width: 978px) {
-    .LoginModal {
-        left: 25%;
-        right: 25%;
-    }
-}
-
-@media(max-width: 768px) {
-    .LoginModal {
-        left: 20%;
-        right: 20%;
-    }
-}
-
-@media(max-width: 600px) {
-    .LoginModal {
-        left: 15%;
-        right: 15%;
-    }
-}
-
-@media(max-width: 500px) {
-    .LoginModal {
-        left: 5%;
-        right: 5%;
-    }
-}
-
-@media(max-width: 400px) {
-    .LoginModal {
-        left: 3%;
-        right: 3%;
-    }
-}
-
-@media(min-width: 1800px) {
-    .LoginModal {
-        left: calc((100% - 500px) / 2);
-        right: calc((100% - 500px) / 2);
     }
 }

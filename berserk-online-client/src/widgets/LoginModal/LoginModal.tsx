@@ -8,10 +8,10 @@ import { EmailInput } from './Inputs/EmailInput';
 import { AlertContext } from 'src/app/providers/AlertProvider';
 import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
-import crossImage from "src/shared/assets/images/cross.svg"
 import cls from "./LoginModal.module.scss"
 import { UserContext } from 'src/app/providers/UserProvider';
 import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
+import { Modal } from '../Modal/Modal';
 
 interface LoginModalProps {
     setModal: (isModal: boolean) => void;
@@ -51,16 +51,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const onFormChangeClick = () => {
         setIsAnimation(true)
         setIsRegistration(!isRegistration)
-    }
-
-    const endAnimation = () => {
-        if (isOpenAnimation) {
-            setIsOpenAnimation(false)
-        }
-
-        if (isAnimation) {
-            setIsAnimation(false)
-        }
     }
 
     const closeModal = () => {
@@ -117,19 +107,19 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     }
 
     return (
-        <div
-            className={cls.wrapper}
+        <Modal
+            isAnimation={isAnimation}
+            isCloseAnimation={isCloseAnimation}
+            isOpenAnimation={isOpenAnimation}
+            setIsAnimation={setIsAnimation}
+            setIsCloseAnimation={setIsCloseAnimation}
+            setIsOpenAnimation={setIsOpenAnimation}
+            closeModal={closeModal}
         >
             <form
-                className={`${cls.LoginModal} ${isOpenAnimation && cls.opened} ${isAnimation && cls.animated} ${isCloseAnimation && cls.closed}`}
-                onAnimationEnd={endAnimation}
+                className={cls.Form}
             >
                 <div className={cls.FormHeader}>
-                    <img
-                        src={crossImage}
-                        className={cls.crossImage}
-                        onClick={closeModal}
-                    />
                     <h1 className={cls.header}>
                         {isRegistration
                             ? 'Регистрация'
@@ -180,6 +170,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
                     </span>
                 </div>
             </form>
-        </div >
+        </Modal>
     );
 }
