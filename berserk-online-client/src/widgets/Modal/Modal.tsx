@@ -5,11 +5,11 @@ import crossImage from "src/shared/assets/images/cross.svg"
 interface ModalProps {
     children: ReactNode;
     isOpenAnimation: boolean;
-    isAnimation: boolean;
+    isAnimation?: boolean;
     isCloseAnimation: boolean;
     setIsOpenAnimation: (b: boolean) => void;
     setIsCloseAnimation: (b: boolean) => void;
-    setIsAnimation: (b: boolean) => void;
+    setIsAnimation?: (b: boolean) => void;
     closeModal: () => void;
 }
 
@@ -19,7 +19,7 @@ export const Modal = (props: ModalProps) => {
             props.setIsOpenAnimation(false)
         }
 
-        if (props.isAnimation) {
+        if (props.isAnimation && props.setIsAnimation) {
             props.setIsAnimation(false)
         }
     }
