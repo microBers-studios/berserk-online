@@ -6,12 +6,14 @@ import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import { UserContext } from 'src/app/providers/UserProvider';
+import { Modals } from '../Navbar';
 
 interface UserButtonProps {
-    user: IUser
+    user: IUser;
+    setModal: (modal: false | Modals) => void
 }
 
-export const UserButton = ({ user }: UserButtonProps) => {
+export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
@@ -22,6 +24,11 @@ export const UserButton = ({ user }: UserButtonProps) => {
         avatarUrl: ''
     })
 
+    const onAccountEditClick = () => {
+        setModal(Modals.EDIT)
+        document.body.style.overflow = 'hidden';
+    }
+
     const onMouseEnter = () => {
         setIsMenuShowed(true)
     }
@@ -29,6 +36,7 @@ export const UserButton = ({ user }: UserButtonProps) => {
     const onMouseLeave = () => {
         setIsMenuShowed(false)
     }
+
 
     return (
         <div
@@ -52,6 +60,7 @@ export const UserButton = ({ user }: UserButtonProps) => {
             >
                 <span
                     className={cls.dropdownAccount}
+                    onClick={onAccountEditClick}
                 >
                     <div
                         className={cls.userChangeIconContainer}

@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import APIController from 'src/API/Controller';
 import { IAnimator, useAnimate } from 'src/helpers/hooks/useAnimate';
-import { PasswordInput } from "./Inputs/PasswordInput";
-import { CheckboxInput } from './Inputs/CheckboxInput';
-import { LoginInput } from './Inputs/LoginInput';
-import { EmailInput } from './Inputs/EmailInput';
+import { PasswordInput } from "../Inputs/PasswordInput";
+import { CheckboxInput } from '../Inputs/CheckboxInput';
+import { LoginInput } from '../Inputs/LoginInput';
+import { EmailInput } from '../Inputs/EmailInput';
 import { AlertContext } from 'src/app/providers/AlertProvider';
 import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import cls from "./LoginModal.module.scss"
 import { UserContext } from 'src/app/providers/UserProvider';
 import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
-import { Modal } from '../Modal/Modal';
+import { Modal } from 'src/widgets/Modal/Modal';
+import { Modals } from 'src/widgets/Navbar/Navbar';
 
 interface LoginModalProps {
-    setModal: (isModal: boolean) => void;
+    setModal: (modal: false | Modals) => void;
+    defaultModal: Modals
 }
 
 const regulars = {
@@ -22,7 +24,7 @@ const regulars = {
     PASSWORD_REGULAR: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@#$%^&+=]).{8,}$/u
 }
 
-export const LoginModal = ({ setModal }: LoginModalProps) => {
+export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const {
         isAnimation, setIsAnimation,
         isOpenAnimation, setIsOpenAnimation,
@@ -32,7 +34,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
-    const [isRegistration, setIsRegistration] = useState(false)
+    const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
@@ -44,10 +46,6 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
 
     const [regStatus, setRegStatus] = useState<number>(0)
 
-    useEffect(() => {
-        setAlert(email)
-    }, [email])
-
     const onFormChangeClick = () => {
         setIsAnimation(true)
         setIsRegistration(!isRegistration)
@@ -56,6 +54,7 @@ export const LoginModal = ({ setModal }: LoginModalProps) => {
     const closeModal = () => {
         setIsCloseAnimation(true)
         setTimeout(() => setModal(false), 300)
+        document.body.style.overflow = ''
     }
 
     const onRegClick = async (e: React.MouseEvent<HTMLElement>) => {

@@ -1,19 +1,26 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { LoginModal } from "src/widgets/LoginModal/LoginModal";
+import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
 import cls from "./Navbar.module.scss"
 import { Burger } from "./items/Burger";
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { UserButton } from "./items/UserButton";
+import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
 
 interface NavbarProps {
     currentPage: RouterPaths;
     user: IUser
 }
 
+export enum Modals {
+    LOGIN = 'login',
+    REGISTRATION = 'registration',
+    EDIT = 'account'
+}
+
 export const Navbar = ({ currentPage, user }: NavbarProps) => {
-    const [isLogin, setIsLogin] = useState<boolean>(false)
+    const [modal, setModal] = useState<false | Modals>(false)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
     const [isUser, setIsUser] = useState<boolean>(false)
 
@@ -28,7 +35,12 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
     }
 
     const onLoginClick = () => {
-        setIsLogin(true)
+        setModal(Modals.LOGIN)
+        document.body.style.overflow = 'hidden';
+    }
+
+    const onRegistrationClick = () => {
+        setModal(Modals.REGISTRATION)
         document.body.style.overflow = 'hidden';
     }
 
@@ -57,15 +69,39 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                 </div>
 
                 {isUser
-                    ? <UserButton user={user} />
-                    : <span
-                        onClick={onLoginClick}
-                        className={cls.login}
-                    >Войти</span>
+                    ? <UserButton
+                        setModal={setModal}
+                        user={user}
+                    />
+                    : <div
+                        className={cls.NavbarLoginButtons}
+                    >
+                        <span
+                            onClick={onLoginClick}
+                            className={cls.login}
+                        >Войти</span>
+                        <span
+                            onClick={onRegistrationClick}
+                            className={cls.registration}
+                        >Зарегистрироваться</span>
+                    </div>
                 }
 
             </div >
-            {isLogin && <LoginModal setModal={setIsLogin} />}
+            {modal === Modals.LOGIN &&
+                <LoginModal
+                    setModal={setModal}
+                    defaultModal={modal}
+                />}
+            {modal === Modals.REGISTRATION &&
+                <LoginModal
+                    setModal={setModal}
+                    defaultModal={modal}
+                />}
+            {modal === Modals.EDIT &&
+                <AccountEditModal
+                    setModal={setModal}
+                />}
         </>
     );
 }
