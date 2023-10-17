@@ -84,7 +84,7 @@ namespace berserk_online_server.Controllers
             try
             {
                 var oldMail = getRequesterMail();
-                var updatedUser = _db.UpdateUser(request, oldMail);
+                var updatedUser = await _db.UpdateUser(request, oldMail);
                 await updateCookie(updatedUser);
                 return Results.Ok(updatedUser);
             }

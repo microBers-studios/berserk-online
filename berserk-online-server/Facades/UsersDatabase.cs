@@ -13,8 +13,10 @@ namespace berserk_online_server.Facades
         {
             this._db = db;
             _avatarUrlBase = staticContent.AvatarsUrl;
+            _staticContent = staticContent;
         }
         private readonly string _avatarUrlBase;
+        private readonly StaticContentService _staticContent;
 
         public void AddUser(User user)
         {
@@ -27,16 +29,18 @@ namespace berserk_online_server.Facades
             _db.Remove(user);
             _db.SaveChanges();
         }
-        public UserInfo UpdateUser(UserInfoRequest request, string oldMail)
+        public async Task<UserInfo> UpdateUser(UserInfoRequest request, string oldMail)
         {
             try
             {
-                var oldUser = _db.Users.Where(u => u.Email == oldMail).First();
-                mergeUserWithRequest(oldUser, request);
-                _db.Update(oldUser);
+                var user = _db.Users.Where(u => u.Email == oldMail).First();
+                mergeUserWithRequest(user, request);
+                var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
+                user.AvatarUrl = avatarName;
+                _db.Update(user);
                 _db.SaveChanges();
-                processUserAvatar(oldUser);
-                return new UserInfo(oldUser);
+                processUserAvatar(user);
+                return new UserInfo(user);
             } catch (InvalidOperationException) {
                 throw new NotFoundException("user with this ID not found");
             }

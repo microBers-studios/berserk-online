@@ -47,6 +47,23 @@
                 }
             }
         }
+        public async Task<string> RenameByMail(string mail)
+        {
+            var newFileName = createImageName(_fileName, mail);
+            var newFilePath = Path.Combine(Path.GetDirectoryName(_filePath), newFileName);
+            using (var fs1 = new FileStream(_filePath, FileMode.Open))
+            {
+                using(var fs2 = new FileStream(newFilePath, FileMode.Create))
+                {
+                    await fs1.CopyToAsync(fs2);
+                }
+            }
+            File.Delete(_filePath);
+            _fileName = newFileName;
+            _filePath = newFilePath;
+            _convertedMail = newFileName.Split('.')[0];
+            return _fileName;
+        }
         private string createImageName(string imgName, string email)
         {
             return $"{email.Replace('@', '_').Replace('.', '-')}.{imgName.Split('.')[1]}";
