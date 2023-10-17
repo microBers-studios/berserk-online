@@ -27,10 +27,19 @@ namespace berserk_online_server.Facades
             _db.Remove(user);
             _db.SaveChanges();
         }
-        public void UpdateUser(User user)
+        public UserInfo UpdateUser(UserInfoRequest request, string oldMail)
         {
-            _db.Users.Update(user);
-            _db.SaveChanges();
+            try
+            {
+                var oldUser = _db.Users.Where(u => u.Email == oldMail).First();
+                mergeUserWithRequest(oldUser, request);
+                _db.Update(oldUser);
+                _db.SaveChanges();
+                processUserAvatar(oldUser);
+                return new UserInfo(oldUser);
+            } catch (InvalidOperationException) {
+                throw new NotFoundException("user with this ID not found");
+            }
         }
         public bool IsUnique(User user)
         {
@@ -90,6 +99,11 @@ namespace berserk_online_server.Facades
         {
             if (user.AvatarUrl != null)
                 user.AvatarUrl = _avatarUrlBase + user.AvatarUrl;
+        }
+        private void mergeUserWithRequest(User u1, UserInfoRequest request)
+        {
+            u1.Name = request.Name?? u1.Name;
+            u1.Email = request.Email?? u1.Email;
         }
     }
 }

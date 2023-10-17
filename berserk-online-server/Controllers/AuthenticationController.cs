@@ -56,23 +56,8 @@ namespace berserk_online_server.Controllers
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var claims = new[] {
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Email, user.Email),
-            };
-            var claimsIdentity = new ClaimsIdentity(claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            if (rememberMe)
-            {
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-            }
-            else
-            {
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
-                    { ExpiresUtc = new DateTimeOffset(DateTime.Now).AddHours(2) });
-            }
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
+            await manager.Authenticate(user, rememberMe, HttpContext);
         }
         private IResult userPasswordNotMatching(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
         private IResult userEmailNotFound(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
