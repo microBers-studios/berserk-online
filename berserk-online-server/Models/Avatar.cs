@@ -23,7 +23,7 @@
         public async Task Replace(IFormFile newFile)
         {
             string newFileName = combineNameWithExtension(newFile.FileName);
-            string newFileBasePath = Path.GetDirectoryName(_filePath);
+            string newFileBasePath = Path.GetDirectoryName(_filePath)?? throw new ArgumentNullException();
             string newFilePath = Path.Combine(newFileBasePath, newFileName);
             bool isSuccess = true;
             if (newFilePath == null) { throw new NullReferenceException(nameof(newFilePath)); }
@@ -50,7 +50,7 @@
         public async Task<string> RenameByMail(string mail)
         {
             var newFileName = createImageName(_fileName, mail);
-            var newFilePath = Path.Combine(Path.GetDirectoryName(_filePath), newFileName);
+            var newFilePath = Path.Combine(Path.GetDirectoryName(_filePath)?? throw new ArgumentNullException(), newFileName);
             using (var fs1 = new FileStream(_filePath, FileMode.Open))
             {
                 using(var fs2 = new FileStream(newFilePath, FileMode.Create))

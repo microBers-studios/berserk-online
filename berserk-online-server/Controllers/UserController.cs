@@ -59,7 +59,7 @@ namespace berserk_online_server.Controllers
             }
             catch (InvalidOperationException)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotAuthorized));
+                return Results.Unauthorized();
             }
         }
         [HttpPost("loadAvatar")]
@@ -70,12 +70,12 @@ namespace berserk_online_server.Controllers
             string fileName = await _contentService.AddAvatar(avatar, email);
             try
             {
-                _db.AddAvatarPath(fileName, email);
-                return Results.Ok();
+                var updatedUser = _db.AddAvatarPath(fileName, email);
+                return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotAuthorized));
+                return Results.Unauthorized();
             }
         }
         [HttpPost("updateMe")]

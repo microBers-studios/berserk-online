@@ -74,13 +74,15 @@ namespace berserk_online_server.Facades
             processUserAvatar(matchingUser);
             return new UserInfo(matchingUser);
         }
-        public void AddAvatarPath(string avatarName, string email)
+        public UserInfo AddAvatarPath(string avatarName, string email)
         {
             var user = _db.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) throw new NotFoundException("user with this email not found.");
             user.AvatarUrl = avatarName;
             _db.Users.Update(user);
             _db.SaveChanges();
+            processUserAvatar(user);
+            return new UserInfo(user);
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {
