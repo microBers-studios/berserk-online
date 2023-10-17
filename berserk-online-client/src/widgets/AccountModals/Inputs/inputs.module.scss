@@ -1,0 +1,118 @@
+.FormLabel {
+    position: relative;
+    color: var(--primary-color);
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.FormInput {
+    position: relative;
+    box-sizing: border-box;
+    background-color: rgb(236, 229, 229);
+    height: 30px;
+    width: 87%;
+    border-radius: 4px;
+    border: none;
+    font-size: 17px;
+}
+
+.FormInput:focus {
+    outline: none;
+    border-bottom: 2px solid black;
+    transition: border-bottom 0.07s ease-in;
+}
+
+.passwordEye {
+    margin-left: 10px;
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+}
+
+.passwordInput {
+    display: flex;
+    align-items: center;
+}
+
+.loginLabel {
+    grid-area: name;
+}
+
+.passwordLabel {
+    grid-area: password;
+}
+
+.emailLabel {
+    grid-area: email;
+}
+
+.rememberLabel {
+    margin-left: 5%;
+    height: 20px;
+    font-weight: bold;
+    grid-area: remember;
+    display: flex;
+    align-items: center;
+}
+
+.rememberInput {
+    display: none;
+}
+
+.red {
+    color: red;
+    font-weight: normal;
+}
+
+.redAlert,
+.longRedAlert {
+    color: red;
+    position: absolute;
+    bottom: -16px;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+.longRedAlert {
+    bottom: -35px;
+}
+
+.checkboxImage {
+    width: 25px;
+    margin-right: 5px;
+}
+
+.checkboxAnimated {
+    animation: checkboxTran 1s ease-out;
+}
+
+.inputContainer {
+    display: flex;
+    gap: 10px;
+
+    span {
+        height: 30px;
+        width: 87%;
+        text-align: center;
+        font-size: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    .inputImage {
+        width: 25px;
+    }
+}
+
+
+@keyframes checkboxTran {
+    from {
+        transform: rotate(0)
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

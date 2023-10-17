@@ -88,7 +88,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
 
-            const user = await APIController.getMe()
+            const { user } = await APIController.getMe()
             setUser(user)
         } else if (code === 400 && !isRegistration) {
             switch (Number(JSON.parse(text).id)) {
@@ -118,13 +118,11 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             <form
                 className={cls.Form}
             >
-                <div className={cls.FormHeader}>
-                    <h1 className={cls.header}>
-                        {isRegistration
-                            ? 'Регистрация'
-                            : 'Войти'}
-                    </h1>
-                </div>
+                <h1 className={cls.FormHeader}>
+                    {isRegistration
+                        ? 'Регистрация'
+                        : 'Войти'}
+                </h1>
 
                 <div className={cls.inputsWrapper}>
                     {isRegistration &&

@@ -1,6 +1,6 @@
 // import { MainPage } from '../pages/MainPage/MainPage'
 import { Navbar } from 'src/widgets/Navbar/Navbar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AlertContext } from 'src/app/providers/AlertProvider'
 import { AppRouter } from 'src/app/providers/router/AppRouter'
 import './styles/index.scss'
@@ -10,11 +10,22 @@ import { AlertsContainer } from 'src/widgets/Alert/AlertsContainer'
 import { RouterPaths } from './providers/router/router-paths'
 import { UserContextProps } from './providers/UserProvider/lib/types/types'
 import { UserContext } from './providers/UserProvider'
+import APIController from 'src/API/Controller'
 
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
-  const { user } = useRequiredContext<UserContextProps>(UserContext)
+  const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
   const [currentPage, setCurrentPage] = useState<RouterPaths>(RouterPaths.MAIN)
+
+
+  useEffect(() => {
+    new Promise(async () => {
+      const res = await APIController.getMe()
+      if (res.code === 200) {
+        setUser(res.user)
+      }
+    })
+  }, [])
 
   return (
     <>

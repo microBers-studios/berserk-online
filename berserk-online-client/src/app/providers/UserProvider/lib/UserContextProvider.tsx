@@ -11,7 +11,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
         id: -1,
         email: '',
         name: '',
-        avatarUrl: ''
+        avatarUrl: '',
     })
 
     const defaultValue = useMemo(() => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import cls from "../LoginModal/LoginModal.module.scss"
+import cls from "./inputs.module.scss"
 import eyeOpened from "src/shared/assets/images/eye-opened.png"
 import eyeClosed from "src/shared/assets/images/eye-closed.svg"
 
@@ -23,7 +23,7 @@ export const PasswordInput = ({ value, error }: PasswordInputProps) => {
     }
 
     return (
-        <label className={cls.FormLabel}>
+        <label className={`${cls.FormLabel} ${cls.passwordLabel}`}>
             <span>Введите пароль:<span className={cls.red}> *</span></span>
             <div className={cls.passwordInput}>
                 <input

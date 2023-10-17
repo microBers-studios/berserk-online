@@ -1,0 +1,31 @@
+.AccountEditForm {
+    display: grid;
+    grid-template-areas: "header"
+        "avatar"
+        "name"
+        "email"
+        "password"
+        "button";
+    position: absolute;
+    bottom: 0;
+    top: 10%;
+    right: 0;
+    left: 0;
+    justify-content: center;
+}
+
+.FormHeader {
+    text-align: center;
+}
+
+.FormButton {
+    margin: 0 auto 10px;
+    font-weight: bold;
+    height: 40px;
+    width: 350px;
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    grid-area: button;
+}

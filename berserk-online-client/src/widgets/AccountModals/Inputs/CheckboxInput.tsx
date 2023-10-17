@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import cls from "../LoginModal/LoginModal.module.scss"
+import cls from "./inputs.module.scss"
 import checked from "src/shared/assets/images/checked.svg"
 import unchecked from "src/shared/assets/images/unchecked.svg"
 

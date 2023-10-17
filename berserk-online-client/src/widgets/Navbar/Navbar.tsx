@@ -25,7 +25,6 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
     const [isUser, setIsUser] = useState<boolean>(false)
 
     useEffect(() => {
-        console.log(user.id !== -1)
         setIsUser(user.id !== -1)
     },
         [user])

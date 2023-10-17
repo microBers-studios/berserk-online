@@ -39,7 +39,7 @@ export default class APIController {
         return { code: response.status, text }
     }
 
-    static async getMe(): Promise<IUser> {
+    static async getMe(): Promise<{ code: number, user: IUser }> {
         const path = URL + Paths.GET_ME
 
         const response: Response = await fetch(path, {
@@ -52,7 +52,7 @@ export default class APIController {
 
         const obj = await response.json()
 
-        return obj
+        return { code: response.status, user: obj }
     }
 
 }
