@@ -63,17 +63,20 @@ namespace berserk_online_server.Controllers
             }
         }
         [HttpPost("loadAvatar")]
-        [Authorize]
         public async Task<IResult> LoadAvatar(IFormFile avatar)
         {
-            string email = getRequesterMail();
-            string fileName = await _contentService.AddAvatar(avatar, email);
             try
             {
+                string email = getRequesterMail();
+                string fileName = await _contentService.AddAvatar(avatar, email);
                 var updatedUser = _db.AddAvatarPath(fileName, email);
                 return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound));
+            }
+            catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
             }
@@ -96,7 +99,7 @@ namespace berserk_online_server.Controllers
         private string getRequesterMail()
         {
             var emailClaim = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
-            if (emailClaim == null) throw new NotFoundException("Name claim not found");
+            if (emailClaim == null) throw new ArgumentNullException("claim is null");
             return emailClaim.Value;
         }
         private async Task updateCookie(UserInfo userInfo)
