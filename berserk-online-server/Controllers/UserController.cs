@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Models.User;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -34,16 +35,16 @@ namespace berserk_online_server.Controllers
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, requestInfo));
             }
         }
-        [HttpGet("getUser/{name}")]
-        public IResult GetUser(string name)
+        [HttpGet("getUser/{id}")]
+        public IResult GetUser(int id)
         {
             try
             {
-                return Results.Ok(_db.GetUserInfo(new UserInfoRequest { Name = name }));
+                return Results.Ok(_db.GetUserInfo(new UserInfoRequest { Id = id }));
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new { Name = name }));
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new { Id = id }));
             }
         }
         [HttpGet("getMe")]
@@ -58,30 +59,53 @@ namespace berserk_online_server.Controllers
             }
             catch (InvalidOperationException)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotAuthorized));
+                return Results.Unauthorized();
             }
         }
         [HttpPost("loadAvatar")]
-        [Authorize]
         public async Task<IResult> LoadAvatar(IFormFile avatar)
         {
-            string email = getRequesterMail();
-            string fileName = await _contentService.AddAvatar(avatar, email);
             try
             {
-                _db.AddAvatarPath(fileName, email);
-                return Results.Ok();
+                string email = getRequesterMail();
+                string fileName = await _contentService.AddAvatar(avatar, email);
+                var updatedUser = _db.AddAvatarPath(fileName, email);
+                return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotAuthorized));
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound));
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+        }
+        [HttpPost("updateMe")]
+        public async Task<IResult> updateMe(UserInfoRequest request)
+        {
+            try
+            {
+                var oldMail = getRequesterMail();
+                var updatedUser = await _db.UpdateUser(request, oldMail);
+                await updateCookie(updatedUser);
+                return Results.Ok(updatedUser);
+            }
+            catch (NotFoundException)
+            {
+                return Results.Unauthorized();
             }
         }
         private string getRequesterMail()
         {
-            var nameClaim = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
-            if (nameClaim == null) throw new NotFoundException("Name claim not found");
-            return nameClaim.Value;
+            var emailClaim = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+            if (emailClaim == null) throw new ArgumentNullException("claim is null");
+            return emailClaim.Value;
+        }
+        private async Task updateCookie(UserInfo userInfo)
+        {
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
+            await manager.Authenticate(userInfo, true, HttpContext);
         }
     }
 }

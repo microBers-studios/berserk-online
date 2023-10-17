@@ -11,7 +11,6 @@ namespace berserk_online_server.Facades
         UserAlreadyExists,
         NotFound,
         ArgumentsMissing,
-        NotAuthorized,
     }
     public static class ApiErrorFabric
     {
@@ -29,8 +28,6 @@ namespace berserk_online_server.Facades
                     return new NotFound(ctx);
                 case ApiErrorType.ArgumentsMissing:
                     return new ArgumentsMissing(ctx);
-                case ApiErrorType.NotAuthorized:
-                    return new NotAuthorized(ctx);
             }
             throw new NotImplementedException();
         }
