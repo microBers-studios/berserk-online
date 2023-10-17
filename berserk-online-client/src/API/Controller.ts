@@ -55,4 +55,31 @@ export default class APIController {
         return { code: response.status, user: obj }
     }
 
+    static async loadAvatar(input: HTMLInputElement): Promise<string> {
+        const path = URL + Paths.LOAD_AVATAR
+
+        const formData = new FormData()
+        const files = input.files as FileList;
+        formData.append('avatar', files[0])
+
+        // const headers = new Headers()
+        // headers.append('Cookie', document.cookie)
+
+        const response = await fetch(path, {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            // headers
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+
+        console.log(response.statusText)
+
+        // console.log(await response.json())
+
+        return ''
+    }
+
 }

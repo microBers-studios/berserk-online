@@ -3,7 +3,7 @@ import cls from "./AccountEditModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { LoginInput } from "../Inputs/LoginInput";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { EmailInput } from "../Inputs/EmailInput";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
@@ -25,6 +25,8 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
     const [email, setEmail] = useState<string>(user.email)
     const [emailError, setEmailError] = useState<number>(0)
 
+    const formRef = useRef<HTMLFormElement>(null)
+
     const closeModal = () => {
         setIsCloseAnimation(true)
         setTimeout(() => setModal(false), 300)
@@ -42,9 +44,10 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
             <div className={cls.AccountEditModal}>
                 <form
                     className={cls.AccountEditForm}
+                    ref={formRef}
                 >
                     <h1 className={cls.FormHeader}>Аккаунт</h1>
-                    <ImageInput />
+                    <ImageInput formRef={formRef} />
                     {<LoginInput
                         name={name}
                         setName={setName}

@@ -18,8 +18,8 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError, isProte
 
         <label className={`${cls.FormLabel} ${cls.emailLabel}`}>
             {isProtected
-                ? <span>Адрес электронной почты: </span>
-                : <span>Введите адрес электронной почты: <span className={cls.red}> *</span></span>
+                ? <span>Email: </span>
+                : <span>Введите email: <span className={cls.red}> *</span></span>
             }
             <div className={cls.inputContainer}>
                 {protect
@@ -39,7 +39,7 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError, isProte
                 {isProtected && <img
                     src={penImage}
                     onClick={() => setProtect(!protect)}
-                    className={cls.inputImage}
+                    className={`${cls.inputImage} ${!protect && cls.clicked}`}
                 />}
             </div>
 

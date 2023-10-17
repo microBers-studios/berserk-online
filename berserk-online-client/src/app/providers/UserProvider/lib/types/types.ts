@@ -5,7 +5,7 @@ export interface UserContextProps {
 
 export interface IUser {
     id: number;
-    avatarUrl: string | null;
+    avatarUrl: string;
     email: string;
     name: string;
 }
