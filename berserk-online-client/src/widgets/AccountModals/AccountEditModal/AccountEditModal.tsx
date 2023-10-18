@@ -41,14 +41,22 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
         const updateObject: Partial<IUser> = {}
 
+        let flag = false
+
         if (email !== user.email) {
             updateObject.email = email
+            flag = true
         }
 
         if (name !== user.name) {
             updateObject.name = name
+            flag = true
         }
 
+        if (!flag) {
+            setIsLoading(false)
+            return
+        }
         const { code, obj } = await APIController.updateUser(updateObject)
 
         if (code === 200) {
