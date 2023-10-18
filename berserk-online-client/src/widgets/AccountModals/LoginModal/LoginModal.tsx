@@ -13,6 +13,7 @@ import { UserContext } from 'src/app/providers/UserProvider';
 import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
 import { Modal } from 'src/widgets/Modal/Modal';
 import { Modals } from 'src/widgets/Navbar/Navbar';
+import { validatePassword } from 'src/helpers/validatePassword';
 
 interface LoginModalProps {
     setModal: (modal: false | Modals) => void;
@@ -21,7 +22,6 @@ interface LoginModalProps {
 
 const regulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    PASSWORD_REGULAR: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@#$%^&+=]).{8,}$/u
 }
 
 export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
@@ -72,8 +72,8 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             return
         }
 
-        if (!password || !regulars.PASSWORD_REGULAR.test(password) && isRegistration) {
-            setPasswordError(password ? regulars.PASSWORD_REGULAR.test(password) ? 0 : 2 : 1)
+        if (!password || validatePassword(password) && isRegistration) {
+            setPasswordError(password ? validatePassword(password) ? 0 : 2 : 1)
             return
         }
 

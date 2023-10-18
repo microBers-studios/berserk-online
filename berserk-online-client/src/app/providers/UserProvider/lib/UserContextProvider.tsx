@@ -1,21 +1,24 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { UserContext } from "./UserContext";
 import { IUser } from './types/types';
-import av from "src/shared/assets/images/default-avatar.jpg"
+import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
+
+export const defaultUser = {
+    id: -1,
+    email: '',
+    name: '',
+    avatarUrl: defaultAvatar,
+}
 
 interface UserContextProviderProps {
     children: ReactNode
 }
 
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
-    const [user, setUser] = useState<IUser>({
-        id: -1,
-        email: '',
-        name: '',
-        avatarUrl: av,
-    })
+    const [user, setUser] = useState<IUser>(defaultUser)
 
     const defaultValue = useMemo(() => {
+        console.log(user)
         return {
             user,
             setUser: (u: IUser) => setUser(u)

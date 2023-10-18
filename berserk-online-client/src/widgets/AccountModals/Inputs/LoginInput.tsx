@@ -36,7 +36,7 @@ export const LoginInput = ({ name, setName, nameError, setNameError, isProtected
                 {isProtected && <img
                     src={penImage}
                     onClick={() => setProtect(!protect)}
-                    className={cls.inputImage}
+                    className={`${cls.inputImage} ${!protect && cls.clicked}`}
                 />}
             </div>
 

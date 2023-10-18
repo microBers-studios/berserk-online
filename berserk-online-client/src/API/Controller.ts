@@ -1,6 +1,7 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { IRegistration, ILogin, IResponseCode } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
+import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 
 export default class APIController {
     static async registrateUser(obj: IRegistration): Promise<IResponseCode> {
@@ -52,35 +53,30 @@ export default class APIController {
 
         const obj = await response.json()
 
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
         return { code: response.status, user: obj }
     }
 
-    static async loadAvatar(input: HTMLInputElement): Promise<string> {
+    static async loadAvatar(input: HTMLInputElement): Promise<IUser> {
         const path = URL + Paths.LOAD_AVATAR
 
         const formData = new FormData()
         const files = input.files as FileList;
-        console.log(input.files);
-        
-        formData.append('avatar', files[0])
 
-        // const headers = new Headers()
-        // headers.append('Cookie', document.cookie)
+        formData.append('avatar', files[0])
 
         const response = await fetch(path, {
             method: 'POST',
             body: formData,
             credentials: 'include',
-            // headers: {
-            //     "Content-Type": "application/json",
-            // }
         })
 
-        console.log(response.statusText)
+        const obj = await response.json()
 
-        // console.log(await response.json())
-
-        return ''
+        return obj
     }
 
 }
