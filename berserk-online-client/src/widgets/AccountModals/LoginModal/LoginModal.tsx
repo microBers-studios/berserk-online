@@ -94,6 +94,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             const { obj } = await APIController.getMe()
             setUser(obj as IUser)
         } else if (code === 400 && !isRegistration) {
+            setIsLoading(false)
 
             switch (Number(obj.id)) {
                 case 2:

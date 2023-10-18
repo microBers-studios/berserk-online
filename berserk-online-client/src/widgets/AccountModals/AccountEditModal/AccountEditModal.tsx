@@ -30,6 +30,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
     const closeModal = () => {
         setIsCloseAnimation(true)
+
         setTimeout(() => setModal(false), 300)
         document.body.style.overflow = ''
     }
@@ -37,11 +38,23 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
     const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
-        const { code, obj } = await APIController.updateUser({ ...user, name, email })
+
+        const updateObject: Partial<IUser> = {}
+
+        if (email !== user.email) {
+            updateObject.email = email
+        }
+
+        if (name !== user.name) {
+            updateObject.name = name
+        }
+
+        const { code, obj } = await APIController.updateUser(updateObject)
 
         if (code === 200) {
             setUser(obj as IUser)
         } else if (code === 400) {
+            setIsLoading(false)
             setEmailError(4)
         }
     }
