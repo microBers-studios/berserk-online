@@ -42,12 +42,12 @@ namespace berserk_online_server.Facades
                 processUserAvatar(user);
                 return new UserInfo(user);
             } catch (InvalidOperationException) {
-                throw new NotFoundException("user with this ID not found");
+                throw new NotFoundException("user with this email not found");
             }
         }
         public bool IsUnique(User user)
         {
-            return !_db.Users.Any(u => u.Email == user.Email);
+            return !_db.Users.Any(u => u.Email == user.Email && u.Name == user.Name);
         }
         public UserInfo GetUserInfo(UserInfoRequest userRequest)
         {

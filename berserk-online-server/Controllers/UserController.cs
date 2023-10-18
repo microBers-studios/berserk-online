@@ -2,7 +2,6 @@
 using berserk_online_server.Facades;
 using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -88,6 +87,10 @@ namespace berserk_online_server.Controllers
         [HttpPost("updateMe")]
         public async Task<IResult> updateMe(UserInfoRequest request)
         {
+            if (!_db.IsUnique(new User() { Name = request.Name, Email = request.Email }))
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
+            }
             try
             {
                 var oldMail = getRequesterMail();
@@ -96,6 +99,10 @@ namespace berserk_online_server.Controllers
                 return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, request));
+            }
+            catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
             }
