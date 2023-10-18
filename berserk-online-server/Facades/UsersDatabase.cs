@@ -35,13 +35,18 @@ namespace berserk_online_server.Facades
             {
                 var user = _db.Users.Where(u => u.Email == oldMail).First();
                 mergeUserWithRequest(user, request);
-                var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
-                user.AvatarUrl = avatarName;
+                if (user.AvatarUrl != null)
+                {
+                    var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
+                    user.AvatarUrl = avatarName;
+                }
                 _db.Update(user);
                 _db.SaveChanges();
                 processUserAvatar(user);
                 return new UserInfo(user);
-            } catch (InvalidOperationException) {
+            }
+            catch (InvalidOperationException)
+            {
                 throw new NotFoundException("user with this email not found");
             }
         }
@@ -108,8 +113,8 @@ namespace berserk_online_server.Facades
         }
         private void mergeUserWithRequest(User u1, UserInfoRequest request)
         {
-            u1.Name = request.Name?? u1.Name;
-            u1.Email = request.Email?? u1.Email;
+            u1.Name = request.Name ?? u1.Name;
+            u1.Email = request.Email ?? u1.Email;
         }
     }
 }
