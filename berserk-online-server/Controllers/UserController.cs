@@ -88,6 +88,10 @@ namespace berserk_online_server.Controllers
         [HttpPost("updateMe")]
         public async Task<IResult> updateMe(UserInfoRequest request)
         {
+            if (!_db.IsUnique(new User() { Name = request.Name, Email = request.Email }))
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
+            }
             try
             {
                 var oldMail = getRequesterMail();
@@ -98,6 +102,10 @@ namespace berserk_online_server.Controllers
             catch (NotFoundException)
             {
                 return Results.Unauthorized();
+            }
+            catch (ArgumentException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
             }
         }
         private string getRequesterMail()
