@@ -44,6 +44,8 @@ namespace berserk_online_server.Facades
             {
                 var avatar = _avatars[oldMail];
                 var avatarName = await avatar.RenameByMail(newMail);
+                _avatars.Remove(oldMail);
+                _avatars[newMail] = avatar;
                 return avatarName;
             } else
             {

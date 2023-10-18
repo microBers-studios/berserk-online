@@ -84,10 +84,10 @@ namespace berserk_online_server.Controllers
                 return Results.Unauthorized();
             }
         }
-        [HttpPost("updateMe")]
+        [HttpPatch("updateMe")]
         public async Task<IResult> updateMe(UserInfoRequest request)
         {
-            if (!_db.IsUnique(new User() { Name = request.Name, Email = request.Email }))
+            if (!_db.IsUnique(request))
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
             }
@@ -100,7 +100,8 @@ namespace berserk_online_server.Controllers
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, request));
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, 
+                    new { Request = request, Mail = getRequesterMail() }));
             }
             catch (ArgumentNullException)
             {
