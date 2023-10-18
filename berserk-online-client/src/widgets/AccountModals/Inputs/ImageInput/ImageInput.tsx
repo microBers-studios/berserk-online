@@ -17,9 +17,10 @@ export const ImageInput = () => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const changeAvatar = async () => {
-        const responseObject = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
+        const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
 
-        setUser({ ...user, ...responseObject.obj })
+        console.log(user.avatarUrl, obj)
+        setUser({ ...user, ...obj })
     }
 
     return (
