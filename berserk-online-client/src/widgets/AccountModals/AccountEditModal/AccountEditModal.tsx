@@ -6,9 +6,10 @@ import { LoginInput } from "../Inputs/LoginInput";
 import { useState } from "react";
 import { EmailInput } from "../Inputs/EmailInput";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
-import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
+import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
 import { UserContext } from "src/app/providers/UserProvider";
 import { ImageInput } from "../Inputs/ImageInput/ImageInput";
+import APIController from "src/API/Controller";
 
 interface AccountEditModalProps {
     setModal: (modal: false | Modals) => void;
@@ -18,12 +19,14 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
-    const { user } = useRequiredContext<UserContextProps>(UserContext)
+    const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
 
     const [name, setName] = useState<string>(user.name)
     const [nameError, setNameError] = useState<boolean>(false)
     const [email, setEmail] = useState<string>(user.email)
     const [emailError, setEmailError] = useState<number>(0)
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const closeModal = () => {
         setIsCloseAnimation(true)
@@ -31,6 +34,17 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         document.body.style.overflow = ''
     }
 
+    const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setIsLoading(true)
+        const { code, obj } = await APIController.updateUser({ ...user, name, email })
+
+        if (code === 200) {
+            setUser(obj as IUser)
+        } else if (code === 400) {
+            setEmailError(4)
+        }
+    }
     return (
         <Modal
             isCloseAnimation={isCloseAnimation}
@@ -42,6 +56,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
             <div className={cls.AccountEditModal}>
                 <form
                     className={cls.AccountEditForm}
+                    onSubmit={onFormSubmit}
                 >
                     <h1 className={cls.FormHeader}>Аккаунт</h1>
                     <ImageInput />
@@ -60,7 +75,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
                         isProtected={true}
                     />}
                     <button
-                        className={cls.FormButton}
+                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
                     >
                         Сохранить
                     </button>

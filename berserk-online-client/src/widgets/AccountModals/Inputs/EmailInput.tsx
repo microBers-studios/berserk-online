@@ -14,6 +14,12 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError, isProte
 
     const [protect, setProtect] = useState<boolean>(isProtected)
 
+    const onInputEnter = (e: React.KeyboardEvent) => {
+        if (e.code === 'Enter' && isProtected) {
+            setProtect(true)
+        }
+    }
+
     return (
 
         <label className={`${cls.FormLabel} ${cls.emailLabel}`}>
@@ -33,6 +39,7 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError, isProte
                             if (email) setEmailError(0)
                             setEmail(e.target.value)
                         }}
+                        onKeyDown={onInputEnter}
                         required
                     />
                 }
@@ -49,6 +56,8 @@ export const EmailInput = ({ email, setEmail, emailError, setEmailError, isProte
                 <span className={cls.redAlert}>*Адрес невалиден</span>}
             {emailError === 3 &&
                 <span className={cls.redAlert}>Пользователь не найден</span>}
+            {emailError === 4 &&
+                <span className={cls.redAlert}>Пользователь с таким адресом уже существует</span>}
         </label>
     );
 }
