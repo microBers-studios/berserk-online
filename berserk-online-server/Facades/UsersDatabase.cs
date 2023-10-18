@@ -13,8 +13,10 @@ namespace berserk_online_server.Facades
         {
             this._db = db;
             _avatarUrlBase = staticContent.AvatarsUrl;
+            _staticContent = staticContent;
         }
         private readonly string _avatarUrlBase;
+        private readonly StaticContentService _staticContent;
 
         public void AddUser(User user)
         {
@@ -27,10 +29,21 @@ namespace berserk_online_server.Facades
             _db.Remove(user);
             _db.SaveChanges();
         }
-        public void UpdateUser(User user)
+        public async Task<UserInfo> UpdateUser(UserInfoRequest request, string oldMail)
         {
-            _db.Users.Update(user);
-            _db.SaveChanges();
+            try
+            {
+                var user = _db.Users.Where(u => u.Email == oldMail).First();
+                mergeUserWithRequest(user, request);
+                var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
+                user.AvatarUrl = avatarName;
+                _db.Update(user);
+                _db.SaveChanges();
+                processUserAvatar(user);
+                return new UserInfo(user);
+            } catch (InvalidOperationException) {
+                throw new NotFoundException("user with this ID not found");
+            }
         }
         public bool IsUnique(User user)
         {
@@ -61,13 +74,15 @@ namespace berserk_online_server.Facades
             processUserAvatar(matchingUser);
             return new UserInfo(matchingUser);
         }
-        public void AddAvatarPath(string avatarName, string email)
+        public UserInfo AddAvatarPath(string avatarName, string email)
         {
             var user = _db.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) throw new NotFoundException("user with this email not found.");
             user.AvatarUrl = avatarName;
             _db.Users.Update(user);
             _db.SaveChanges();
+            processUserAvatar(user);
+            return new UserInfo(user);
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {
@@ -90,6 +105,11 @@ namespace berserk_online_server.Facades
         {
             if (user.AvatarUrl != null)
                 user.AvatarUrl = _avatarUrlBase + user.AvatarUrl;
+        }
+        private void mergeUserWithRequest(User u1, UserInfoRequest request)
+        {
+            u1.Name = request.Name?? u1.Name;
+            u1.Email = request.Email?? u1.Email;
         }
     }
 }

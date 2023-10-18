@@ -38,6 +38,18 @@ namespace berserk_online_server.Facades
                 return avatar.FileName;
             }
         }
+        public async Task<string> RenameAvatarByEmail(string oldMail, string newMail)
+        {
+            if (_avatars.ContainsKey(oldMail))
+            {
+                var avatar = _avatars[oldMail];
+                var avatarName = await avatar.RenameByMail(newMail);
+                return avatarName;
+            } else
+            {
+                throw new InvalidOperationException();
+            }
+        }
         private void createAvatarsFolder()
         {
             try

@@ -26,8 +26,8 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
-builder.Services.AddTransient<UsersDatabase>();
-builder.Services.AddTransient<StaticContentService>();
+builder.Services.AddScoped<UsersDatabase>();
+builder.Services.AddSingleton<StaticContentService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

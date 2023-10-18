@@ -32,11 +32,27 @@
     color: var(--secondary-color);
 }
 
-.login {
+.login,
+.registration {
     color: white;
-    right: 50px;
-    top: 35%;
+}
+
+.registration {
+    padding: 2px 4px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+}
+
+.login:hover,
+.registration:hover {
     cursor: pointer;
+    color: var(--secondary-color)
+}
+
+.NavbarLoginButtons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }
 
 .burger {
@@ -98,7 +114,7 @@
     height: 30px;
 }
 
-.userName {}
+// .userName {}
 
 .dropdownUserMenu {
     position: absolute;

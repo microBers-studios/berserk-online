@@ -39,7 +39,7 @@ export default class APIController {
         return { code: response.status, text }
     }
 
-    static async getMe(): Promise<IUser> {
+    static async getMe(): Promise<{ code: number, user: IUser }> {
         const path = URL + Paths.GET_ME
 
         const response: Response = await fetch(path, {
@@ -52,7 +52,35 @@ export default class APIController {
 
         const obj = await response.json()
 
-        return obj
+        return { code: response.status, user: obj }
+    }
+
+    static async loadAvatar(input: HTMLInputElement): Promise<string> {
+        const path = URL + Paths.LOAD_AVATAR
+
+        const formData = new FormData()
+        const files = input.files as FileList;
+        console.log(input.files);
+        
+        formData.append('avatar', files[0])
+
+        // const headers = new Headers()
+        // headers.append('Cookie', document.cookie)
+
+        const response = await fetch(path, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include',
+            // headers: {
+            //     "Content-Type": "application/json",
+            // }
+        })
+
+        console.log(response.statusText)
+
+        // console.log(await response.json())
+
+        return ''
     }
 
 }

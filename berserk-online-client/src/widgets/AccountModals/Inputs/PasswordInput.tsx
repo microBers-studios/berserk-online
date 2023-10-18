@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import cls from "../LoginModal.module.scss"
-import eyeOpened from "../../../shared/assets/images/eye-opened.png"
-import eyeClosed from "../../../shared/assets/images/eye-closed.svg"
+import cls from "./inputs.module.scss"
+import eyeOpened from "src/shared/assets/images/eye-opened.png"
+import eyeClosed from "src/shared/assets/images/eye-closed.svg"
 
 interface PasswordInputProps {
     value: {
@@ -23,7 +23,7 @@ export const PasswordInput = ({ value, error }: PasswordInputProps) => {
     }
 
     return (
-        <label className={cls.FormLabel}>
+        <label className={`${cls.FormLabel} ${cls.passwordLabel}`}>
             <span>Введите пароль:<span className={cls.red}> *</span></span>
             <div className={cls.passwordInput}>
                 <input
