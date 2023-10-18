@@ -50,7 +50,7 @@ namespace berserk_online_server.Facades
                 throw new NotFoundException("user with this email not found");
             }
         }
-        public bool IsUnique(User user)
+        public bool IsUnique(UserInfoRequest user)
         {
             return !_db.Users.Any(u => u.Email == user.Email || u.Name == user.Name);
         }
