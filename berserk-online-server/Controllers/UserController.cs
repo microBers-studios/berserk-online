@@ -100,11 +100,11 @@ namespace berserk_online_server.Controllers
             }
             catch (NotFoundException)
             {
-                return Results.Unauthorized();
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, request));
             }
             catch (ArgumentNullException)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
+                return Results.Unauthorized();
             }
         }
         private string getRequesterMail()
