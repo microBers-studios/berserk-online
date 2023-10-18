@@ -2,7 +2,6 @@
 using berserk_online_server.Facades;
 using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -103,7 +102,7 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (ArgumentException)
+            catch (ArgumentNullException)
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
             }
