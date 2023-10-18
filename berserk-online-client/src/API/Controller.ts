@@ -79,11 +79,11 @@ export default class APIController {
         return obj
     }
 
-    static async updateUser(user: IUser): Promise<IResponseInfo> {
+    static async updateUser(user: Partial<IUser>): Promise<IResponseInfo> {
         const path = URL + Paths.UPDATE_ME
 
         const response = await fetch(path, {
-            method: 'POST',
+            method: 'PATCH',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
