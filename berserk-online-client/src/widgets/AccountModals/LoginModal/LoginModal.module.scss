@@ -53,3 +53,16 @@
 .changeFormButton {
     cursor: pointer;
 }
+
+.redAlert,
+.longRedAlert {
+    color: red;
+    position: absolute;
+    bottom: -16px;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+.grayButton {
+    background-color: rgb(169, 165, 165);
+}

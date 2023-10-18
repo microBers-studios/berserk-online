@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
-import defaultUserAvatar from "src/shared/assets/images/default-avatar.jpg"
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import { UserContext } from 'src/app/providers/UserProvider';
 import { Modals } from '../Navbar';
+import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
 
 interface UserButtonProps {
     user: IUser;
@@ -17,12 +17,7 @@ export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
-    const onExitClick = () => setUser({
-        id: -1,
-        email: '',
-        name: '',
-        avatarUrl: ''
-    })
+    const onExitClick = () => setUser(defaultUser)
 
     const onAccountEditClick = () => {
         setModal(Modals.EDIT)
@@ -37,6 +32,8 @@ export const UserButton = ({ user, setModal }: UserButtonProps) => {
         setIsMenuShowed(false)
     }
 
+    console.log(user)
+
 
     return (
         <div
@@ -47,7 +44,7 @@ export const UserButton = ({ user, setModal }: UserButtonProps) => {
             <div
                 className={cls.userImageContainer}>
                 <img
-                    src={defaultUserAvatar}
+                    src={user.avatarUrl}
                     className={cls.userImage}
                 />
             </div>

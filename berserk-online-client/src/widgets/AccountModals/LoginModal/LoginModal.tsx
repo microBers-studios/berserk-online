@@ -10,9 +10,10 @@ import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertCont
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import cls from "./LoginModal.module.scss"
 import { UserContext } from 'src/app/providers/UserProvider';
-import { UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
+import { IUser, UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
 import { Modal } from 'src/widgets/Modal/Modal';
 import { Modals } from 'src/widgets/Navbar/Navbar';
+import { validatePassword } from 'src/helpers/validatePassword';
 
 interface LoginModalProps {
     setModal: (modal: false | Modals) => void;
@@ -21,7 +22,6 @@ interface LoginModalProps {
 
 const regulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    PASSWORD_REGULAR: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@#$%^&+=]).{8,}$/u
 }
 
 export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
@@ -35,6 +35,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
@@ -72,12 +73,14 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             return
         }
 
-        if (!password || !regulars.PASSWORD_REGULAR.test(password) && isRegistration) {
-            setPasswordError(password ? regulars.PASSWORD_REGULAR.test(password) ? 0 : 2 : 1)
+        if (!password || validatePassword(password) && isRegistration) {
+            setPasswordError(password ? validatePassword(password) ? 0 : 2 : 1)
             return
         }
 
-        const { code, text } = isRegistration
+        setIsLoading(true)
+
+        const { code, obj } = isRegistration
             ? await APIController.registrateUser({ name, email, password })
             : await APIController.loginUser({ email, password, rememberMe: isChecked })
 
@@ -88,10 +91,11 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
 
-            const { user } = await APIController.getMe()
-            setUser(user)
+            const { obj } = await APIController.getMe()
+            setUser(obj as IUser)
         } else if (code === 400 && !isRegistration) {
-            switch (Number(JSON.parse(text).id)) {
+
+            switch (Number(obj.id)) {
                 case 2:
                     setPasswordError(3)
                     break;
@@ -99,9 +103,6 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                     setEmailError(3)
                     break;
             }
-        }
-        else {
-            console.log(text)
         }
     }
 
@@ -151,7 +152,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
 
                 <div className={cls.buttonsWrapper}>
                     <button
-                        className={cls.FormButton}
+                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
                         onClick={onRegClick}
                     >
                         {isRegistration

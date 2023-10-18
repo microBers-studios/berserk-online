@@ -4,5 +4,6 @@ export enum Paths {
     REGISTRATION = '/Authentication/register',
     LOGIN = '/Authentication/login',
     GET_ME = '/User/getMe',
-    LOAD_AVATAR = '/User/loadAvatar'
+    LOAD_AVATAR = '/User/loadAvatar',
+    UPDATE_ME = '/User/updateMe'
 }

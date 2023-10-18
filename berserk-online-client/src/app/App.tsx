@@ -8,7 +8,7 @@ import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext'
 import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext'
 import { AlertsContainer } from 'src/widgets/Alert/AlertsContainer'
 import { RouterPaths } from './providers/router/router-paths'
-import { UserContextProps } from './providers/UserProvider/lib/types/types'
+import { IUser, UserContextProps } from './providers/UserProvider/lib/types/types'
 import { UserContext } from './providers/UserProvider'
 import APIController from 'src/API/Controller'
 
@@ -22,7 +22,7 @@ function App() {
     new Promise(async () => {
       const res = await APIController.getMe()
       if (res.code === 200) {
-        setUser(res.user)
+        setUser(res.obj as IUser)
       }
     })
   }, [])

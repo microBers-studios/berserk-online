@@ -3,7 +3,6 @@ import cls from "./ImageInput.module.scss"
 import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
 import { UserContext } from "src/app/providers/UserProvider";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
-import av from "src/shared/assets/images/default-avatar.jpg"
 import camera from "src/shared/assets/images/photo.svg"
 import APIController from 'src/API/Controller';
 import { useRef } from 'react';
@@ -13,17 +12,14 @@ import { useRef } from 'react';
 // }
 
 export const ImageInput = () => {
-    const { user } = useRequiredContext<UserContextProps>(UserContext)
-
+    const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
     const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-    const [url, setUrl] = useState<string>(Boolean(user.avatarUrl)
-        ? user.avatarUrl
-        : av)
-
     const inputRef = useRef<HTMLInputElement>(null)
 
     const changeAvatar = async () => {
-        APIController.loadAvatar(inputRef.current as HTMLInputElement)
+        const responseObject = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
+
+        setUser({ ...user, ...responseObject.obj })
     }
 
     return (
@@ -34,7 +30,7 @@ export const ImageInput = () => {
                 onMouseLeave={() => setIsMouseOver(false)}
             >
                 <img
-                    src={url}
+                    src={user.avatarUrl}
                     className={cls.userImage}
                 />
                 {isMouseOver && <label

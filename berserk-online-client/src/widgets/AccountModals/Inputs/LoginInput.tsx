@@ -12,6 +12,14 @@ interface LoginInputProps {
 
 export const LoginInput = ({ name, setName, nameError, setNameError, isProtected = false }: LoginInputProps) => {
     const [protect, setProtect] = useState<boolean>(isProtected)
+
+
+    const onInputEnter = (e: React.KeyboardEvent) => {
+        if (e.code === 'Enter' && isProtected) {
+            setProtect(true)
+        }
+    }
+
     return (
         <label className={`${cls.FormLabel} ${cls.loginLabel}`}>
             {isProtected
@@ -30,13 +38,14 @@ export const LoginInput = ({ name, setName, nameError, setNameError, isProtected
                             if (name) setNameError(false)
                             setName(e.target.value)
                         }}
+                        onKeyDown={onInputEnter}
                         required
                     />
                 }
                 {isProtected && <img
                     src={penImage}
                     onClick={() => setProtect(!protect)}
-                    className={cls.inputImage}
+                    className={`${cls.inputImage} ${!protect && cls.clicked}`}
                 />}
             </div>
 

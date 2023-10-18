@@ -1,9 +1,10 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseCode } from "./utils/types";
+import { IRegistration, ILogin, IResponseInfo } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
+import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 
 export default class APIController {
-    static async registrateUser(obj: IRegistration): Promise<IResponseCode> {
+    static async registrateUser(obj: IRegistration): Promise<IResponseInfo> {
         const path = URL + Paths.REGISTRATION
 
         const response: Response = await fetch(path, {
@@ -16,12 +17,12 @@ export default class APIController {
             body: JSON.stringify(obj)
         })
 
-        const text = await response.text()
+        const user = await response.json().catch(console.error)
 
-        return { code: response.status, text }
+        return { code: response.status, obj: user }
     }
 
-    static async loginUser(obj: ILogin): Promise<IResponseCode> {
+    static async loginUser(object: ILogin): Promise<IResponseInfo> {
         const path = URL + Paths.LOGIN
 
         const response: Response = await fetch(path, {
@@ -31,15 +32,15 @@ export default class APIController {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify(obj),
+            body: JSON.stringify(object),
         })
 
-        const text = await response.text()
+        const obj = await response.json().catch(console.error)
 
-        return { code: response.status, text }
+        return { code: response.status, obj }
     }
 
-    static async getMe(): Promise<{ code: number, user: IUser }> {
+    static async getMe(): Promise<IResponseInfo> {
         const path = URL + Paths.GET_ME
 
         const response: Response = await fetch(path, {
@@ -50,37 +51,49 @@ export default class APIController {
             credentials: 'include'
         })
 
-        const obj = await response.json()
+        const obj = await response.json().catch(console.error)
 
-        return { code: response.status, user: obj }
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
+        return { code: response.status, obj }
     }
 
-    static async loadAvatar(input: HTMLInputElement): Promise<string> {
+    static async loadAvatar(input: HTMLInputElement): Promise<IResponseInfo> {
         const path = URL + Paths.LOAD_AVATAR
 
         const formData = new FormData()
         const files = input.files as FileList;
-        console.log(input.files);
-        
-        formData.append('avatar', files[0])
 
-        // const headers = new Headers()
-        // headers.append('Cookie', document.cookie)
+        formData.append('avatar', files[0])
 
         const response = await fetch(path, {
             method: 'POST',
             body: formData,
             credentials: 'include',
-            // headers: {
-            //     "Content-Type": "application/json",
-            // }
         })
 
-        console.log(response.statusText)
+        const obj = await response.json().catch(console.error)
 
-        // console.log(await response.json())
+        return obj
+    }
 
-        return ''
+    static async updateUser(user: IUser): Promise<IResponseInfo> {
+        const path = URL + Paths.UPDATE_ME
+
+        const response = await fetch(path, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+
+        const obj = await response.json()
+
+        return { code: response.status, obj }
     }
 
 }
