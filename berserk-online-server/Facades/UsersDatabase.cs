@@ -47,7 +47,7 @@ namespace berserk_online_server.Facades
         }
         public bool IsUnique(User user)
         {
-            return !_db.Users.Any(u => u.Email == user.Email && u.Name == user.Name);
+            return !_db.Users.Any(u => u.Email == user.Email || u.Name == user.Name);
         }
         public UserInfo GetUserInfo(UserInfoRequest userRequest)
         {
