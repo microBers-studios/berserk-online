@@ -63,12 +63,16 @@ namespace berserk_online_server.Controllers
             }
         }
         [HttpPost("loadAvatar")]
-        public async Task<IResult> LoadAvatar(IFormFile avatar)
+        public async Task<IResult> LoadAvatar([FromForm] IFormFile avatar)
         {
             try
             {
                 string email = getRequesterMail();
                 string fileName = await _contentService.AddAvatar(avatar, email);
+                if (!fileName.Contains('.'))
+                {
+                    return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFileName, avatar.Name));
+                }
                 var updatedUser = _db.AddAvatarPath(fileName, email);
                 return Results.Ok(updatedUser);
             }

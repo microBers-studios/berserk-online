@@ -60,6 +60,8 @@ export default class APIController {
 
         const formData = new FormData()
         const files = input.files as FileList;
+        console.log(input.files);
+        
         formData.append('avatar', files[0])
 
         // const headers = new Headers()
@@ -67,12 +69,11 @@ export default class APIController {
 
         const response = await fetch(path, {
             method: 'POST',
-            body: JSON.stringify(formData),
-            // headers
+            body: formData,
             credentials: 'include',
-            headers: {
-                "Content-Type": "application/json",
-            }
+            // headers: {
+            //     "Content-Type": "application/json",
+            // }
         })
 
         console.log(response.statusText)
