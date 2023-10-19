@@ -26,20 +26,22 @@
         {
             validateFileName(newFile.FileName);
             string newFileName = createImageName(newFile.FileName, _convertedMail);
-            string newFileBasePath = Path.GetDirectoryName(_filePath)?? throw new ArgumentNullException();
+            string newFileBasePath = Path.GetDirectoryName(_filePath) ?? throw new ArgumentNullException();
             string newFilePath = Path.Combine(newFileBasePath, newFileName);
             bool isSuccess = true;
             if (newFilePath == null) { throw new NullReferenceException(nameof(newFilePath)); }
             try
             {
                 File.Delete(_filePath);
-                var fs = new FileStream(newFilePath, FileMode.Create);
-                await newFile.CopyToAsync(fs);
-                fs.Dispose();
+                using (var fs = new FileStream(newFilePath, FileMode.Create))
+                {
+                    await newFile.CopyToAsync(fs);
+                };   
             }
             catch (Exception)
             {
                 isSuccess = false;
+                throw new IOException();
             }
             finally
             {
