@@ -87,7 +87,7 @@ namespace berserk_online_server.Controllers
         [HttpPatch("updateMe")]
         public async Task<IResult> updateMe(UserInfoRequest request)
         {
-            if (!_db.IsUnique(new User() { Name = request.Name, Email = request.Email }))
+            if (!_db.IsUnique(request))
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
             }

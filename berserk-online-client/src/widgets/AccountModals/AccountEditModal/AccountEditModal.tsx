@@ -10,6 +10,7 @@ import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/type
 import { UserContext } from "src/app/providers/UserProvider";
 import { ImageInput } from "../Inputs/ImageInput/ImageInput";
 import APIController from "src/API/Controller";
+import { AlertContext, AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
 
 interface AccountEditModalProps {
     setModal: (modal: false | Modals) => void;
@@ -20,6 +21,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
     const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
 
     const [name, setName] = useState<string>(user.name)
     const [nameError, setNameError] = useState<boolean>(false)
@@ -41,18 +43,29 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
         const updateObject: Partial<IUser> = {}
 
+        let flag = false
+
         if (email !== user.email) {
             updateObject.email = email
+            flag = true
         }
 
         if (name !== user.name) {
             updateObject.name = name
+            flag = true
+        }
+
+        if (!flag) {
+            setIsLoading(false)
+            return
         }
 
         const { code, obj } = await APIController.updateUser(updateObject)
 
         if (code === 200) {
             setUser(obj as IUser)
+            closeModal()
+            setAlert('Данные изменены')
         } else if (code === 400) {
             setIsLoading(false)
             setEmailError(4)

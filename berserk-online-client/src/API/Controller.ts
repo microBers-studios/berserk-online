@@ -17,7 +17,7 @@ export default class APIController {
             body: JSON.stringify(obj)
         })
 
-        const user = await response.json().catch(console.error)
+        const user = await response.json()
 
         return { code: response.status, obj: user }
     }
@@ -35,7 +35,7 @@ export default class APIController {
             body: JSON.stringify(object),
         })
 
-        const obj = await response.json().catch(console.error)
+        const obj = await response.json()
 
         return { code: response.status, obj }
     }
@@ -51,7 +51,7 @@ export default class APIController {
             credentials: 'include'
         })
 
-        const obj = await response.json().catch(console.error)
+        const obj = await response.json()
 
         obj.avatarUrl = obj.avatarUrl
             ? obj.avatarUrl
@@ -74,9 +74,9 @@ export default class APIController {
             credentials: 'include',
         })
 
-        const obj = await response.json().catch(console.error)
+        const obj = await response.json()
 
-        return obj
+        return { code: response.status, obj }
     }
 
     static async updateUser(user: Partial<IUser>): Promise<IResponseInfo> {
@@ -92,6 +92,10 @@ export default class APIController {
         })
 
         const obj = await response.json()
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
 
         return { code: response.status, obj }
     }

@@ -44,7 +44,7 @@ namespace berserk_online_server.Controllers
         [HttpPost("register")]
         public async Task<IResult> Register(UserAuthenticationRequest user)
         {
-            if (db.IsUnique(user))
+            if (db.IsUnique(new UserInfoRequest() { Email = user.Email, Name = user.Email }))
             {
                 db.AddUser(user);
                 await authenticate(new UserInfo(user), user.RememberMe);
