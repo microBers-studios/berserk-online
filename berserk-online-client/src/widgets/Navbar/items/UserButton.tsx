@@ -7,6 +7,7 @@ import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import { UserContext } from 'src/app/providers/UserProvider';
 import { Modals } from '../Navbar';
 import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
+import APIController from 'src/API/Controller';
 
 interface UserButtonProps {
     user: IUser;
@@ -17,7 +18,11 @@ export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
-    const onExitClick = () => setUser(defaultUser)
+    const onExitClick = () => {
+        setUser(defaultUser)
+
+        APIController.logout()
+    }
 
     const onAccountEditClick = () => {
         setModal(Modals.EDIT)

@@ -100,4 +100,11 @@ export default class APIController {
         return { code: response.status, obj }
     }
 
+    static async logout(): Promise<void> {
+        const path = URL + Paths.LOGOUT
+
+        await fetch(path, {
+            credentials: 'include'
+        })
+    }
 }
