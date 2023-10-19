@@ -4,6 +4,7 @@ using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Net;
 
 namespace berserk_online_server.Controllers
 {
@@ -52,9 +53,17 @@ namespace berserk_online_server.Controllers
             }
             else return userAlreadyExists(user);
         }
+        [HttpGet("logout")]
+        public IResult LogOut()
+        {
+            var cookie = new Cookie();
+            cookie.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Append(".AspNetCore.Cookies",cookie.ToString());
+            return Results.NoContent();
+        }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
+            var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
             await manager.Authenticate(user, rememberMe, HttpContext);
         }
         private IResult userPasswordNotMatching(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
