@@ -35,7 +35,7 @@ namespace berserk_online_server.Facades
             {
                 var user = _db.Users.Where(u => u.Email == oldMail).First();
                 mergeUserWithRequest(user, request);
-                if (user.AvatarUrl != null)
+                if (user.AvatarUrl != null && request.Email != null)
                 {
                     var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
                     user.AvatarUrl = avatarName;

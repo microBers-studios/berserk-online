@@ -32,9 +32,6 @@ export const UserButton = ({ user, setModal }: UserButtonProps) => {
         setIsMenuShowed(false)
     }
 
-    console.log(user)
-
-
     return (
         <div
             className={cls.userButton}

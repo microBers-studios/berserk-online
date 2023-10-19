@@ -56,6 +56,7 @@
         {
             var newFileName = createImageName(_fileName, mail);
             var newFilePath = Path.Combine(Path.GetDirectoryName(_filePath) ?? throw new ArgumentNullException(), newFileName);
+            if (newFilePath == _filePath) return _fileName;
             await copyFiles(newFilePath);
             File.Delete(_filePath);
             _fileName = newFileName;

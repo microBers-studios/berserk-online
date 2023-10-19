@@ -18,7 +18,6 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [user, setUser] = useState<IUser>(defaultUser)
 
     const defaultValue = useMemo(() => {
-        console.log(user)
         return {
             user,
             setUser: (u: IUser) => setUser(u)
