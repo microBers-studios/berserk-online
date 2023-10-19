@@ -58,7 +58,8 @@ namespace berserk_online_server.Controllers
         {
             var cookie = new Cookie();
             cookie.Expires = DateTime.Now.AddDays(-1);
-            Response.Cookies.Append(".AspNetCore.Cookies",cookie.ToString());
+            Response.Cookies.Append(".AspNetCore.Cookies","", new CookieOptions() { 
+                SameSite = SameSiteMode.None, Secure = true, });
             return Results.NoContent();
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
