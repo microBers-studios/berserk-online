@@ -25,27 +25,29 @@ namespace berserk_online_server.Facades
 
         public async Task<string> AddAvatar(IFormFile file, string email)
         {
-            if (_avatars.ContainsKey(email))
+            var key = createKeyFromEmail(email);
+            if (_avatars.ContainsKey(key))
             {
-                var avatar = _avatars[email];
+                var avatar = _avatars[key];
                 await avatar.Replace(file);
                 return avatar.FileName;
             }
             else
             {
-                var avatar = new Avatar(AvatarsFolderPath, file, email);
-                _avatars.Add(email, avatar);
+                var avatar = new Avatar(AvatarsFolderPath, file, key);
+                _avatars.Add(key, avatar);
                 return avatar.FileName;
             }
         }
         public async Task<string> RenameAvatarByEmail(string oldMail, string newMail)
         {
-            if (_avatars.ContainsKey(oldMail))
+            var oldKey = createKeyFromEmail(oldMail);
+            if (_avatars.ContainsKey(oldKey))
             {
-                var avatar = _avatars[oldMail];
+                var avatar = _avatars[oldKey];
                 var avatarName = await avatar.RenameByMail(newMail);
-                _avatars.Remove(oldMail);
-                _avatars[newMail] = avatar;
+                _avatars.Remove(oldKey);
+                _avatars[createKeyFromEmail(newMail)] = avatar;
                 return avatarName;
             } else
             {
@@ -73,12 +75,16 @@ namespace berserk_online_server.Facades
             foreach (var avatarPath in avatarNames)
             {
                 var avatarName = Path.GetFileName(avatarPath);
-                _avatars.Add(createMailFromFileName(avatarName), new Avatar(AvatarsFolderPath, AvatarsUrl, avatarName));
+                _avatars.Add(createKeyFromFileName(avatarName), new Avatar(AvatarsFolderPath, AvatarsUrl, avatarName));
             }
         }
-        private string createMailFromFileName(string fileName)
+        private string createKeyFromFileName(string fileName)
         {
-            return fileName.Split('.')[0].Replace('-', '.').Replace('_', '@');
+            return fileName.Split('.')[0];
+        }
+        private string createKeyFromEmail(string email)
+        {
+            return email.Replace('.', '-').Replace('@', '_');
         }
     }
 }
