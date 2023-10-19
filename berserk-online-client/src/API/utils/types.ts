@@ -12,7 +12,7 @@ export interface ILogin {
     rememberMe: boolean;
 }
 
-export interface IResponseInfo {
+export interface IResponseUserInfo {
     code: number;
     obj: IUser | IError;
 }
