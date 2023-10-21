@@ -141,7 +141,12 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         emailError={emailError}
                         setEmailError={setEmailError}
                     />
-                    <PasswordInput value={{ password, setPassword }} error={{ passwordError, setPasswordError }} />
+                    <PasswordInput
+                        password={password}
+                        setPassword={setPassword}
+                        passwordError={passwordError}
+                        setPasswordError={setPasswordError}
+                    />
                     {isRegistration && regStatus === 400 &&
                         <span className={cls.redAlert}>*Пользователь уже существует</span>
                     }
@@ -160,6 +165,13 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                             ? 'Зарегистрироваться'
                             : 'Войти'}
                     </button>
+                    {!isRegistration &&
+                        <span
+                            className={cls.PasswordResetButton}
+                        >
+                            Забыли пароль?
+                        </span>
+                    }
                     <span
                         onClick={onFormChangeClick}
                         className={cls.changeFormButton}
@@ -167,6 +179,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         ? 'Войти'
                         : 'Зарегистрироваться'}
                     </span>
+
                 </div>
             </form>
         </Modal>

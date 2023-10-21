@@ -15,7 +15,6 @@
 }
 
 .FormButton {
-    margin-bottom: 10px;
     font-weight: bold;
     height: 40px;
     width: 350px;
@@ -44,14 +43,19 @@
 .buttonsWrapper {
     margin-top: 10%;
     grid-area: buttons;
-    // justify-self: flex-end;
+    gap: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.changeFormButton {
+.changeFormButton:hover,
+.PasswordResetButton:hover {
     cursor: pointer;
+}
+
+.PasswordResetButton {
+    color: var(--secondary-color)
 }
 
 .redAlert,
