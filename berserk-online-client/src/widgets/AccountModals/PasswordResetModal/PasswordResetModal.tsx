@@ -20,6 +20,10 @@ export const PasswordResetModal = ({ closeModal }: PasswordResetModalProps) => {
     const [extraPassword, setExtraPassword] = useState<string>('')
     const [extraPasswordError, setExtraPasswordError] = useState<number>(0)
 
+    const onFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+    }
+
     return (
         <div className={cls.PasswordResetModal} >
             <Modal
@@ -31,6 +35,7 @@ export const PasswordResetModal = ({ closeModal }: PasswordResetModalProps) => {
             >
                 <form
                     className={cls.Form}
+                    onSubmit={onFormSubmit}
                 >
 
                     <h1 className={cls.FormHeader}>
