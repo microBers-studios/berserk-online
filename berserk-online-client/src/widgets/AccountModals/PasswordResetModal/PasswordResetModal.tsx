@@ -17,6 +17,9 @@ export const PasswordResetModal = ({ closeModal }: PasswordResetModalProps) => {
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
 
+    const [extraPassword, setExtraPassword] = useState<string>('')
+    const [extraPasswordError, setExtraPasswordError] = useState<number>(0)
+
     return (
         <div className={cls.PasswordResetModal} >
             <Modal
@@ -43,10 +46,10 @@ export const PasswordResetModal = ({ closeModal }: PasswordResetModalProps) => {
                         />
 
                         <PasswordInput
-                            password={password}
-                            setPassword={setPassword}
-                            passwordError={passwordError}
-                            setPasswordError={setPasswordError}
+                            password={extraPassword}
+                            setPassword={setExtraPassword}
+                            passwordError={extraPasswordError}
+                            setPasswordError={setExtraPasswordError}
                             label={'Подтвердите новый пароль:'}
                         />
                     </div>
