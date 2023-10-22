@@ -116,8 +116,8 @@ namespace berserk_online_server.Controllers
         }
         private async Task updateCookie(UserInfo userInfo)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
-            await manager.Authenticate(userInfo, true, HttpContext);
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
+            await manager.Authenticate(userInfo, true);
         }
     }
 }

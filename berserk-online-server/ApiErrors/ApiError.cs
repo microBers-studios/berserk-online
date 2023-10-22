@@ -1,8 +1,6 @@
-﻿using berserk_online_server.Interfaces;
-
-namespace berserk_online_server.ApiErrors
+﻿namespace berserk_online_server.ApiErrors
 {
-    public abstract class ApiError : IApiError
+    public abstract class ApiError
     {
         protected ApiError(object? ctx = null)
         {

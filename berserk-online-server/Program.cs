@@ -1,5 +1,6 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Facades;
+using berserk_online_server.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,11 +50,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-app.UseHttpsRedirection();
 app.UseCors();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<CookieUpdateMiddleware>();
 
 app.MapControllers();
 

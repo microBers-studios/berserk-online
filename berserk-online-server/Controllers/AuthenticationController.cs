@@ -1,3 +1,4 @@
+using berserk_online_server.Constants;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Models.User;
@@ -21,7 +22,6 @@ namespace berserk_online_server.Controllers
         [HttpPost("login")]
         public async Task<IResult> Login(UserAuthenticationRequest authRequest)
         {
-            // REFACTOR
             try
             {
                 UserInfo matchingUser = db.VerifyUser(authRequest);
@@ -56,16 +56,13 @@ namespace berserk_online_server.Controllers
         [HttpGet("logout")]
         public IResult LogOut()
         {
-            var cookie = new Cookie();
-            cookie.Expires = DateTime.Now.AddDays(-1);
-            Response.Cookies.Append(".AspNetCore.Cookies","", new CookieOptions() { 
-                SameSite = SameSiteMode.None, Secure = true, });
+            new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
             return Results.NoContent();
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme);
-            await manager.Authenticate(user, rememberMe, HttpContext);
+            var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
+            await manager.Authenticate(user, rememberMe);
         }
         private IResult userPasswordNotMatching(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
         private IResult userEmailNotFound(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
