@@ -18,6 +18,7 @@ namespace berserk_online_server.Middleware
             if (!isValidCookie(context, CookieConstants.RememberMeCookieName))
             {
                 new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, context).LogOut();
+                writeBadResponse(context);
                 return;
             }
             if (getRememberMe(context))
@@ -40,6 +41,11 @@ namespace berserk_online_server.Middleware
             {
                 throw new InvalidOperationException(ex.Message, ex);
             }
+        }
+        private void writeBadResponse(HttpContext context)
+        {
+            context.Response.StatusCode = 403;
+            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.RememberMeLost));
         }
     }
 }
