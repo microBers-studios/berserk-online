@@ -1,6 +1,5 @@
 ﻿using berserk_online_server.ApiErrors;
 using berserk_online_server.ApiErrors.Authentication;
-using berserk_online_server.Interfaces;
 
 namespace berserk_online_server.Facades
 {
@@ -15,7 +14,7 @@ namespace berserk_online_server.Facades
     }
     public static class ApiErrorFabric
     {
-        public static IApiError Create(ApiErrorType errorType, object? ctx = null)
+        public static ApiError Create(ApiErrorType errorType, object? ctx = null)
         {
             switch (errorType)
             {
