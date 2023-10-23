@@ -27,8 +27,11 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
-builder.Services.AddScoped<UsersDatabase>();
+builder.Services.AddTransient<FrontendURLCreator>();
+builder.Services.AddTransient<UsersDatabase>();
 builder.Services.AddSingleton<StaticContentService>();
+builder.Services.AddSingleton<MailSender>();
+builder.Services.AddSingleton<RecoveryManager>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -36,7 +39,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins(builder.Configuration.GetValue<String>("FrontendPath"))
+            .WithOrigins(builder.Configuration.GetValue<string>("FrontendPath"))
             .WithExposedHeaders("Set-Cookie");
     });
 });
