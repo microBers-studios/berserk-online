@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Net;
+using System.Net.Mail;
 
 namespace berserk_online_server.Controllers
 {
@@ -52,6 +53,20 @@ namespace berserk_online_server.Controllers
                 return Results.Ok();
             }
             else return userAlreadyExists(user);
+        }
+        [HttpGet("mailTest")]
+        public IResult mailTest()
+        {
+            SmtpClient smtpClient = new SmtpClient("smtp.google.com", 587);
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential("val21219@gmail.com", "2190oviv0");
+            MailAddress from = new MailAddress("val21219@gmail.com");
+            MailAddress to = new MailAddress("val.rar@yandex.by");
+            MailMessage message = new MailMessage(from, to);
+            message.Body = "bebra";
+            smtpClient.Send(message);
+            return Results.Ok();
         }
         [HttpGet("logout")]
         public IResult LogOut()

@@ -21,7 +21,7 @@ namespace berserk_online_server.Middleware
                 writeBadResponse(context);
                 return;
             }
-            if (getRememberMe(context))
+            if (!getRememberMe(context))
                 new CookieExtender(context).ExtendAll();
             await _next.Invoke(context);
         }
