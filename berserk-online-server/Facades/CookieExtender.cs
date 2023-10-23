@@ -57,20 +57,21 @@ namespace berserk_online_server.Facades
             try
             {
                 var tokenValue = getCookie(CookieConstants.AuthenticationCookieName).Value;
-                extendCookie(CookieConstants.AuthenticationCookieName, tokenValue);
+                extendCookie(CookieConstants.AuthenticationCookieName, tokenValue, httpOnly: true);
             }
             catch (Exception)
             {
                 return;
             }
         }
-        private void extendCookie(string name, string value, bool sameSite = false)
+        private void extendCookie(string name, string value, bool sameSite = false, bool httpOnly = false)
         {
             _context.Response.Cookies.Append(name, value, new CookieOptions()
             {
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddMinutes(20),
                 SameSite = sameSite ? SameSiteMode.Lax : SameSiteMode.None,
-                Secure = true
+                Secure = true,
+                HttpOnly = httpOnly
             });
         }
     }

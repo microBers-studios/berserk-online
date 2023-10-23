@@ -11,7 +11,7 @@ namespace berserk_online_server.Facades
         private readonly Databases _db;
         public UsersDatabase(Databases db, StaticContentService staticContent)
         {
-            this._db = db;
+            _db = db;
             _avatarUrlBase = staticContent.AvatarsUrl;
             _staticContent = staticContent;
         }
@@ -88,6 +88,20 @@ namespace berserk_online_server.Facades
             _db.SaveChanges();
             processUserAvatar(user);
             return new UserInfo(user);
+        }
+        public void ChangeUserPassword(string password, string mail)
+        {
+            try
+            {
+                var user = _db.Users.Where(u => u.Email == mail).First();
+                user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+                _db.Update(user);
+                _db.SaveChanges();
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NotFoundException("user with this email not found: " + mail + ".");
+            }
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {

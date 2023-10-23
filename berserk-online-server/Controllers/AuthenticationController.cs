@@ -5,7 +5,6 @@ using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
-using System.Net;
 
 namespace berserk_online_server.Controllers
 {
@@ -13,18 +12,20 @@ namespace berserk_online_server.Controllers
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UsersDatabase db;
+        private readonly UsersDatabase _db;
+        private readonly RecoveryManager _recoveryManager;
 
-        public AuthenticationController(UsersDatabase databases)
+        public AuthenticationController(UsersDatabase databases, RecoveryManager recoveryManager)
         {
-            db = databases;
+            _db = databases;
+            _recoveryManager = recoveryManager;
         }
         [HttpPost("login")]
         public async Task<IResult> Login(UserAuthenticationRequest authRequest)
         {
             try
             {
-                UserInfo matchingUser = db.VerifyUser(authRequest);
+                UserInfo matchingUser = _db.VerifyUser(authRequest);
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }
@@ -45,13 +46,53 @@ namespace berserk_online_server.Controllers
         [HttpPost("register")]
         public async Task<IResult> Register(UserAuthenticationRequest user)
         {
-            if (db.IsUnique(new UserInfoRequest() { Email = user.Email, Name = user.Email }))
+            if (_db.IsUnique(new UserInfoRequest() { Email = user.Email, Name = user.Email }))
             {
-                db.AddUser(user);
+                _db.AddUser(user);
                 await authenticate(new UserInfo(user), user.RememberMe);
                 return Results.Ok();
             }
             else return userAlreadyExists(user);
+        }
+        [HttpPost("requestRecover")]
+        public IResult RequestRecover(UserInfoRequest request)
+        {
+            if (request.Email == null)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.ArgumentsMissing, new
+                {
+                    Request = request,
+                    Message = "'Email' required."
+                }));
+            }
+            if (_db.IsUnique(request))
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, request));
+            _recoveryManager.Push(request.Email);
+            return Results.Ok();
+        }
+        [HttpPatch("changePassword")]
+        public IResult ChangePassword(RecoveryRequestModel request)
+        {
+            try
+            {
+                var email = _recoveryManager.GetEmail(request.Token);
+                _db.ChangeUserPassword(request.Password, email);
+                _recoveryManager.Remove(request.Token);
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, request));
+            }
+            catch (NotFoundException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                {
+                    Request = request,
+                    Message = "An incorrect email address is stored under this token."
+                }));
+            }
+
+            return Results.Ok();
         }
         [HttpGet("logout")]
         public IResult LogOut()

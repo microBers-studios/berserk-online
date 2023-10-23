@@ -22,7 +22,7 @@ namespace berserk_online_server.Facades
                 _authScheme);
             await _context.SignInAsync(_authScheme, new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
             {
-                ExpiresUtc = DateTime.UtcNow.AddHours(1)
+                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddMonths(2) : DateTimeOffset.UtcNow.AddMinutes(20)
             });
             setRememberMeCookie(rememberMe);
         }

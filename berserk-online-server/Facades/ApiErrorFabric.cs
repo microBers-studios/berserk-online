@@ -12,6 +12,7 @@ namespace berserk_online_server.Facades
         ArgumentsMissing,
         InvalidFileName,
         RememberMeLost,
+        InvalidToken
     }
     public static class ApiErrorFabric
     {
@@ -33,6 +34,8 @@ namespace berserk_online_server.Facades
                     return new InvalidFileName(ctx);
                 case ApiErrorType.RememberMeLost:
                     return new RememberMeLost(ctx);
+                case ApiErrorType.InvalidToken:
+                    return new InvalidToken(ctx);
             }
             throw new NotImplementedException();
         }
