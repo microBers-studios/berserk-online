@@ -22,13 +22,21 @@ namespace berserk_online_server.Facades
         }
         public bool IsValid(string token)
         {
-            return _requests.ContainsKey(token) && _requests[token].Created >= DateTimeOffset.Now;
+            return _requests.ContainsKey(token) && _requests[token].Expires >= DateTimeOffset.Now;
         }
         public string GetEmail(string token)
         {
             try
             {
-                return _requests[token].Mail;
+                if (IsValid(token))
+                {
+                    return _requests[token].Mail;
+                }
+                else
+                {
+                    Remove(token);
+                    throw new KeyNotFoundException();
+                }
             }
             catch (KeyNotFoundException)
             {
