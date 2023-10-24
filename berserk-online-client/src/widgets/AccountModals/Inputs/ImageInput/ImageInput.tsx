@@ -6,6 +6,7 @@ import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import camera from "src/shared/assets/images/photo.svg"
 import APIController from 'src/API/Controller';
 import { useRef } from 'react';
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
 
 // interface ImageInputProps {
 //     formRef: React.Ref<HTMLFormElement>
@@ -52,9 +53,10 @@ export const ImageInput = () => {
                 </label>
                 }
             </div>
-            <span
+
+            {user.avatarUrl !== defaultAvatar && <span
                 className={cls.deleteAvatar}
-            >Удалить</span>
+            >Удалить</span>}
         </div>
     );
 }
