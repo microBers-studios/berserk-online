@@ -50,7 +50,7 @@ namespace berserk_online_server.Controllers
             {
                 _db.AddUser(user);
                 await authenticate(new UserInfo(user), user.RememberMe);
-                return Results.Ok();
+                return Results.Ok(new UserInfo(user));
             }
             else return userAlreadyExists(user);
         }
