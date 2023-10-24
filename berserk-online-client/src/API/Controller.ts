@@ -118,4 +118,34 @@ export default class APIController {
             credentials: 'include'
         })
     }
+
+    static async requestPasswordChanging(email: string): Promise<number> {
+        const path = URL + Paths.REQUEST_PASSWORD_CHANGING
+
+        const response = await fetch(path, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        })
+
+        return response.status
+    }
+
+    static async changePassword(token: string, password: string): Promise<number> {
+
+        const path = URL + Paths.UPDATE_PASSWORD
+
+        const response = await fetch(path, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token, password })
+        })
+
+        return response.status
+    }
 }

@@ -20,7 +20,7 @@ interface LoginModalProps {
     defaultModal: Modals
 }
 
-const regulars = {
+export const formRegulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
 
@@ -52,10 +52,25 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
         setIsRegistration(!isRegistration)
     }
 
-    const closeModal = () => {
+    const closeModal = async (isOverflowHidden = true) => {
         setIsCloseAnimation(true)
-        setTimeout(() => setModal(false), 300)
-        document.body.style.overflow = ''
+
+        if (isOverflowHidden) {
+            document.body.style.overflow = ''
+        }
+
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                setModal(false)
+                resolve(0)
+            }, 300)
+        })
+    }
+
+
+    const onPasswordResetClick = async () => {
+        await closeModal(false)
+        setModal(Modals.EMAIL)
     }
 
     const onRegClick = async (e: React.MouseEvent<HTMLElement>) => {
@@ -68,14 +83,15 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             return
         }
 
-        if (!email || !regulars.EMAIL_REGULAR.test(email)) {
-            setEmailError(email ? regulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
+        if (!email || !formRegulars.EMAIL_REGULAR.test(email)) {
+            setEmailError(email ? formRegulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
             return
         }
 
-        if (!password || validatePassword(password) && isRegistration) {
-            setPasswordError(password ? validatePassword(password) ? 0 : 2 : 1)
-            return
+        if (!password || !validatePassword(password) && isRegistration) {
+            const error = password ? validatePassword(password) ? 0 : 2 : 1
+            setPasswordError(error)
+            if (error) return
         }
 
         setIsLoading(true)
@@ -168,6 +184,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                     {!isRegistration &&
                         <span
                             className={cls.PasswordResetButton}
+                            onClick={onPasswordResetClick}
                         >
                             Забыли пароль?
                         </span>

@@ -7,6 +7,7 @@ import { RouterPaths } from "src/app/providers/router/router-paths";
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { UserButton } from "./items/UserButton";
 import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
+import { EmailModal } from "../AccountModals/EmailModal/EmailModal";
 
 interface NavbarProps {
     currentPage: RouterPaths;
@@ -16,7 +17,8 @@ interface NavbarProps {
 export enum Modals {
     LOGIN = 'login',
     REGISTRATION = 'registration',
-    EDIT = 'account'
+    EDIT = 'account',
+    EMAIL = 'reset-email'
 }
 
 export const Navbar = ({ currentPage, user }: NavbarProps) => {
@@ -99,6 +101,10 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                 />}
             {modal === Modals.EDIT &&
                 <AccountEditModal
+                    setModal={setModal}
+                />}
+            {modal === Modals.EMAIL &&
+                <EmailModal
                     setModal={setModal}
                 />}
         </>

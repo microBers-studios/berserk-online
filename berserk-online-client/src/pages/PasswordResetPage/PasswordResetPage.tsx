@@ -1,16 +1,22 @@
 import { PasswordResetModal } from "src/widgets/AccountModals/PasswordResetModal/PasswordResetModal";
 import cls from "./PasswordResetPage.module.scss"
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 
 // interface PasswordResetPageProps {
 //     className?: string;
 // }
 
 export const PasswordResetPage = () => {
-
     const [isModal, setIsModal] = useState<boolean>(true)
     const [isNavigate, setIsNavigate] = useState<boolean>(false)
+
+    const [params] = useSearchParams()
+    const token = params.get('token')
+
+    if (!token) {
+        throw new Error('Token Error')
+    }
 
     const closeModal = () => {
         setIsModal(false)
@@ -21,7 +27,10 @@ export const PasswordResetPage = () => {
         ? <Navigate to={'/'} />
         : <div className={cls.PasswordResetPage} >
             {isModal &&
-                <PasswordResetModal closeModal={closeModal} />}
+                <PasswordResetModal
+                    closeModal={closeModal}
+                    token={token}
+                />}
         </div >
         ;
 }
