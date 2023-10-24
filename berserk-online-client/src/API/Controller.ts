@@ -4,7 +4,7 @@ import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 
 export default class APIController {
-    static async registrateUser(obj: IRegistration): Promise<IResponseUserInfo> {
+    static async registrateUser(userObject: IRegistration): Promise<IResponseUserInfo> {
         const path = URL + Paths.REGISTRATION
 
         const response: Response = await fetch(path, {
@@ -14,12 +14,17 @@ export default class APIController {
                 'Access-Control-Allow-Origin': '*'
             },
             credentials: "include",
-            body: JSON.stringify(obj)
+            body: JSON.stringify(userObject)
         })
 
-        const user = await response.json()
 
-        return { code: response.status, obj: user }
+        const obj = await response.json()
+
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
+        return { code: response.status, obj }
     }
 
     static async loginUser(object: ILogin): Promise<IResponseUserInfo> {
@@ -36,6 +41,10 @@ export default class APIController {
         })
 
         const obj = await response.json()
+
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
 
         return { code: response.status, obj }
     }

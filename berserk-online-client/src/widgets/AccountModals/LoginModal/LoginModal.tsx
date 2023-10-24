@@ -107,7 +107,6 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 ? 'Вы зарегистрированы'
                 : 'Вы вошли в аккаунт')
 
-            const { obj } = await APIController.getMe()
             setUser(obj as IUser)
         } else if (code === 400 && !isRegistration) {
             setIsLoading(false)
