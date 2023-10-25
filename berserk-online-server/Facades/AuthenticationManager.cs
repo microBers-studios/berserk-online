@@ -26,6 +26,12 @@ namespace berserk_online_server.Facades
             });
             setRememberMeCookie(rememberMe);
         }
+        public string GetMail()
+        {
+            var emailClaim = _context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+            if (emailClaim == null) throw new ArgumentNullException("claim is null");
+            return emailClaim.Value;
+        }
         public void LogOut()
         {
             clearResponseCookies(CookieConstants.AuthenticationCookieName, 

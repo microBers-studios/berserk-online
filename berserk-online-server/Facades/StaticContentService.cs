@@ -49,6 +49,19 @@ namespace berserk_online_server.Facades
                 _avatars.Remove(oldKey);
                 _avatars[createKeyFromEmail(newMail)] = avatar;
                 return avatarName;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
+        public void DeleteAvatar(string email)
+        {
+            var key = createKeyFromEmail(email);
+            if (_avatars.ContainsKey(key))
+            {
+                _avatars[key].Delete();
+                _avatars.Remove(key);
             } else
             {
                 throw new InvalidOperationException();

@@ -1,24 +1,25 @@
-﻿using berserk_online_server.Models;
+﻿using berserk_online_server.Facades.MailSenders;
+using berserk_online_server.Interfaces;
+using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades
 {
-    public class RecoveryManager
+    public class TempRequestsManager<T>
+        where T : IMailSender
     {
         //Key is token
-        private Dictionary<string, RecoveryRequest> _requests;
-        private MailSender _mailSender;
-        private FrontendURLCreator _urlCreator;
-        public RecoveryManager(MailSender mailSender, FrontendURLCreator urlCreator)
+        private Dictionary<string, TempRequest> _requests;
+        private IMailSender _mailSender;
+        public TempRequestsManager(T sender)
         {
-            _requests = new Dictionary<string, RecoveryRequest>();
-            _mailSender = mailSender;
-            _urlCreator = urlCreator;
+            _requests = new Dictionary<string, TempRequest>();
+            _mailSender = sender;
         }
         public void Push(string mail)
         {
-            var recoveryRequest = new RecoveryRequest(mail);
-            _requests[recoveryRequest.Token] = recoveryRequest;
-            sendRecoveryMail(mail, recoveryRequest.Token);
+            var tempRequest = new TempRequest(mail);
+            _requests[tempRequest.Token] = tempRequest;
+            sendRecoveryMail(mail, tempRequest.Token);
         }
         public bool IsValid(string token)
         {
@@ -50,7 +51,7 @@ namespace berserk_online_server.Facades
         }
         private void sendRecoveryMail(string mail, string token)
         {
-            _mailSender.Send(mail, _urlCreator.GetRecoveryUrl(token), "Recover your password");
+            _mailSender.Send(mail, token);
         }
     }
 }

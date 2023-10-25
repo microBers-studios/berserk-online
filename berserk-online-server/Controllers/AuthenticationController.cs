@@ -1,6 +1,7 @@
 using berserk_online_server.Constants;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
+using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,16 @@ namespace berserk_online_server.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UsersDatabase _db;
-        private readonly RecoveryManager _recoveryManager;
+        private readonly TempRequestsManager<RecoveryMailSender> _recoveryManager;
+        private readonly TempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
 
-        public AuthenticationController(UsersDatabase databases, RecoveryManager recoveryManager)
+        public AuthenticationController(UsersDatabase databases, 
+            TempRequestsManager<RecoveryMailSender> recoveryManager,
+            TempRequestsManager<ConfirmEmailSender> confirmEmailManager)
         {
             _db = databases;
             _recoveryManager = recoveryManager;
+            _confirmEmailManager = confirmEmailManager;
         }
         [HttpPost("login")]
         public async Task<IResult> Login(UserAuthenticationRequest authRequest)
@@ -50,6 +55,7 @@ namespace berserk_online_server.Controllers
             {
                 _db.AddUser(user);
                 await authenticate(new UserInfo(user), user.RememberMe);
+                _confirmEmailManager.Push(user.Email);
                 return Results.Ok(new UserInfo(user));
             }
             else return userAlreadyExists(user);
@@ -76,7 +82,7 @@ namespace berserk_online_server.Controllers
             try
             {
                 var email = _recoveryManager.GetEmail(request.Token);
-                _db.ChangeUserPassword(request.Password, email);
+                _db.UpdateUser(new User() { Password = request.Password}, email);
                 _recoveryManager.Remove(request.Token);
             }
             catch (InvalidOperationException)
@@ -93,6 +99,43 @@ namespace berserk_online_server.Controllers
             }
 
             return Results.Ok();
+        }
+        [HttpPost("confirmEmail")]
+        public IResult ConfirmEmail(string token)
+        {
+            try
+            {
+                if (!_confirmEmailManager.IsValid(token))
+                {
+                    return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
+                }
+                var email = _confirmEmailManager.GetEmail(token);
+                var user = _db.ConfirmEmail(email);
+                _confirmEmailManager.Remove(token);
+                return Results.Ok(user);
+            } catch (InvalidOperationException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
+            } catch (NotFoundException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
+            }
+            
+        }
+        [HttpGet("confirmationRequest")]
+        public IResult requestNewConfirmation()
+        {
+            try
+            {
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
+                    HttpContext);
+                var mail = authManager.GetMail();
+                _confirmEmailManager.Push(mail);
+                return Results.Ok();
+            } catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
         }
         [HttpGet("logout")]
         public IResult LogOut()

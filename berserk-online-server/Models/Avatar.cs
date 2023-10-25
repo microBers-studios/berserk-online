@@ -64,6 +64,10 @@
             _convertedMail = newFileName.Split('.')[0];
             return _fileName;
         }
+        public void Delete()
+        {
+            File.Delete(_filePath);
+        }
 
         private async Task copyFiles(string newFilePath)
         {
