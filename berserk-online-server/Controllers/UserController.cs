@@ -99,8 +99,8 @@ namespace berserk_online_server.Controllers
                     HttpContext);
                 string email = authManager.GetMail();
                 _contentService.DeleteAvatar(email);
-                var updatedUSer = _db.RemoveAvatar(email);
-                return Results.Ok(updatedUSer);
+                var updatedUser = _db.RemoveAvatar(email);
+                return Results.Ok(updatedUser);
             }
             catch (ArgumentNullException)
             {

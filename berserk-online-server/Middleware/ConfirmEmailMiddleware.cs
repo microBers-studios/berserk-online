@@ -51,7 +51,9 @@ namespace berserk_online_server.Middleware
         }
         private bool isTryToConfirm(HttpContext context)
         {
-            return context.Request.Path.Value.Contains("confirmEmail");
+            var path = context.Request.Path.Value;
+            return path.Contains("confirmEmail") || path.Contains("logout") || path.Contains("login") 
+                || path.Contains("register");
         }
     }
 }
