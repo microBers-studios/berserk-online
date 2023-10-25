@@ -13,7 +13,8 @@ namespace berserk_online_server.Controllers
     {
         private readonly UsersDatabase _db;
         private readonly StaticContentService _contentService;
-        public UserController(UsersDatabase db, IWebHostEnvironment environment, StaticContentService contentService)
+        public UserController(UsersDatabase db, IWebHostEnvironment environment, 
+            StaticContentService contentService)
         {
             _db = db;
             _contentService = contentService;
@@ -27,7 +28,8 @@ namespace berserk_online_server.Controllers
             }
             try
             {
-                return Results.Ok(_db.GetUserInfo(requestInfo));
+                var user = _db.GetUser(requestInfo);
+                return Results.Ok(new UserInfo(user));
             }
             catch (NotFoundException)
             {
@@ -39,7 +41,8 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                return Results.Ok(_db.GetUserInfo(new UserInfoRequest { Id = id }));
+                var user = _db.GetUser(new UserInfoRequest { Id = id });
+                return Results.Ok(new UserInfo(user));
             }
             catch (NotFoundException)
             {
@@ -54,7 +57,8 @@ namespace berserk_online_server.Controllers
                 string email = User.Claims.Where(claim => claim.Type == ClaimTypes.Email).First().Value;
                 string name = User.Claims.Where(claim => claim.Type == ClaimTypes.Name).First().Value;
 
-                return Results.Ok(_db.GetUserInfo(new UserInfoRequest() { Name = name, Email = email }));
+                var user = _db.GetUser(new UserInfoRequest() { Name = name, Email = email });
+                return Results.Ok(new UserInfo(user));
             }
             catch (InvalidOperationException)
             {
@@ -66,13 +70,15 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                string email = getRequesterMail();
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                    HttpContext);
+                string email = authManager.GetMail();
                 string fileName = await _contentService.AddAvatar(avatar, email);
                 if (!fileName.Contains('.'))
                 {
                     return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFileName, avatar.Name));
                 }
-                var updatedUser = _db.AddAvatarPath(fileName, email);
+                var updatedUser = _db.UpdateUser(new User() { AvatarUrl = fileName }, email);
                 return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
@@ -84,6 +90,26 @@ namespace berserk_online_server.Controllers
                 return Results.Unauthorized();
             }
         }
+        [HttpDelete("deleteAvatar")]
+        public IResult DeleteAvatar()
+        {
+            try
+            {
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                    HttpContext);
+                string email = authManager.GetMail();
+                _contentService.DeleteAvatar(email);
+                var updatedUSer = _db.RemoveAvatar(email);
+                return Results.Ok(updatedUSer);
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            } catch (NotFoundException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
+            }
+        }
         [HttpPatch("updateMe")]
         public async Task<IResult> updateMe(UserInfoRequest request)
         {
@@ -93,30 +119,30 @@ namespace berserk_online_server.Controllers
             }
             try
             {
-                var oldMail = getRequesterMail();
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                    HttpContext);
+                string oldMail = authManager.GetMail();
                 var updatedUser = await _db.UpdateUser(request, oldMail);
                 await updateCookie(updatedUser);
                 return Results.Ok(updatedUser);
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, 
-                    new { Request = request, Mail = getRequesterMail() }));
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                    HttpContext);
+                string email = authManager.GetMail();
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
+                    new { Request = request, Mail = email }));
             }
             catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
             }
         }
-        private string getRequesterMail()
-        {
-            var emailClaim = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
-            if (emailClaim == null) throw new ArgumentNullException("claim is null");
-            return emailClaim.Value;
-        }
         private async Task updateCookie(UserInfo userInfo)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                HttpContext);
             await manager.Authenticate(userInfo, true);
         }
     }

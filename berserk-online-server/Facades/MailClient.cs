@@ -3,11 +3,11 @@ using System.Net.Mail;
 
 namespace berserk_online_server.Facades
 {
-    public class MailSender
+    public class MailClient
     {
         private readonly SmtpClient _smtpClient;
         private readonly MailAddress _senderAddress;
-        public MailSender(IConfiguration configuration)
+        public MailClient(IConfiguration configuration)
         {
             var (username, password) = getCredentialsFromConfig(configuration);
             _smtpClient = createSmtpClient(new(username, password));

@@ -2,6 +2,7 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Models.User;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace berserk_online_server.Facades
 {
@@ -42,25 +43,72 @@ namespace berserk_online_server.Facades
                 }
                 _db.Update(user);
                 _db.SaveChanges();
-                processUserAvatar(user);
-                return new UserInfo(user);
+                return new UserInfo(formatUser(user));
             }
             catch (InvalidOperationException)
             {
                 throw new NotFoundException("user with this email not found");
             }
         }
+        public UserInfo UpdateUser(User newUser, string oldmail)
+        {
+            try
+            {
+                var user = _db.Users.Where(u => u.Email == oldmail).First();
+                user.Email = newUser.Email != null ? newUser.Email : user.Email;
+                user.AvatarUrl = newUser.AvatarUrl != null ? newUser.AvatarUrl : user.AvatarUrl;
+                user.Password = newUser.Password != null ? BCrypt.Net.BCrypt.HashPassword(newUser.Password)
+                    : user.Password;
+                user.Name = newUser.Name != null ? newUser.Name : user.Name;
+                _db.Update(user);
+                _db.SaveChanges();
+                return new UserInfo(formatUser(user));
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NotFoundException();
+            }
+        }
+        public UserInfo ConfirmEmail(string mail)
+        {
+            try
+            {
+                var user = _db.Users.Where(u => u.Email == mail).First();
+                user.IsEmailConfirmed = true;
+                _db.Update(user);
+                _db.SaveChanges();
+                return new UserInfo(formatUser(user));
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NotFoundException();
+            }
+        }
+        public UserInfo RemoveAvatar(string email)
+        {
+            try
+            {
+                var user = _db.Users.Where(u => u.Email == email).First();
+                user.AvatarUrl = null;
+                _db.Users.Update(user);
+                _db.SaveChanges();
+                return new UserInfo(formatUser(user));
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NotFoundException();
+            }
+        }
         public bool IsUnique(UserInfoRequest user)
         {
             return !_db.Users.Any(u => u.Email == user.Email || u.Name == user.Name);
         }
-        public UserInfo GetUserInfo(UserInfoRequest userRequest)
+        public User GetUser(UserInfoRequest userRequest)
         {
             var foundedUser = findUserFromRequest(userRequest);
             if (foundedUser != null)
             {
-                processUserAvatar(foundedUser);
-                return new UserInfo(foundedUser);
+                return formatUser(foundedUser);
             }
             else
             {
@@ -76,32 +124,7 @@ namespace berserk_online_server.Facades
                 throw new ArgumentException($"User with email: {user.Email} not found!");
             if (!tryVerifyPassword(user, matchingUser))
                 throw new UserPasswordException($"User with password: {user.Password} not found!");
-            processUserAvatar(matchingUser);
-            return new UserInfo(matchingUser);
-        }
-        public UserInfo AddAvatarPath(string avatarName, string email)
-        {
-            var user = _db.Users.FirstOrDefault(u => u.Email == email);
-            if (user == null) throw new NotFoundException("user with this email not found.");
-            user.AvatarUrl = avatarName;
-            _db.Users.Update(user);
-            _db.SaveChanges();
-            processUserAvatar(user);
-            return new UserInfo(user);
-        }
-        public void ChangeUserPassword(string password, string mail)
-        {
-            try
-            {
-                var user = _db.Users.Where(u => u.Email == mail).First();
-                user.Password = BCrypt.Net.BCrypt.HashPassword(password);
-                _db.Update(user);
-                _db.SaveChanges();
-            }
-            catch (InvalidOperationException)
-            {
-                throw new NotFoundException("user with this email not found: " + mail + ".");
-            }
+            return new UserInfo(formatUser(matchingUser));
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {
@@ -120,10 +143,10 @@ namespace berserk_online_server.Facades
                 && (request.Email == null || request.Email == u.Email)
                 && (request.Id == null || request.Id == u.Id));
         }
-        private void processUserAvatar(User user)
+        private User formatUser(User user)
         {
-            if (user.AvatarUrl != null)
-                user.AvatarUrl = _avatarUrlBase + user.AvatarUrl;
+            return new User() { Name = user.Name, Email = user.Email, AvatarUrl = _avatarUrlBase + user.AvatarUrl,
+            Id = user.Id, IsEmailConfirmed = user.IsEmailConfirmed, Password = user.Password};
         }
         private void mergeUserWithRequest(User u1, UserInfoRequest request)
         {

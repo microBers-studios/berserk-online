@@ -1,5 +1,6 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Facades;
+using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,12 @@ builder.Services.AddDbContext<Databases>(options =>
 });
 builder.Services.AddTransient<FrontendURLCreator>();
 builder.Services.AddTransient<UsersDatabase>();
+builder.Services.AddTransient<RecoveryMailSender>();
+builder.Services.AddTransient<ConfirmEmailSender>();
 builder.Services.AddSingleton<StaticContentService>();
-builder.Services.AddSingleton<MailSender>();
-builder.Services.AddSingleton<RecoveryManager>();
+builder.Services.AddSingleton<MailClient>();
+builder.Services.AddSingleton<TempRequestsManager<RecoveryMailSender>>();
+builder.Services.AddSingleton<TempRequestsManager<ConfirmEmailSender>>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -60,6 +64,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<CookieUpdateMiddleware>();
+app.UseMiddleware<ConfirmEmailMiddleware>();
 
 app.MapControllers();
 

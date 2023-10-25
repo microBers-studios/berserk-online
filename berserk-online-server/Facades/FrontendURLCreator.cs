@@ -15,5 +15,9 @@
         {
             return $"{_host}/password?token={token}";
         }
+        public string GetEmailConfirmationUrl(string token)
+        {
+            return $"{_host}/confirmEmail?token={token}";
+        }
     }
 }

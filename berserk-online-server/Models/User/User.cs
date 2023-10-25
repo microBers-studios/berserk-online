@@ -15,12 +15,16 @@ namespace berserk_online_server.Models.User
         {
             get
             {
-                name ??= Email.Split('@')[0];
+                if (Email != null && name == null)
+                {
+                    name = Email.Split('@')[0];
+                }
                 return name;
             }
             set { name = value; }
         }
         public string? AvatarUrl { get; set; }
+        public bool IsEmailConfirmed { get; set; } = false;
         private string? name;
     }
 }
