@@ -7,11 +7,13 @@ namespace berserk_online_server.Facades
     {
         private readonly SmtpClient _smtpClient;
         private readonly MailAddress _senderAddress;
-        public MailClient(IConfiguration configuration)
+        private readonly ILogger _logger;
+        public MailClient(IConfiguration configuration, ILogger<MailClient> logger)
         {
             var (username, password) = getCredentialsFromConfig(configuration);
             _smtpClient = createSmtpClient(new(username, password));
             _senderAddress = createSenderAddress(username);
+            _logger = logger;
         }
         public void Send(string to, string content, string header = "")
         {
@@ -22,8 +24,9 @@ namespace berserk_online_server.Facades
             {
                 _smtpClient.SendAsync(message, null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogCritical(ex.Message);
                 return;
             }
 
