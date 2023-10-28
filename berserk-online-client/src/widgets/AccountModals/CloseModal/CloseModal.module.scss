@@ -15,7 +15,26 @@
     font-weight: bold;
 }
 
+.MailLinkImageWrapper {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.MailLinkWrapper {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    margin: 15px 0;
+}
+
 .MailLink {
     text-decoration: none;
-    font-size: 300%;
+    font-size: 25px;
+    color: white;
+    margin: 0;
+}
+
+.MailServiceImage {
+    width: 50px;
+    // fill: red;
 }

@@ -31,7 +31,7 @@ export const Modal = (props: ModalProps) => {
             className={cls.wrapper}
         >
             <div
-                className={`${cls.Modal} ${props.isOpenAnimation && cls.opened} ${props.isAnimation && cls.animated} ${props.isCloseAnimation && cls.closed} ${props.modalClass == Modals.EMAIL && cls.EmailModal}`}
+                className={`${cls.Modal} ${props.isOpenAnimation && cls.opened} ${props.isAnimation && cls.animated} ${props.isCloseAnimation && cls.closed} ${props.modalClass == Modals.EMAIL && cls.EmailModal} ${props.modalClass == Modals.CLOSE && cls.CloseModal}`}
                 onAnimationEnd={endAnimation}>
                 <img
                     src={crossImage}

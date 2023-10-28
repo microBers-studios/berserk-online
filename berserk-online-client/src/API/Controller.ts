@@ -158,11 +158,22 @@ export default class APIController {
         return response.status
     }
 
-    static async confirmEmail(): Promise<number> {
-        const path = URL + Paths.CONFIRM_EMAIL;
+    static async sendConfirmEmail(): Promise<number> {
+        const path = URL + Paths.CONFIRM_EMAIL_LETTER;
 
         const response = await fetch(path, {
             credentials: 'include',
+        })
+
+        return response.status
+    }
+
+    static async confirmEmail(token: string): Promise<number> {
+        const path = URL + Paths.CONFIRM_EMAIL + `?token=${token}`
+
+        const response = await fetch(path, {
+            method: 'POST',
+            credentials: 'include'
         })
 
         return response.status

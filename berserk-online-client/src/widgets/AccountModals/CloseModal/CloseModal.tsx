@@ -4,6 +4,9 @@ import cls from "./CloseModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
+import gmailSvg from 'src/shared/assets/images/gmail.svg'
+import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg'
+import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg'
 import APIController from 'src/API/Controller';
 
 interface CloseModalProps {
@@ -12,7 +15,8 @@ interface CloseModalProps {
 }
 
 const mailServices = {
-    "mail.ru": ["Почта Mail.Ru", "https://e.mail.ru/"],
+    "mail.ru": ["Почта Mail.Ru", "https://e.mail.ru/", mailDotRuSvg],
+    "mail.com": ["Почта Mail.Com", "https://mail.com/", mailDotComSvg],
     'bk.ru': ["Почта Mail.Ru (bk.ru)", "https://e.mail.ru/"],
     'list.ru': ["Почта Mail.Ru (list.ru)", "https://e.mail.ru/"],
     'inbox.ru': ["Почта Mail.Ru (inbox.ru)", "https://e.mail.ru/"],
@@ -22,7 +26,7 @@ const mailServices = {
     'yandex.by': ["Яндекс.Почта", "https://mail.yandex.by/"],
     'yandex.kz': ["Яндекс.Почта", "https://mail.yandex.kz/"],
     'yandex.com': ["Yandex.Mail", "https://mail.yandex.com/"],
-    'gmail.com': ["Gmail", "https://mail.google.com/"],
+    'gmail.com': ["Gmail", "https://mail.google.com/", gmailSvg],
     'googlemail.com': ["Gmail", "https://mail.google.com/"],
     'outlook.com': ["Outlook.com", "https://mail.live.com/"],
     'hotmail.com': ["Outlook.com (Hotmail)", "https://mail.live.com/"],
@@ -73,7 +77,7 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
     }, [time])
 
     const onButtonClick = () => {
-        APIController.confirmEmail();
+        APIController.sendConfirmEmail();
 
         setIsReady(false)
         setTime(59)
@@ -83,7 +87,6 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
         }, 1000)
 
         setIntervalID(interval)
-        console.log('ffffffff')
     }
 
     const closeModal = () => {
@@ -98,21 +101,41 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
+            modalClass={Modals.CLOSE}
         >
             <div
                 className={cls.CloseModal}
             >
                 <p
                     className={cls.CloseModalText}
-                >Перейдите в почту, чтобы подтвердить свой аккаунт:
+                >Перейдите в почту, чтобы подтвердить свой аккаунт{mailService === undefined ? '.' : ':'}
                 </p>
-                {mailService && <a
-                    href={mailService[1]}
-                    target="_blank"
-                    className={cls.MailLink}
-                >
-                    {mailService[0]}
-                </a>}
+                {mailService &&
+                    (mailService[2] !== undefined ? <div className={cls.MailImageLinkWrapper}>
+                        <a
+                            href={mailService[1]}
+                            target="_blank"
+                            className={cls.MailLink}
+                        >
+                            <img
+                                className={cls.MailServiceImage}
+                                src={mailService[2]}
+                            />
+                        </a>
+                    </div>
+                        :
+                        <div className={cls.MailLinkWrapper}>
+                            <a
+                                href={mailService[1]}
+                                target="_blank"
+                                className={cls.MailLink}
+                            >
+                                <p className={cls.MailLink}>
+                                    {mailService[0]}
+                                </p>
+
+                            </a>
+                        </div>)}
                 <ModalButton
                     text={isReady
                         ? `Отправить повторно`
@@ -120,8 +143,8 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
                     isActive={!isReady}
                     onButtonClick={onButtonClick}
                 />
-            </div>
-        </Modal>
+            </div >
+        </Modal >
 
     );
 }
