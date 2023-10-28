@@ -21,20 +21,3 @@
     text-align: center;
     margin: -100px 0 0;
 }
-
-.FormButton {
-    margin: 25px auto -20px;
-    font-weight: bold;
-    height: 40px;
-    width: 350px;
-    background-color: var(--secondary-color);
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    grid-area: button;
-    justify-self: center;
-}
-
-.grayButton {
-    background-color: rgb(169, 165, 165);
-}

@@ -11,6 +11,7 @@ import { UserContext } from "src/app/providers/UserProvider";
 import { ImageInput } from "../Inputs/ImageInput/ImageInput";
 import APIController from "src/API/Controller";
 import { AlertContext, AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
+import { ModalButton } from "src/widgets/ModalButton/ModalButton";
 
 interface AccountEditModalProps {
     setModal: (modal: false | Modals) => void;
@@ -37,7 +38,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         document.body.style.overflow = ''
     }
 
-    const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onFormSubmit = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -82,7 +83,6 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
             <div className={cls.AccountEditModal}>
                 <form
                     className={cls.AccountEditForm}
-                    onSubmit={onFormSubmit}
                 >
                     <h1 className={cls.FormHeader}>Аккаунт</h1>
                     <ImageInput />
@@ -100,13 +100,13 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
                         setEmailError={setEmailError}
                         isProtected={true}
                     />}
-                    <button
-                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
-                    >
-                        Сохранить
-                    </button>
+                    <ModalButton
+                        text="Сохранить"
+                        isActive={isLoading}
+                        onButtonClick={onFormSubmit}
+                    />
                 </form>
             </div >
-        </Modal>
+        </Modal >
     )
 }

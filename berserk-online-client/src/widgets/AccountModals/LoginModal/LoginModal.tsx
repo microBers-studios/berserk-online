@@ -14,13 +14,14 @@ import { IUser, UserContextProps } from 'src/app/providers/UserProvider/lib/type
 import { Modal } from 'src/widgets/Modal/Modal';
 import { Modals } from 'src/widgets/Navbar/Navbar';
 import { validatePassword } from 'src/helpers/validatePassword';
+import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
 
 interface LoginModalProps {
-    setModal: (modal: false | Modals) => void;
+    setModal: (modal: false | Modals, props?: object | null) => void;
     defaultModal: Modals
 }
 
-export const formRegulars = {
+const formRegulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
 
@@ -101,13 +102,17 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             : await APIController.loginUser({ email, password, rememberMe: isChecked })
 
         setRegStatus(code)
-        if (code === 200) {
-            closeModal()
-            setAlert(isRegistration
-                ? 'Вы зарегистрированы'
-                : 'Вы вошли в аккаунт')
 
+        console.log(code, isRegistration)
+        if (code === 200) {
+            if (isRegistration) {
+                setModal(Modals.CLOSE, { email })
+            } else {
+                closeModal()
+                if (!isRegistration) setAlert('Вы вошли в аккаунт')
+            }
             setUser(obj as IUser)
+
         } else if (code === 400 && !isRegistration) {
             setIsLoading(false)
 
@@ -172,14 +177,13 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 }
 
                 <div className={cls.buttonsWrapper}>
-                    <button
-                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
-                        onClick={onRegClick}
-                    >
-                        {isRegistration
+                    <ModalButton
+                        text={isRegistration
                             ? 'Зарегистрироваться'
                             : 'Войти'}
-                    </button>
+                        isActive={isLoading}
+                        onButtonClick={onRegClick}
+                    />
                     {!isRegistration &&
                         <span
                             className={cls.PasswordResetButton}

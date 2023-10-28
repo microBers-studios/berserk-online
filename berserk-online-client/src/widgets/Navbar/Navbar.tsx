@@ -8,6 +8,7 @@ import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { UserButton } from "./items/UserButton";
 import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
 import { EmailModal } from "../AccountModals/EmailModal/EmailModal";
+import { CloseModal } from "../AccountModals/CloseModal/CloseModal";
 
 interface NavbarProps {
     currentPage: RouterPaths;
@@ -18,11 +19,13 @@ export enum Modals {
     LOGIN = 'login',
     REGISTRATION = 'registration',
     EDIT = 'account',
-    EMAIL = 'reset-email'
+    EMAIL = 'reset-email',
+    CLOSE = 'close'
 }
 
 export const Navbar = ({ currentPage, user }: NavbarProps) => {
     const [modal, setModal] = useState<false | Modals>(false)
+    const [modalProps, setModalProps] = useState<object | null>(null)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
     const [isUser, setIsUser] = useState<boolean>(false)
 
@@ -30,6 +33,11 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
         setIsUser(user.id !== -1)
     },
         [user])
+
+    const changeModal = (modal: false | Modals, extra: object | null = null) => {
+        setModal(modal)
+        setModalProps(extra)
+    }
 
     const onLinkClick = () => {
         setIsBurgerClicked(false)
@@ -89,24 +97,28 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                 }
 
             </div >
-            {modal === Modals.LOGIN &&
+            {(modal === Modals.LOGIN || modal === Modals.REGISTRATION) &&
                 <LoginModal
-                    setModal={setModal}
+                    setModal={changeModal}
                     defaultModal={modal}
                 />}
-            {modal === Modals.REGISTRATION &&
-                <LoginModal
-                    setModal={setModal}
-                    defaultModal={modal}
-                />}
+
             {modal === Modals.EDIT &&
                 <AccountEditModal
-                    setModal={setModal}
+                    setModal={changeModal}
                 />}
+
             {modal === Modals.EMAIL &&
                 <EmailModal
-                    setModal={setModal}
+                    setModal={changeModal}
                 />}
+
+            {modal === Modals.CLOSE &&
+                <CloseModal
+                    setModal={changeModal}
+                    emailObject={modalProps as { email: string }}
+                />
+            }
         </>
     );
 }

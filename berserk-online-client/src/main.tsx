@@ -6,13 +6,11 @@ import App from './app/App.tsx'
 import { UserContextProvider } from './app/providers/UserProvider/index.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AlertContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
-      </AlertContextProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <AlertContextProvider>
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </AlertContextProvider>
+  </BrowserRouter>,
 )

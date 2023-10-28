@@ -1,0 +1,21 @@
+.CloseModal {
+    position: absolute;
+    top: 14%;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.CloseModalText {
+    padding: 0 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.MailLink {
+    text-decoration: none;
+    font-size: 300%;
+}

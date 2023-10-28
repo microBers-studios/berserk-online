@@ -9,6 +9,7 @@ import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types
 import { UserContext } from "src/app/providers/UserProvider";
 import { EmailInput } from "../Inputs/EmailInput";
 import APIController from "src/API/Controller";
+import { ModalButton } from "src/widgets/ModalButton/ModalButton";
 
 interface EmailModalProps {
     setModal: (modal: false | Modals) => void;
@@ -65,13 +66,12 @@ export const EmailModal = ({ setModal }: EmailModalProps) => {
                         setEmailError={setEmailError}
                     />
                     <span>На указанный адрес мы отправим Вам письмо для изменения пароля.</span>
-                    <button
-                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
-                    >
-                        Отправить
-                    </button>
+                    <ModalButton
+                        text="Отправить"
+                        isActive={isLoading}
+                    />
                 </form>
             </div >
-        </Modal>
+        </Modal >
     )
 }

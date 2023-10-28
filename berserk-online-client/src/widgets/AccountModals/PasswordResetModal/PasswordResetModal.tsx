@@ -5,6 +5,7 @@ import { PasswordInput } from "../Inputs/PasswordInput";
 import { useState } from "react";
 import APIController from "src/API/Controller";
 import { validatePassword } from "src/helpers/validatePassword";
+import { ModalButton } from "src/widgets/ModalButton/ModalButton";
 
 interface PasswordResetModalProps {
     closeModal: () => void;
@@ -87,9 +88,10 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
                             label={'Подтвердите новый пароль:'}
                         />
                     </div>
-
-
-                    <button className={`${cls.FormButton} ${loading && cls.grayButton}`}>Сохранить</button>
+                    <ModalButton
+                        text="Сохранить"
+                        isActive={loading}
+                    />
                 </form>
             </Modal>
         </div >

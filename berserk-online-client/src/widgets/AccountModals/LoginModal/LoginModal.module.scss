@@ -14,16 +14,6 @@
         "buttons";
 }
 
-.FormButton {
-    font-weight: bold;
-    height: 40px;
-    width: 350px;
-    background-color: var(--secondary-color);
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
 .FormHeader {
     grid-area: header;
     text-align: center;
@@ -65,8 +55,4 @@
     bottom: -16px;
     font-weight: 200;
     font-size: 14px;
-}
-
-.grayButton {
-    background-color: rgb(169, 165, 165);
 }
