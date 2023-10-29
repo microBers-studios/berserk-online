@@ -2,7 +2,6 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Models.User;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace berserk_online_server.Facades
 {
@@ -145,8 +144,15 @@ namespace berserk_online_server.Facades
         }
         private User formatUser(User user)
         {
-            return new User() { Name = user.Name, Email = user.Email, AvatarUrl = _avatarUrlBase + user.AvatarUrl,
-            Id = user.Id, IsEmailConfirmed = user.IsEmailConfirmed, Password = user.Password};
+            return new User()
+            {
+                Name = user.Name,
+                Email = user.Email,
+                AvatarUrl = user.AvatarUrl != null ? _avatarUrlBase + user.AvatarUrl : null,
+                Id = user.Id,
+                IsEmailConfirmed = user.IsEmailConfirmed,
+                Password = user.Password
+            };
         }
         private void mergeUserWithRequest(User u1, UserInfoRequest request)
         {
