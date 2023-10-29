@@ -1,7 +1,6 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Models.User;
 using Microsoft.AspNetCore.Authentication;
-using System.Net;
 using System.Security.Claims;
 
 namespace berserk_online_server.Facades
@@ -34,7 +33,7 @@ namespace berserk_online_server.Facades
         }
         public void LogOut()
         {
-            clearResponseCookies(CookieConstants.AuthenticationCookieName, 
+            clearResponseCookies(CookieConstants.AuthenticationCookieName,
                 CookieConstants.RememberMeCookieName);
         }
         private void clearResponseCookies(params string[] names)

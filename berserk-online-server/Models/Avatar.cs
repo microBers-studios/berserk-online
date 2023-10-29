@@ -36,7 +36,7 @@
                 using (var fs = new FileStream(newFilePath, FileMode.Create))
                 {
                     await newFile.CopyToAsync(fs);
-                };   
+                };
             }
             catch (Exception)
             {

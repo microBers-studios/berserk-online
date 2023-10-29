@@ -6,6 +6,6 @@
         public string? Email { get; set; }
         public int? Id { get; set; }
 
-        public bool isEmpty { get => Id == null && Name == null && Email == null;  }
+        public bool isEmpty { get => Id == null && Name == null && Email == null; }
     }
 }

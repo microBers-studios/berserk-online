@@ -1,4 +1,3 @@
-using berserk_online_server.Constants;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.MailSenders;
@@ -17,7 +16,7 @@ namespace berserk_online_server.Controllers
         private readonly TempRequestsManager<RecoveryMailSender> _recoveryManager;
         private readonly TempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
 
-        public AuthenticationController(UsersDatabase databases, 
+        public AuthenticationController(UsersDatabase databases,
             TempRequestsManager<RecoveryMailSender> recoveryManager,
             TempRequestsManager<ConfirmEmailSender> confirmEmailManager)
         {
@@ -82,7 +81,7 @@ namespace berserk_online_server.Controllers
             try
             {
                 var email = _recoveryManager.GetEmail(request.Token);
-                _db.UpdateUser(new User() { Password = request.Password}, email);
+                _db.UpdateUser(new User() { Password = request.Password }, email);
                 _recoveryManager.Remove(request.Token);
             }
             catch (InvalidOperationException)
@@ -113,14 +112,16 @@ namespace berserk_online_server.Controllers
                 var user = _db.ConfirmEmail(email);
                 _confirmEmailManager.Remove(token);
                 return Results.Ok(user);
-            } catch (InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
-            } catch (NotFoundException)
+            }
+            catch (NotFoundException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
             }
-            
+
         }
         [HttpGet("confirmationRequest")]
         public IResult requestNewConfirmation()
@@ -132,7 +133,8 @@ namespace berserk_online_server.Controllers
                 var mail = authManager.GetMail();
                 _confirmEmailManager.Push(mail);
                 return Results.Ok();
-            } catch (ArgumentNullException)
+            }
+            catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
             }

@@ -6,7 +6,7 @@
         public FrontendURLCreator(IConfiguration configuration)
         {
             _host = configuration.GetValue<string>("FrontendPath");
-            if (string.IsNullOrEmpty(_host) )
+            if (string.IsNullOrEmpty(_host))
             {
                 throw new ArgumentNullException("please specify 'FrontendPath' in config");
             }
