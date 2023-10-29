@@ -168,7 +168,7 @@ export default class APIController {
         return response.status
     }
 
-    static async confirmEmail(token: string): Promise<number> {
+    static async confirmEmail(token: string): Promise<IResponseUserInfo> {
         const path = URL + Paths.CONFIRM_EMAIL + `?token=${token}`
 
         const response = await fetch(path, {
@@ -176,6 +176,8 @@ export default class APIController {
             credentials: 'include'
         })
 
-        return response.status
+        const obj = await response.json()
+
+        return { code: response.status, obj }
     }
 }
