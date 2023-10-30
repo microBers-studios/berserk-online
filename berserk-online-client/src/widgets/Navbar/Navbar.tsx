@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
 import cls from "./Navbar.module.scss"
@@ -9,10 +9,14 @@ import { UserButton } from "./items/UserButton";
 import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
 import { EmailModal } from "../AccountModals/EmailModal/EmailModal";
 import { CloseModal } from "../AccountModals/CloseModal/CloseModal";
+import { CookieModal } from "../AccountModals/CookieModal/CookieModal";
+import { defaultUser } from "src/app/providers/UserProvider/lib/UserContextProvider";
+import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
+import { CookieModalContext, CookieModalContextProps } from "src/app/providers/CookieModalProvider/lib/CookieModalContext";
 
 interface NavbarProps {
     currentPage: RouterPaths;
-    user: IUser
+    user: IUser;
 }
 
 export enum Modals {
@@ -20,19 +24,16 @@ export enum Modals {
     REGISTRATION = 'registration',
     EDIT = 'account',
     EMAIL = 'reset-email',
-    CLOSE = 'close'
+    CLOSE = 'close',
+    COOKIE = 'cookie'
 }
 
 export const Navbar = ({ currentPage, user }: NavbarProps) => {
     const [modal, setModal] = useState<false | Modals>(false)
     const [modalProps, setModalProps] = useState<object | null>(null)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
-    const [isUser, setIsUser] = useState<boolean>(false)
 
-    useEffect(() => {
-        setIsUser(user.id !== -1)
-    },
-        [user])
+    const { isCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
 
     const changeModal = (modal: false | Modals, extra: object | null = null) => {
         setModal(modal)
@@ -77,7 +78,7 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     </Link>
                 </div>
 
-                {isUser
+                {user !== defaultUser
                     ? <UserButton
                         setModal={setModal}
                         user={user}
@@ -117,6 +118,12 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                 <CloseModal
                     setModal={changeModal}
                     emailObject={modalProps as { email: string }}
+                />
+            }
+            {(modal === Modals.COOKIE || isCookieModal) &&
+                <CookieModal
+                    modal={modal}
+                    setModal={changeModal}
                 />
             }
         </>

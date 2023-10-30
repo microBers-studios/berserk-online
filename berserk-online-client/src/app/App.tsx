@@ -11,16 +11,26 @@ import { RouterPaths } from './providers/router/router-paths'
 import { IUser, UserContextProps } from './providers/UserProvider/lib/types/types'
 import { UserContext } from './providers/UserProvider'
 import APIController from 'src/API/Controller'
+import { useCookie } from 'src/helpers/hooks/useCookie'
+import { CookieModalContext, CookieModalContextProps } from './providers/CookieModalProvider/lib/CookieModalContext'
 
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
   const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
   const [currentPage, setCurrentPage] = useState<RouterPaths>(RouterPaths.MAIN)
 
+  const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
+  const cookied = useCookie()
 
   useEffect(() => {
     new Promise(async () => {
-      const res = await APIController.getMe()
+      const res = await cookied(APIController.getMe)
+
+      if (!res) {
+        setIsCookieModal(true)
+        return
+      }
+
       if (res.code === 200) {
         setUser(res.obj as IUser)
       }
@@ -29,7 +39,10 @@ function App() {
 
   return (
     <>
-      <Navbar currentPage={currentPage} user={user} />
+      <Navbar
+        currentPage={currentPage}
+        user={user}
+      />
 
       {Boolean(alerts.length) &&
         <AlertsContainer alerts={alerts} />

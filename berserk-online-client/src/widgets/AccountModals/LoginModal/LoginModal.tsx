@@ -15,6 +15,9 @@ import { Modal } from 'src/widgets/Modal/Modal';
 import { Modals } from 'src/widgets/Navbar/Navbar';
 import { validatePassword } from 'src/helpers/validatePassword';
 import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
+import { useCookie } from 'src/helpers/hooks/useCookie';
+import { IResponseUserInfo } from 'src/API/utils/types';
+import { CookieModalContext, CookieModalContextProps } from 'src/app/providers/CookieModalProvider/lib/CookieModalContext';
 
 interface LoginModalProps {
     setModal: (modal: false | Modals, props?: object | null) => void;
@@ -47,6 +50,9 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const [isChecked, setIsChecked] = useState<boolean>(false)
 
     const [regStatus, setRegStatus] = useState<number>(0)
+
+    const cookied = useCookie()
+    const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
 
     const onFormChangeClick = () => {
         setIsAnimation(true)
@@ -97,9 +103,17 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
 
         setIsLoading(true)
 
-        const { code, obj } = isRegistration
-            ? await APIController.registrateUser({ name, email, password })
-            : await APIController.loginUser({ email, password, rememberMe: isChecked })
+        const result = isRegistration
+            ? await cookied<IResponseUserInfo>(APIController.registrateUser, [{ name, email, password }])
+            : await cookied(APIController.loginUser, [{ email, password, rememberMe: isChecked }])
+
+        if (!result) {
+            setIsLoading(false)
+            setIsCookieModal(true)
+            return
+        }
+
+        const { code, obj } = result
 
         setRegStatus(code)
 
