@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import APIController from 'src/API/Controller';
 import { UserContext } from 'src/app/providers/UserProvider';
 import { IUser, UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
+import { RouterPaths } from 'src/app/providers/router/router-paths';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 
 export const EmailConfirmPage = () => {
@@ -22,10 +23,12 @@ export const EmailConfirmPage = () => {
 
             if (code === 200) {
                 setUser({ ...user, ...obj as IUser })
-                navigate('/')
+                navigate(RouterPaths.ERROR)
             } else {
-                navigate('/error')
+                navigate(RouterPaths.MAIN)
             }
         })
     }, [])
-}   
+
+    return <></>
+}

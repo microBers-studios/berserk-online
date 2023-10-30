@@ -13,11 +13,11 @@ export const AppRouter = ({ setPage }: AppRouterProps) => {
     return (
         <>
             <Routes>
-                <Route path={'/'} element={<MainPage setPage={setPage} />} />
-                <Route path={'/rooms'} element={<RoomsPage setPage={setPage} />} />
-                <Route path={'/password'} element={<PasswordResetPage />} />
-                <Route path={'/confirmEmail'} element={<EmailConfirmPage />} />
-                <Route path={'/error'} element={<ErrorModalPage />} />
+                <Route path={RouterPaths.MAIN} element={<MainPage setPage={setPage} />} />
+                <Route path={RouterPaths.ROOMS} element={<RoomsPage setPage={setPage} />} />
+                <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
+                <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
+                <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
             </Routes>
         </>
     );

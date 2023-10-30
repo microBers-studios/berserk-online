@@ -14,3 +14,9 @@
 .grayButton {
     background-color: rgb(169, 165, 165);
 }
+
+@media (max-width: 400px) {
+    .ModalButton {
+        width: 300px;
+    }
+}

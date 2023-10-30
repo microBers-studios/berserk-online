@@ -1,4 +1,33 @@
+.ErrorWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 110px;
+}
+
 .ErrorModalHeader {
     font-size: 30px;
     font-weight: bold;
+}
+
+.ErrorImage {
+    width: 10vw;
+}
+
+@media (max-width: 1200px) {
+    .ErrorImage {
+        width: 15vw;
+    }
+}
+
+@media (max-width: 800px) {
+    .ErrorImage {
+        width: 20vw;
+    }
+}
+
+@media (max-width: 500px) {
+    .ErrorImage {
+        width: 30vw;
+    }
 }

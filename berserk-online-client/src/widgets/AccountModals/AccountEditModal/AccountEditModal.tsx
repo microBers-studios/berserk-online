@@ -58,6 +58,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
         if (!flag) {
             setIsLoading(false)
+            closeModal()
             return
         }
 
