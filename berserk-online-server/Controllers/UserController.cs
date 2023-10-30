@@ -13,7 +13,7 @@ namespace berserk_online_server.Controllers
     {
         private readonly UsersDatabase _db;
         private readonly StaticContentService _contentService;
-        public UserController(UsersDatabase db, IWebHostEnvironment environment, 
+        public UserController(UsersDatabase db, IWebHostEnvironment environment,
             StaticContentService contentService)
         {
             _db = db;
@@ -70,7 +70,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                     HttpContext);
                 string email = authManager.GetMail();
                 string fileName = await _contentService.AddAvatar(avatar, email);
@@ -95,7 +95,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                     HttpContext);
                 string email = authManager.GetMail();
                 _contentService.DeleteAvatar(email);
@@ -105,7 +105,8 @@ namespace berserk_online_server.Controllers
             catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
-            } catch (NotFoundException)
+            }
+            catch (NotFoundException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
             }
@@ -119,7 +120,7 @@ namespace berserk_online_server.Controllers
             }
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                     HttpContext);
                 string oldMail = authManager.GetMail();
                 var updatedUser = await _db.UpdateUser(request, oldMail);
@@ -128,7 +129,7 @@ namespace berserk_online_server.Controllers
             }
             catch (NotFoundException)
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                     HttpContext);
                 string email = authManager.GetMail();
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
@@ -141,7 +142,7 @@ namespace berserk_online_server.Controllers
         }
         private async Task updateCookie(UserInfo userInfo)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, 
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                 HttpContext);
             await manager.Authenticate(userInfo, true);
         }

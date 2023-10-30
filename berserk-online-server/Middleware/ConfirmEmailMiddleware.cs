@@ -27,7 +27,8 @@ namespace berserk_online_server.Middleware
                     writeBadRequest(context);
                     return;
                 }
-            } catch (Exception) { }
+            }
+            catch (Exception) { }
             await _next.Invoke(context);
         }
         private bool isConfirmed(HttpContext context, UsersDatabase db)

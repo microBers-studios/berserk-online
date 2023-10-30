@@ -1,5 +1,4 @@
-﻿using berserk_online_server.Facades.MailSenders;
-using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces;
 using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades

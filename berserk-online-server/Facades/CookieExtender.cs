@@ -24,12 +24,12 @@ namespace berserk_online_server.Facades
             {
                 var cookie = getCookie(cookieName);
                 extendCookie(cookie.Key, cookie.Value);
-            } 
+            }
             catch (InvalidOperationException)
             {
                 return;
             }
-            
+
         }
         private Dictionary<string, string> getCookies()
         {
@@ -46,11 +46,12 @@ namespace berserk_online_server.Facades
             try
             {
                 return _context.Request.Cookies.First(cookie => cookie.Key == name);
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 throw new InvalidOperationException("cookie with name " + name + " not found");
             }
-            
+
         }
         private void extendToken()
         {

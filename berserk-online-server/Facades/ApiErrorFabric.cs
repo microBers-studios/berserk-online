@@ -25,7 +25,7 @@ namespace berserk_online_server.Facades
                     return new InvalidEmail(ctx);
                 case ApiErrorType.InvalidPassword:
                     return new InvalidPassword(ctx);
-                case ApiErrorType.UserAlreadyExists: 
+                case ApiErrorType.UserAlreadyExists:
                     return new UserAlreadyExists(ctx);
                 case ApiErrorType.NotFound:
                     return new NotFound(ctx);

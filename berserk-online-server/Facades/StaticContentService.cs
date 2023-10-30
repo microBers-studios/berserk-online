@@ -1,5 +1,4 @@
 ﻿using berserk_online_server.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace berserk_online_server.Facades
 {
@@ -62,7 +61,8 @@ namespace berserk_online_server.Facades
             {
                 _avatars[key].Delete();
                 _avatars.Remove(key);
-            } else
+            }
+            else
             {
                 throw new InvalidOperationException();
             }
