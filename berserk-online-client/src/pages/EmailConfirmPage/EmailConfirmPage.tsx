@@ -23,9 +23,9 @@ export const EmailConfirmPage = () => {
 
             if (code === 200) {
                 setUser({ ...user, ...obj as IUser })
-                navigate(RouterPaths.ERROR)
-            } else {
                 navigate(RouterPaths.MAIN)
+            } else {
+                navigate(RouterPaths.ERROR)
             }
         })
     }, [])

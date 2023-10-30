@@ -180,4 +180,21 @@ export default class APIController {
 
         return { code: response.status, obj }
     }
+
+    static async deleteAvatar(): Promise<IResponseUserInfo> {
+        const path = URL + Paths.DELETE_AVATAR
+
+        const response = await fetch(path, {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+
+        const obj = await response.json()
+
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
+        return { code: response.status, obj }
+    }
 }

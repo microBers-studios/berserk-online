@@ -7,6 +7,7 @@ import camera from "src/shared/assets/images/photo.svg"
 import APIController from 'src/API/Controller';
 import { useRef } from 'react';
 import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { AlertContext, AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 
 // interface ImageInputProps {
 //     formRef: React.Ref<HTMLFormElement>
@@ -14,14 +15,24 @@ import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
 
 export const ImageInput = () => {
     const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
     const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null)
 
     const changeAvatar = async () => {
         const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
 
-        console.log(user.avatarUrl, obj)
         setUser({ ...user, ...obj })
+    }
+
+    const deleteAvatar = async () => {
+        const { code, obj } = await APIController.deleteAvatar()
+
+        if (code === 200) {
+            setUser({ ...user, ...obj })
+        } else {
+            setAlert('Ошибка!')
+        }
     }
 
     return (
@@ -56,6 +67,7 @@ export const ImageInput = () => {
 
             {user.avatarUrl !== defaultAvatar && <span
                 className={cls.deleteAvatar}
+                onClick={deleteAvatar}
             >Удалить</span>}
         </div>
     );

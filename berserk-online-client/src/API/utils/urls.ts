@@ -10,5 +10,6 @@ export enum Paths {
     CONFIRM_EMAIL = '/Authentication/confirmEmail',
     GET_ME = '/User/getMe',
     LOAD_AVATAR = '/User/loadAvatar',
+    DELETE_AVATAR = '/User/deleteAvatar',
     UPDATE_ME = '/User/updateMe',
 }
