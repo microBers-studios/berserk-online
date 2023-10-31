@@ -28,27 +28,28 @@ export const ErrorModal = () => {
     }
 
     return (
-        <div className={cls.ErrorModal} >
-            <Modal
-                isCloseAnimation={isCloseAnimation}
-                isOpenAnimation={isOpenAnimation}
-                setIsCloseAnimation={setIsCloseAnimation}
-                setIsOpenAnimation={setIsOpenAnimation}
-                closeModal={closeModal}
-                modalClass={Modals.EMAIL}
+        <Modal
+            isCloseAnimation={isCloseAnimation}
+            isOpenAnimation={isOpenAnimation}
+            setIsCloseAnimation={setIsCloseAnimation}
+            setIsOpenAnimation={setIsOpenAnimation}
+            closeModal={closeModal}
+            modalClass={Modals.EMAIL}
+        >
+            <div
+                className={cls.ErrorWrapper}
             >
-                <div
-                    className={cls.ErrorWrapper}
-                >
-                    <img
-                        src={errorSvg}
-                        className={cls.ErrorImage}
-                    />
-                    <h1
-                        className={cls.ErrorModalHeader}
-                    >Ошибка!</h1>
-                </div>
-            </Modal>
-        </div>
+                <img
+                    src={errorSvg}
+                    className={cls.ErrorImage}
+                />
+                <h1
+                    className={cls.ErrorModalHeader}
+                >Ошибка!</h1>
+                <p
+                    className={cls.ErrorText}
+                >Возможно&nbsp;ссылка&nbsp;устарела или неверна.</p>
+            </div>
+        </Modal>
     );
 }
