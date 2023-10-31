@@ -3,6 +3,7 @@ import cls from "./DeckItem.module.scss"
 import { getElement } from "src/helpers/getSymbols";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg"
+import { useAlert } from "src/helpers/hooks/useAlert";
 
 interface DeckItemProps {
     deck: IDeck;
@@ -11,6 +12,7 @@ interface DeckItemProps {
 }
 
 export const DeckItem = ({ deck, decks, setDecks }: DeckItemProps) => {
+    const setAlert = useAlert()
 
     const deckElementsList = deck.elements.map((element, index) =>
         <SymbolIcon key={index} src={getElement(element)} />
@@ -18,6 +20,7 @@ export const DeckItem = ({ deck, decks, setDecks }: DeckItemProps) => {
 
     const deleteDeck = () => {
         setDecks(decks.filter(d => d.id !== deck.id))
+        setAlert(`Колода ${deck.name} удалена.`)
     }
 
     return (
