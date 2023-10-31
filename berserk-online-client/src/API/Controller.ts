@@ -1,7 +1,8 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseUserInfo } from "./utils/types";
+import { IRegistration, ILogin, IResponseUserInfo, DecksArray } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
+import { decks } from "./utils/mock";
 
 export default class APIController {
     static async registrateUser(userObject: IRegistration): Promise<IResponseUserInfo> {
@@ -196,5 +197,9 @@ export default class APIController {
             : defaultAvatar
 
         return { code: response.status, obj }
+    }
+
+    static async getDecks(): Promise<DecksArray> {
+        return decks
     }
 }

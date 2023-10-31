@@ -1,4 +1,5 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
+import { Elements } from "src/API/utils/data";
 
 export interface IRegistration {
     name: string;
@@ -20,4 +21,18 @@ export interface IResponseUserInfo {
 export interface IError {
     id: number;
     message: string;
+}
+
+export type DecksArray = IDeck[]
+
+export interface IDeck {
+    id: number;
+    name: string;
+    elements: Elements[];
+    cards: ICard[]
+}
+
+export interface ICard {
+    name: string;
+    image: string;
 }

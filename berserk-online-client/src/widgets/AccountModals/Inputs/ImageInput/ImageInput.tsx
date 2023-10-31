@@ -20,17 +20,25 @@ export const ImageInput = () => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const changeAvatar = async () => {
-        const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
+        try {
+            const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
 
-        setUser({ ...user, ...obj })
+            setUser({ ...user, ...obj })
+        } catch (e) {
+            setAlert('Ошибка!')
+        }
     }
 
     const deleteAvatar = async () => {
-        const { code, obj } = await APIController.deleteAvatar()
+        try {
+            const { code, obj } = await APIController.deleteAvatar()
 
-        if (code === 200) {
-            setUser({ ...user, ...obj })
-        } else {
+            if (code === 200) {
+                setUser({ ...user, ...obj })
+            } else {
+                setAlert('Ошибка!')
+            }
+        } catch (e) {
             setAlert('Ошибка!')
         }
     }
