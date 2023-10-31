@@ -51,7 +51,7 @@ export const DecksContainer = () => {
                             {decks.length} из {decks.length}
                         </span>}
                 </div>
-                {!userIsUnauthorized &&
+                {!userIsUnauthorized && !isUserLoading &&
                     <button
                         className={cls.AddButton}
                     >
