@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CookieModalContext } from "../CookieModalProvider/lib/CookieModalContext";
+import { CookieModalContext } from "./CookieModalContext";
 
 interface CookieModalContextProviderProps {
     children: React.ReactNode

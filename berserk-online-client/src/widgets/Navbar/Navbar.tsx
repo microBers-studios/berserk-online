@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
+import ReactLoading from "react-loading";
 import cls from "./Navbar.module.scss"
+import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
 import { Burger } from "./items/Burger";
 import { RouterPaths } from "src/app/providers/router/router-paths";
-import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { UserButton } from "./items/UserButton";
 import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
 import { EmailModal } from "../AccountModals/EmailModal/EmailModal";
@@ -12,11 +12,11 @@ import { CloseModal } from "../AccountModals/CloseModal/CloseModal";
 import { CookieModal } from "../AccountModals/CookieModal/CookieModal";
 import { defaultUser } from "src/app/providers/UserProvider/lib/UserContextProvider";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
-import { CookieModalContext, CookieModalContextProps } from "src/app/providers/CookieModalProvider/lib/CookieModalContext";
+import { CookieModalContext } from "src/app/providers/CookieModalProvider/lib/CookieModalContext";
+import { UserContext } from "src/app/providers/UserProvider";
 
 interface NavbarProps {
     currentPage: RouterPaths;
-    user: IUser;
 }
 
 export enum Modals {
@@ -28,12 +28,13 @@ export enum Modals {
     COOKIE = 'cookie'
 }
 
-export const Navbar = ({ currentPage, user }: NavbarProps) => {
+export const Navbar = ({ currentPage }: NavbarProps) => {
     const [modal, setModal] = useState<false | Modals>(false)
     const [modalProps, setModalProps] = useState<object | null>(null)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
+    const { user, isUserLoading } = useRequiredContext(UserContext)
 
-    const { isCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
+    const { isCookieModal } = useRequiredContext(CookieModalContext)
 
     const changeModal = (modal: false | Modals, extra: object | null = null) => {
         setModal(modal)
@@ -78,23 +79,25 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     </Link>
                 </nav>
 
-                {user !== defaultUser
-                    ? <UserButton
-                        setModal={setModal}
-                        user={user}
-                    />
-                    : <div
-                        className={cls.NavbarLoginButtons}
-                    >
-                        <span
-                            onClick={onLoginClick}
-                            className={cls.login}
-                        >Войти</span>
-                        <span
-                            onClick={onRegistrationClick}
-                            className={cls.registration}
-                        >Зарегистрироваться</span>
-                    </div>
+                {isUserLoading
+                    ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
+                    : user !== defaultUser
+                        ? <UserButton
+                            setModal={setModal}
+                            user={user}
+                        />
+                        : <div
+                            className={cls.NavbarLoginButtons}
+                        >
+                            <span
+                                onClick={onLoginClick}
+                                className={cls.login}
+                            >Войти</span>
+                            <span
+                                onClick={onRegistrationClick}
+                                className={cls.registration}
+                            >Зарегистрироваться</span>
+                        </div>
                 }
 
             </header>

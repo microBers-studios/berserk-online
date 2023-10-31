@@ -17,7 +17,7 @@ import { Footer } from 'src/widgets/Footer/Footer'
 
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
-  const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
+  const { setUser, setIsUserLoading, isUserLoading } = useRequiredContext<UserContextProps>(UserContext)
   const [currentPage, setCurrentPage] = useState<RouterPaths>(RouterPaths.MAIN)
 
   const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
@@ -28,9 +28,16 @@ function App() {
       const res = await cookied(APIController.getMe)
 
       if (!res) {
+        setIsUserLoading(false)
         setIsCookieModal(true)
         return
       }
+
+      console.log('before setting')
+
+      setIsUserLoading(false)
+
+      console.log('after setting')
 
       if (res.code === 200) {
         setUser(res.obj as IUser)
@@ -38,11 +45,12 @@ function App() {
     })
   }, [])
 
+  useEffect(() => console.log(isUserLoading), [setIsUserLoading])
+
   return (
     <>
       <Navbar
         currentPage={currentPage}
-        user={user}
       />
       <main>
         {Boolean(alerts.length) &&

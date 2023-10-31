@@ -1,6 +1,8 @@
 export interface UserContextProps {
     user: IUser;
-    setUser: (user: IUser) => void
+    setUser: (user: IUser) => void;
+    isUserLoading: boolean;
+    setIsUserLoading: (b: boolean) => void;
 }
 
 export interface IUser {

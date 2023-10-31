@@ -204,6 +204,8 @@ export default class APIController {
     }
 
     static async getDecks(): Promise<DecksArray> {
-        return decks
+        return new Promise(res => {
+            setTimeout(() => res(decks), 1000)
+        })
     }
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
+import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
@@ -16,7 +16,7 @@ interface UserButtonProps {
 
 export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
-    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { setUser } = useRequiredContext(UserContext)
 
     const onExitClick = () => {
         setUser(defaultUser)

@@ -1,7 +1,7 @@
 import { IDeck } from "src/API/utils/types";
 import cls from "./DeckItem.module.scss"
 import { getElement } from "src/helpers/getSymbols";
-import { SymbolIcon } from "../SymbolIcon/SymbolIcon";
+import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 
 interface DeckItemProps {
     deck: IDeck;

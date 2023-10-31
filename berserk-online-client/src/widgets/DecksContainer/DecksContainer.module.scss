@@ -34,24 +34,32 @@
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    // gap: 1vw; // flex-wrap: wrap;
-    // align-items: center;
     row-gap: 25px;
+}
+
+.NoDecks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .AddButton {
     border: none;
     background-color: var(--secondary-color);
-    // border: 2px solid white;
     color: white;
     border-radius: 10px;
     font-size: 20px;
-    // height: 30px;
     padding: 5px 15px;
 }
 
 .AddButton:hover {
     cursor: pointer;
+}
+
+.NoDecksContent {
+    text-align: center;
+    font-size: 20px;
+    color: var(--border-color);
 }
 
 @media (min-width: 1833px) {

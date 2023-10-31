@@ -1,1 +1,1 @@
-export { CookieModalContextProvider } from "../AlertProvider/CookieModalContextProvider"
+export { CookieModalContextProvider } from "./lib/CookieModalContextProvider"
