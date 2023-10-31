@@ -13,6 +13,7 @@ import { UserContext } from './providers/UserProvider'
 import APIController from 'src/API/Controller'
 import { useCookie } from 'src/helpers/hooks/useCookie'
 import { CookieModalContext, CookieModalContextProps } from './providers/CookieModalProvider/lib/CookieModalContext'
+import { Footer } from 'src/widgets/Footer/Footer'
 
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
@@ -49,6 +50,8 @@ function App() {
       }
 
       <AppRouter setPage={setCurrentPage} />
+
+      <Footer />
     </>
   )
 }
