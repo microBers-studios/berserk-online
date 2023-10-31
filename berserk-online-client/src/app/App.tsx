@@ -44,13 +44,14 @@ function App() {
         currentPage={currentPage}
         user={user}
       />
+      <main>
+        {Boolean(alerts.length) &&
+          <AlertsContainer alerts={alerts} />
+        }
 
-      {Boolean(alerts.length) &&
-        <AlertsContainer alerts={alerts} />
-      }
+        <AppRouter setPage={setCurrentPage} />
 
-      <AppRouter setPage={setCurrentPage} />
-
+      </main>
       <Footer />
     </>
   )

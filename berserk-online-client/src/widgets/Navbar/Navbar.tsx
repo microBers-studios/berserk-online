@@ -97,7 +97,7 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     </div>
                 }
 
-            </ >
+            </header>
             {(modal === Modals.LOGIN || modal === Modals.REGISTRATION) &&
                 <LoginModal
                     setModal={changeModal}
