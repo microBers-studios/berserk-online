@@ -56,12 +56,12 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
 
     return (
         <>
-            <div className={cls.Navbar}>
+            <header className={cls.Navbar}>
                 <Burger
                     isBurgerClicked={isBurgerClicked}
                     setIsBurgerClicked={setIsBurgerClicked}
                 />
-                <div className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
+                <nav className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
                     <Link
                         to={RouterPaths.MAIN}
                         onClick={onLinkClick}
@@ -76,7 +76,7 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     >
                         <span className={`${currentPage === RouterPaths.ROOMS ? cls.active : ''}`}>Комнаты</span>
                     </Link>
-                </div>
+                </nav>
 
                 {user !== defaultUser
                     ? <UserButton
@@ -97,7 +97,7 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     </div>
                 }
 
-            </div >
+            </ >
             {(modal === Modals.LOGIN || modal === Modals.REGISTRATION) &&
                 <LoginModal
                     setModal={changeModal}

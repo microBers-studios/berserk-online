@@ -8,7 +8,7 @@ import githubImage from "src/shared/assets/images/github.png"
 
 export const Footer = () => {
     return (
-        <div className={cls.Footer} >
+        <footer className={cls.Footer} >
             <div className={cls.FooterContent}>
 
                 <a
@@ -38,6 +38,6 @@ export const Footer = () => {
                     className={cls.year}
                 >2023</span>
             </div>
-        </div >
+        </footer>
     );
 }
