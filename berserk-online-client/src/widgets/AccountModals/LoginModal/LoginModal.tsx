@@ -35,10 +35,9 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     }: IAnimator = useAnimate()
 
     const setAlert = useAlert()
-    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { setUser, isUserLoading, setIsUserLoading } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
@@ -100,14 +99,14 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             if (error) return
         }
 
-        setIsLoading(true)
+        setIsUserLoading(true)
 
         const result = isRegistration
             ? await cookied<IResponseUserInfo>(APIController.registrateUser, [{ name, email, password }])
             : await cookied(APIController.loginUser, [{ email, password, rememberMe: isChecked }])
 
         if (!result) {
-            setIsLoading(false)
+            setIsUserLoading(false)
             setIsCookieModal(true)
             return
         }
@@ -115,6 +114,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
         const { code, obj } = result
 
         setRegStatus(code)
+        if (!isRegistration) setIsUserLoading(false)
 
         console.log(code, isRegistration)
         if (code === 200) {
@@ -127,7 +127,6 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             setUser(obj as IUser)
 
         } else if (code === 400 && !isRegistration) {
-            setIsLoading(false)
 
             switch (Number(obj.id)) {
                 case 2:
@@ -196,7 +195,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         text={isRegistration
                             ? 'Зарегистрироваться'
                             : 'Войти'}
-                        isActive={isLoading}
+                        isActive={isUserLoading}
                         onButtonClick={onRegClick}
                     />
                     {!isRegistration &&
