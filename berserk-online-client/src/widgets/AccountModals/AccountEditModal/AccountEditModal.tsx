@@ -10,8 +10,8 @@ import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/type
 import { UserContext } from "src/app/providers/UserProvider";
 import { ImageInput } from "../Inputs/ImageInput/ImageInput";
 import APIController from "src/API/Controller";
-import { AlertContext, AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
+import { useAlert } from "src/helpers/hooks/useAlert";
 
 interface AccountEditModalProps {
     setModal: (modal: false | Modals) => void;
@@ -22,7 +22,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
     const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const setAlert = useAlert()
 
     const [name, setName] = useState<string>(user.name)
     const [nameError, setNameError] = useState<boolean>(false)
@@ -71,8 +71,11 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         } else if (code === 400) {
             setIsLoading(false)
             setEmailError(4)
+        } else {
+            setAlert('Ошибка!')
         }
     }
+
     return (
         <Modal
             isCloseAnimation={isCloseAnimation}

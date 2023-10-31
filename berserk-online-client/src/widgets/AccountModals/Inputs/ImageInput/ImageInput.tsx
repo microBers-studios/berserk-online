@@ -7,7 +7,7 @@ import camera from "src/shared/assets/images/photo.svg"
 import APIController from 'src/API/Controller';
 import { useRef } from 'react';
 import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
-import { AlertContext, AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
+import { useAlert } from 'src/helpers/hooks/useAlert';
 
 // interface ImageInputProps {
 //     formRef: React.Ref<HTMLFormElement>
@@ -15,7 +15,7 @@ import { AlertContext, AlertContextProps } from 'src/app/providers/AlertProvider
 
 export const ImageInput = () => {
     const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const setAlert = useAlert()
     const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null)
 

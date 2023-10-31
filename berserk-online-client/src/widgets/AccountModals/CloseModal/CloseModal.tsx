@@ -8,6 +8,7 @@ import gmailSvg from 'src/shared/assets/images/gmail.svg'
 import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg'
 import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg'
 import APIController from 'src/API/Controller';
+import { useAlert } from 'src/helpers/hooks/useAlert';
 
 interface CloseModalProps {
     setModal: (modal: false | Modals) => void;
@@ -54,6 +55,8 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
     const [intervalID, setIntervalID] = useState<number | null>(null)
     const [time, setTime] = useState<number>(59)
 
+    const setAlert = useAlert()
+
     useEffect(() => {
         try {
             setMailService(mailServices[emailObject.email.split('@')[1]])
@@ -77,7 +80,7 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
     }, [time])
 
     const onButtonClick = () => {
-        APIController.sendConfirmEmail();
+        APIController.sendConfirmEmail().catch(() => setAlert('Ошибка!'));
 
         setIsReady(false)
         setTime(59)

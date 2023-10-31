@@ -5,8 +5,6 @@ import { PasswordInput } from "../Inputs/PasswordInput";
 import { CheckboxInput } from '../Inputs/CheckboxInput';
 import { LoginInput } from '../Inputs/LoginInput';
 import { EmailInput } from '../Inputs/EmailInput';
-import { AlertContext } from 'src/app/providers/AlertProvider';
-import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import cls from "./LoginModal.module.scss"
 import { UserContext } from 'src/app/providers/UserProvider';
@@ -18,6 +16,7 @@ import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
 import { useCookie } from 'src/helpers/hooks/useCookie';
 import { IResponseUserInfo } from 'src/API/utils/types';
 import { CookieModalContext, CookieModalContextProps } from 'src/app/providers/CookieModalProvider/lib/CookieModalContext';
+import { useAlert } from 'src/helpers/hooks/useAlert';
 
 interface LoginModalProps {
     setModal: (modal: false | Modals, props?: object | null) => void;
@@ -35,7 +34,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const setAlert = useAlert()
     const { setUser } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
@@ -138,6 +137,8 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                     setEmailError(3)
                     break;
             }
+        } else {
+            setAlert('Ошибка!')
         }
     }
 

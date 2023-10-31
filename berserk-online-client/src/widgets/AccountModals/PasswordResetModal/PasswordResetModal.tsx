@@ -6,6 +6,7 @@ import { useState } from "react";
 import APIController from "src/API/Controller";
 import { validatePassword } from "src/helpers/validatePassword";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
+import { useAlert } from "src/helpers/hooks/useAlert";
 
 interface PasswordResetModalProps {
     closeModal: () => void;
@@ -26,6 +27,7 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
     const [extraPassword, setExtraPassword] = useState<string>('')
     const [extraPasswordError, setExtraPasswordError] = useState<number>(0)
 
+    const setAlert = useAlert()
 
     const endChanging = () => {
         setIsCloseAnimation(true)
@@ -51,7 +53,11 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
 
         const code = await APIController.changePassword(token, password)
         setLoading(false)
-        if (code === 200) endChanging()
+        if (code === 200) {
+            endChanging()
+        } else {
+            setAlert('Ошибка!')
+        }
     }
 
     return (
