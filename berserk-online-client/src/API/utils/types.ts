@@ -27,7 +27,6 @@ export type DecksArray = IDeck[]
 
 export interface IDeck {
     id: number;
-    order: number;
     name: string;
     elements: Elements[];
     cards: ICard[]

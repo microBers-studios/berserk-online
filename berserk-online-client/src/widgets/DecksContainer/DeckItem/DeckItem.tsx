@@ -2,16 +2,23 @@ import { IDeck } from "src/API/utils/types";
 import cls from "./DeckItem.module.scss"
 import { getElement } from "src/helpers/getSymbols";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
+import trashCanSvg from "src/shared/assets/images/trash.svg"
 
 interface DeckItemProps {
     deck: IDeck;
+    setDecks: (decks: IDeck[]) => void;
+    decks: IDeck[];
 }
 
-export const DeckItem = ({ deck }: DeckItemProps) => {
+export const DeckItem = ({ deck, decks, setDecks }: DeckItemProps) => {
 
     const deckElementsList = deck.elements.map((element, index) =>
         <SymbolIcon key={index} src={getElement(element)} />
     )
+
+    const deleteDeck = () => {
+        setDecks(decks.filter(d => d.id !== deck.id))
+    }
 
     return (
         <div className={cls.DeckItem} >
@@ -19,6 +26,15 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
                 className={cls.DeckImage}
                 src={deck.cards[0].image}
             />
+            <div
+                className={cls.TrashCanImageWrapper}
+            >
+                <img
+                    src={trashCanSvg}
+                    className={cls.TrashCanImage}
+                    onClick={deleteDeck}
+                />
+            </div>
             <div className={cls.DeckItemHeaderWrapper}>
                 <div className={cls.DeckItemHeaderTopWrapper}>
                     <p

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import cls from "./DecksContainer.module.scss";
 import { DecksArray } from "src/API/utils/types";
 import APIController from 'src/API/Controller';
@@ -31,9 +31,14 @@ export const DecksContainer = () => {
         })
     }, [user])
 
-    const decksList = decks.map(deck =>
-        <DeckItem key={deck.id} deck={deck} />
-    )
+    const decksList = useMemo(() => decks.map(deck =>
+        <DeckItem
+            key={deck.id}
+            deck={deck}
+            decks={decks}
+            setDecks={setDecks}
+        />
+    ), [decks])
 
     return (
         <div className={cls.DecksContainer} >
@@ -44,7 +49,7 @@ export const DecksContainer = () => {
                     >
                         Колоды
                     </span>
-                    {!userIsUnauthorized && !isLoading &&
+                    {!userIsUnauthorized && !isLoading && !isUserLoading &&
                         <span
                             className={cls.DecksCount}
                         >
@@ -61,7 +66,7 @@ export const DecksContainer = () => {
             <div className={`${cls.DecksWrapper} ${(userIsUnauthorized
                 || isUserLoading
                 || !decksList.length) && cls.NoDecks}`}>
-                {isLoading
+                {(isUserLoading || isLoading)
                     ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                     : userIsUnauthorized
                         ? <span

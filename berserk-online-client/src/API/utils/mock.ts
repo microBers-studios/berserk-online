@@ -5,7 +5,6 @@ import { DecksArray } from "./types";
 export const decks: DecksArray = [
     {
         id: 0,
-        order: 0,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
@@ -24,7 +23,6 @@ export const decks: DecksArray = [
     },
     {
         id: 1,
-        order: 1,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
@@ -43,7 +41,6 @@ export const decks: DecksArray = [
     },
     {
         id: 2,
-        order: 2,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
@@ -62,7 +59,6 @@ export const decks: DecksArray = [
     },
     {
         id: 3,
-        order: 3,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
@@ -81,7 +77,6 @@ export const decks: DecksArray = [
     },
     {
         id: 4,
-        order: 4,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
@@ -99,8 +94,7 @@ export const decks: DecksArray = [
         ],
     },
     {
-        id: 4,
-        order: 4,
+        id: 5,
         name: 'Демоны',
         elements: [Elements.DARKNESS, Elements.SWAMPS],
         cards: [
