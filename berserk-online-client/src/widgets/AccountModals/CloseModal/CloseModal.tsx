@@ -11,7 +11,6 @@ import APIController from 'src/API/Controller';
 import { useAlert } from 'src/helpers/hooks/useAlert';
 
 interface CloseModalProps {
-    setModal: (modal: false | Modals) => void;
     emailObject: { email: string };
 }
 
@@ -45,7 +44,7 @@ const mailServices = {
     'mail.kz': ["Почта mail.kz", "http://mail.kz/"]
 } as Record<string, string[]>
 
-export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
+export const CloseModal = ({ emailObject }: CloseModalProps) => {
 
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
@@ -93,7 +92,7 @@ export const CloseModal = ({ setModal, emailObject }: CloseModalProps) => {
     }
 
     const closeModal = () => {
-        setModal(false)
+        window.close()
     }
 
     return (

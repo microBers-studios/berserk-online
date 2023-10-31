@@ -179,6 +179,10 @@ export default class APIController {
 
         const obj = await response.json()
 
+        obj.avatarUrl = obj.avatarUrl
+            ? obj.avatarUrl
+            : defaultAvatar
+
         return { code: response.status, obj }
     }
 

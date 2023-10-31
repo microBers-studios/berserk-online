@@ -116,7 +116,6 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
 
             {modal === Modals.CLOSE &&
                 <CloseModal
-                    setModal={changeModal}
                     emailObject={modalProps as { email: string }}
                 />
             }
