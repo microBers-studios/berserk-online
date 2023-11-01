@@ -1,5 +1,6 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Facades;
+using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -36,6 +37,7 @@ builder.Services.AddSingleton<StaticContentService>();
 builder.Services.AddSingleton<MailClient>();
 builder.Services.AddSingleton<TempRequestsManager<RecoveryMailSender>>();
 builder.Services.AddSingleton<TempRequestsManager<ConfirmEmailSender>>();
+builder.Services.AddSingleton<CardProvider>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
