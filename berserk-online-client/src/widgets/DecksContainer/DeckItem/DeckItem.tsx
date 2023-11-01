@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { DecksArray, IDeck } from "src/API/utils/types";
 import cls from "./DeckItem.module.scss"
 import { getElement } from "src/helpers/getSymbols";
@@ -5,6 +6,8 @@ import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg"
 import { useAlert } from "src/helpers/hooks/useAlert";
 import APIController from "src/API/Controller";
+import { useNavigate } from "react-router-dom";
+import { RouterPaths } from "src/app/providers/router/router-paths";
 
 interface DeckItemProps {
     deck: IDeck;
@@ -13,24 +16,35 @@ interface DeckItemProps {
 
 export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
     const setAlert = useAlert()
+    const navigate = useNavigate()
+
+    const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
 
     const deckElementsList = deck.elements.map((element, index) =>
         <SymbolIcon key={index} src={getElement(element)} />
     )
 
-    const deleteDeck = async () => {
+    const deleteDeck = async (e: React.MouseEvent) => {
+        e.stopPropagation()
         const { code, obj } = await APIController.deleteDeck(deck.id)
 
         if (code === 200) {
-            setDecks(obj as DecksArray);
-            setAlert(`Колода ${deck.name} удалена.`)
+            setIsDeleteAnimation(true)
+            setTimeout(() => {
+                setDecks(obj as DecksArray);
+                setAlert(`Колода ${deck.name} удалена.`)
+            }, 350)
+
         } else {
             setAlert('Ошибка!')
         }
     }
 
     return (
-        <div className={cls.DeckItem} >
+        <div
+            onClick={() => navigate(`${RouterPaths.DECK}/${deck.id}`)}
+            className={`${cls.DeckItem} ${isDeleteAnimation && cls.deletingDeck}`}
+        >
             <img
                 className={cls.DeckImage}
                 src={deck.cards[0].image}
@@ -65,9 +79,7 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
                             : 'карт'}
                     </span>
                 </div>
-
             </div>
-
         </div >
     );
 }

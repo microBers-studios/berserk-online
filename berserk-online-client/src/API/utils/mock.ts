@@ -1,5 +1,4 @@
-import defaultCard from "src/shared/assets/images/card.jpg"
-import { Elements } from "./data";
+import { CardTypes, Elements, Rarities, Sets } from "./data";
 import { DecksArray } from "./types";
 
 export const decksObj: Record<string, DecksArray> = {
@@ -10,107 +9,42 @@ export const decksObj: Record<string, DecksArray> = {
             elements: [Elements.DARKNESS, Elements.NEUTRAL],
             cards: [
                 {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
+                    id: 0,
+                    amount: 3,
+                    rarity: Rarities.COMMON,
+                    painter: 'Марина Клейман',
+                    elements: [Elements.PLAINS],
+                    price: 3,
+                    health: 7,
+                    moves: 2,
+                    hit: { weak: 1, normal: 2, hard: 3 },
+                    image: 'https://berserk.ru/image/data/Берсерк/Нашествие%20тьмы/Berserk_NT_all_card_29_pages-to-jpg-0002%20копия.png',
+                    name: 'Кентавр',
+                    unique: false,
+                    elite: false,
+                    set: Sets.DARKNESS_INVASION,
+                    type: CardTypes.CREATURE,
+                    description: null
                 },
                 {
-                    name: 'name',
-                    image: defaultCard
+                    id: 1,
+                    amount: 1,
+                    rarity: Rarities.COMMON,
+                    painter: 'Марина Клейман',
+                    elements: [Elements.PLAINS],
+                    price: 3,
+                    health: 7,
+                    moves: 2,
+                    hit: { weak: 1, normal: 2, hard: 3 },
+                    image: 'https://berserk.ru/image/data/Берсерк/Нашествие%20тьмы/Berserk_NT_all_card_29_pages-to-jpg-0002%20копия.png',
+                    name: 'Кентавр',
+                    unique: false,
+                    elite: false,
+                    set: Sets.DARKNESS_INVASION,
+                    type: CardTypes.CREATURE,
+                    description: null
                 }
             ],
-        },
-        {
-            id: 1,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
-            cards: [
-                {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
-                },
-                {
-                    name: 'name',
-                    image: defaultCard
-                }
-            ],
-        },
-        {
-            id: 2,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
-            cards: [
-                {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
-                },
-                {
-                    name: 'name',
-                    image: defaultCard
-                }
-            ],
-        },
-        {
-            id: 3,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
-            cards: [
-                {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
-                },
-                {
-                    name: 'name',
-                    image: defaultCard
-                }
-            ],
-        },
-        {
-            id: 4,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
-            cards: [
-                {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
-                },
-                {
-                    name: 'name',
-                    image: defaultCard
-                }
-            ],
-        },
-        {
-            id: 5,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
-            cards: [
-                {
-                    name: 'name',
-                    image: defaultCard
-                }, {
-                    name: 'name',
-                    image: defaultCard
-                },
-                {
-                    name: 'name',
-                    image: defaultCard
-                }
-            ],
-        },
+        }
     ]
 };

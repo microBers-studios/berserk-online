@@ -1,10 +1,11 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { MainPage } from 'src/pages/MainPage/MainPage';
 import { RoomsPage } from 'src/pages/RoomsPage/RoomsPage';
 import { RouterPaths } from './router-paths';
 import { PasswordResetPage } from 'src/pages/PasswordResetPage/PasswordResetPage';
 import { EmailConfirmPage } from 'src/pages/EmailConfirmPage/EmailConfirmPage';
 import { ErrorModalPage } from 'src/pages/ErrorModalPage/ErrorModalPage';
+import { DeckPage } from 'src/pages/DeckPage/DeckPage';
 interface AppRouterProps {
     setPage: (page: RouterPaths) => void
 }
@@ -18,6 +19,8 @@ export const AppRouter = ({ setPage }: AppRouterProps) => {
                 <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
                 <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
                 <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
+                <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage />} />
+                <Route path={RouterPaths.DECK} element={<Navigate to={`${RouterPaths.DECK}/1`} />} />
             </Routes>
         </>
     );

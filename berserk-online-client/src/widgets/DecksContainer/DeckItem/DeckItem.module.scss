@@ -34,6 +34,10 @@
     cursor: pointer;
 }
 
+.deletingDeck {
+    animation: delete 0.4s;
+}
+
 .DeckImage {
     width: 290px;
     position: absolute;
@@ -97,6 +101,16 @@
 
 .TrashCanImage {
     width: 90%;
+}
+
+@keyframes delete {
+    from {
+        transform: scale(100%)
+    }
+
+    to {
+        transform: scale(30%)
+    }
 }
 
 @media (max-width: 1200px) {

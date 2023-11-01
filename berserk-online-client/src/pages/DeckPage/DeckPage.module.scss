@@ -1,0 +1,39 @@
+.DeckPage {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.DeckPageHeader {
+    margin: 20px;
+    color: white;
+}
+
+.CardsContainer {
+    display: flex;
+    color: white;
+}
+
+.OrdinaryCardsContainer,
+.EliteCardsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    align-items: center;
+}
+
+
+.OrdinaryCardsHeader,
+.EliteCardsHeader {
+    color: var(--secondary-color)
+}
+
+.CardsWrapper {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

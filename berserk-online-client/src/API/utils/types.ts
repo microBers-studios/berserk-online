@@ -1,5 +1,5 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { Elements } from "src/API/utils/data";
+import { CardTypes, Elements, Rarities, Sets } from "src/API/utils/data";
 
 export interface IRegistration {
     name: string;
@@ -23,21 +23,47 @@ export interface IResponseDecksInfo {
     obj: IError | DecksArray;
 }
 
+export interface IResponseDeckInfo {
+    code: number;
+    obj: IError | IDeck;
+}
+
 export interface IError {
     id: number;
     message: string;
 }
 
-export type DecksArray = IDeck[]
+export interface ICard {
+    id: number;
+    name: string;
+    price: number;
+    elite: boolean;
+    unique: boolean;
+    elements: [Elements];
+    type: CardTypes;
+    health: number;
+    moves: number | null;
+    hit: {
+        weak: number;
+        normal: number;
+        hard: number
+    },
+    rarity: Rarities,
+    description: string | null;
+    painter: string;
+    set: Sets;
+    image: string;
+}
+
+export interface IDeckCard extends ICard {
+    amount: number;
+}
 
 export interface IDeck {
     id: number;
     name: string;
     elements: Elements[];
-    cards: ICard[]
+    cards: IDeckCard[]
 }
 
-export interface ICard {
-    name: string;
-    image: string;
-}
+export type DecksArray = IDeck[]

@@ -1,8 +1,29 @@
 export enum Elements {
-    MOUNTAINS = 'mountains',
-    PLAINS = 'plains',
-    FORESTS = 'forests',
-    SWAMPS = 'swamps',
-    DARKNESS = 'darkness',
-    NEUTRAL = 'neutral'
+    MOUNTAINS = 'Горы',
+    PLAINS = 'Степи',
+    FORESTS = 'Леса',
+    SWAMPS = 'Болота',
+    DARKNESS = 'Тьма',
+    NEUTRAL = 'Нейтральная'
+}
+
+export enum Rarities {
+    COMMON = 'Частая',
+    UNCOMMON = 'Необычная',
+    RARE = 'Редкая',
+    ULTRARARE = 'Ультраредкая'
+}
+
+export enum Sets {
+    ELEMENTS_WAR = 'Война стихий',
+    DARKNESS_INVASION = 'Нашествие тьмы'
+}
+
+export enum CardTypes {
+    CREATURE = 'creature',
+    FLYER = 'flyer',
+    COMPANION = 'companion',
+    PARASITE = 'parasite',
+    ARTIFACT = 'artifact',
+    TERRAIN = 'terrain'
 }

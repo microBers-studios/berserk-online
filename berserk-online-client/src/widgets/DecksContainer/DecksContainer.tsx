@@ -30,7 +30,7 @@ export const DecksContainer = () => {
             setIsLoading(false)
             setDecks(decks)
         })
-    }, [decks])
+    }, [])
 
     const decksList = useMemo(() => decks.map(deck =>
         <DeckItem

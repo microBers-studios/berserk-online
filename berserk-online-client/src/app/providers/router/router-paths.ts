@@ -3,5 +3,6 @@ export enum RouterPaths {
     ROOMS = '/rooms',
     RESET_PASSWORD = '/password',
     CONFIRM_EMAIL = '/confirmEmail',
-    ERROR = '/error'
+    ERROR = '/error',
+    DECK = '/decks'
 }

@@ -1,5 +1,5 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray } from "./utils/types";
+import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray, IResponseDeckInfo } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 import { decksObj } from "./utils/mock";
@@ -218,6 +218,27 @@ export default class APIController {
             setTimeout(() => {
                 decksObj.decks = decksObj.decks.filter(d => d.id !== id)
                 res({ code: 200, obj: decksObj.decks })
+            }, 300)
+        })
+    }
+
+    static async getDeck(id: number): Promise<IResponseDeckInfo> {
+        return new Promise(res => {
+            setTimeout(() => {
+                const deck = decksObj.decks.find(d => d.id === id)
+
+                const code = deck === undefined
+                    ? 404
+                    : 200;
+
+                const obj = deck === undefined
+                    ? {
+                        id: 0,
+                        message: 'error'
+                    }
+                    : deck;
+
+                res({ code, obj })
             }, 1000)
         })
     }

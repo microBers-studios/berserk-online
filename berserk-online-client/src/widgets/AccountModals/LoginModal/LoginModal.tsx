@@ -45,7 +45,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const [emailError, setEmailError] = useState<number>(0)
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
-    const [isChecked, setIsChecked] = useState<boolean>(false)
+    const [isChecked, setIsChecked] = useState<boolean>(true)
 
     const [regStatus, setRegStatus] = useState<number>(0)
 
