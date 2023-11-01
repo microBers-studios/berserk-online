@@ -14,6 +14,7 @@ export const Footer = () => {
                 <a
                     href="https://github.com/microBers-studios"
                     className={cls.GithubLink}
+                    target="_blank"
                 >
                     <div
                         className={cls.GithubImageWrapper}

@@ -1,8 +1,8 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseUserInfo, DecksArray } from "./utils/types";
+import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { decks } from "./utils/mock";
+import { decksObj } from "./utils/mock";
 
 export default class APIController {
     static async registrateUser(userObject: IRegistration): Promise<IResponseUserInfo> {
@@ -96,6 +96,10 @@ export default class APIController {
         })
 
         const obj = await response.json()
+
+        // if (response.status === 200) {
+        //     obj.avatarUrl = 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGljfGVufDB8fDB8fHww'
+        // }
 
         return { code: response.status, obj }
     }
@@ -205,7 +209,16 @@ export default class APIController {
 
     static async getDecks(): Promise<DecksArray> {
         return new Promise(res => {
-            setTimeout(() => res(decks), 1000)
+            setTimeout(() => res(decksObj.decks), 1000)
+        })
+    }
+
+    static async deleteDeck(id: number): Promise<IResponseDecksInfo> {
+        return new Promise(res => {
+            setTimeout(() => {
+                decksObj.decks = decksObj.decks.filter(d => d.id !== id)
+                res({ code: 200, obj: decksObj.decks })
+            }, 1000)
         })
     }
 }

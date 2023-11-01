@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import cls from "./DecksContainer.module.scss";
-import { DecksArray } from "src/API/utils/types";
 import APIController from 'src/API/Controller';
 import { DeckItem } from './DeckItem/DeckItem';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import { UserContext } from 'src/app/providers/UserProvider';
 import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
 import ReactLoading from 'react-loading';
+import { DecksContext } from 'src/app/providers/DecksProvider/utils/DecksContext';
 
 // interface DecksContainerProps {
 //     className?: string;
@@ -14,28 +14,28 @@ import ReactLoading from 'react-loading';
 
 export const DecksContainer = () => {
     const { user, isUserLoading } = useRequiredContext(UserContext)
-    const [decks, setDecks] = useState<DecksArray>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { decks, setDecks } = useRequiredContext(DecksContext)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     let userIsUnauthorized = user === defaultUser && !isUserLoading
 
     useEffect(() => {
         if (userIsUnauthorized) {
+            setIsLoading(false)
             return
         }
+
         new Promise(async () => {
-            setIsLoading(true)
             const decks = await APIController.getDecks()
             setIsLoading(false)
             setDecks(decks)
         })
-    }, [user])
+    }, [decks])
 
     const decksList = useMemo(() => decks.map(deck =>
         <DeckItem
             key={deck.id}
             deck={deck}
-            decks={decks}
             setDecks={setDecks}
         />
     ), [decks])
@@ -64,9 +64,9 @@ export const DecksContainer = () => {
                     </button>}
             </div>
             <div className={`${cls.DecksWrapper} ${(userIsUnauthorized
-                || isUserLoading
-                || !decksList.length) && cls.NoDecks}`}>
-                {(isUserLoading || isLoading)
+                || !decksList.length
+            ) && cls.NoDecks}`}>
+                {isLoading
                     ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                     : userIsUnauthorized
                         ? <span

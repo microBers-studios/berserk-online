@@ -1,26 +1,32 @@
-import { IDeck } from "src/API/utils/types";
+import { DecksArray, IDeck } from "src/API/utils/types";
 import cls from "./DeckItem.module.scss"
 import { getElement } from "src/helpers/getSymbols";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg"
 import { useAlert } from "src/helpers/hooks/useAlert";
+import APIController from "src/API/Controller";
 
 interface DeckItemProps {
     deck: IDeck;
     setDecks: (decks: IDeck[]) => void;
-    decks: IDeck[];
 }
 
-export const DeckItem = ({ deck, decks, setDecks }: DeckItemProps) => {
+export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
     const setAlert = useAlert()
 
     const deckElementsList = deck.elements.map((element, index) =>
         <SymbolIcon key={index} src={getElement(element)} />
     )
 
-    const deleteDeck = () => {
-        setDecks(decks.filter(d => d.id !== deck.id))
-        setAlert(`Колода ${deck.name} удалена.`)
+    const deleteDeck = async () => {
+        const { code, obj } = await APIController.deleteDeck(deck.id)
+
+        if (code === 200) {
+            setDecks(obj as DecksArray);
+            setAlert(`Колода ${deck.name} удалена.`)
+        } else {
+            setAlert('Ошибка!')
+        }
     }
 
     return (

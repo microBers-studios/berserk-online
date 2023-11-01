@@ -18,6 +18,11 @@ export interface IResponseUserInfo {
     obj: IUser | IError;
 }
 
+export interface IResponseDecksInfo {
+    code: number;
+    obj: IError | DecksArray;
+}
+
 export interface IError {
     id: number;
     message: string;

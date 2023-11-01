@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import cls from "./ImageInput.module.scss"
-import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
 import { UserContext } from "src/app/providers/UserProvider";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import camera from "src/shared/assets/images/photo.svg"
@@ -14,16 +13,24 @@ import { useAlert } from 'src/helpers/hooks/useAlert';
 // }
 
 export const ImageInput = () => {
-    const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { user, setUser } = useRequiredContext(UserContext)
     const setAlert = useAlert()
-    const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-    const inputRef = useRef<HTMLInputElement>(null)
+    const [isMouseOver, setIsMouseOver] = useState(false);
+    const inputRef = useRef(null)
 
     const changeAvatar = async () => {
         try {
-            const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
+            if (!inputRef.current) {
+                throw new Error('Avatar Error')
+            }
 
-            setUser({ ...user, ...obj })
+            const { code, obj } = await APIController.loadAvatar(inputRef.current)
+
+            if (code === 200) {
+                setUser({ ...user, ...obj })
+            } else {
+                setAlert('Ошибка!')
+            }
         } catch (e) {
             setAlert('Ошибка!')
         }

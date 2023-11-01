@@ -4,13 +4,16 @@ import { AlertContextProvider } from './app/providers/AlertProvider/lib/AlertCon
 import App from './app/App.tsx'
 import { UserContextProvider } from './app/providers/UserProvider/index.ts'
 import { CookieModalContextProvider } from './app/providers/CookieModalProvider/index.ts'
+import { DecksContextProvider } from './app/providers/DecksProvider/utils/DecksContextProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <AlertContextProvider>
       <CookieModalContextProvider>
         <UserContextProvider>
-          <App />
+          <DecksContextProvider>
+            <App />
+          </DecksContextProvider>
         </UserContextProvider>
       </CookieModalContextProvider>
     </AlertContextProvider>
