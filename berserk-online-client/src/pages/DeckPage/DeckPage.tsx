@@ -20,10 +20,10 @@ export const DeckPage = () => {
 
     const [deck, setDeck] = useState<IDeck | null>(null)
 
-    const ordinaryCards = deck?.cards
+    const ordinaryCards = deck?.main
         .filter(c => !c.elite)
 
-    const eliteCards = deck?.cards
+    const eliteCards = deck?.main
         .filter(c => c.elite)
 
     useEffect(() => {

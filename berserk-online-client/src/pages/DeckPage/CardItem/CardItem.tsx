@@ -3,6 +3,7 @@ import cls from "./CardItem.module.scss"
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
 import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getSymbols";
 import { CardTypes } from "src/API/utils/data";
+import trashcanImage from "src/shared/assets/images/trash.svg"
 
 interface CardItemProps {
     card: IDeckCard;
@@ -18,19 +19,23 @@ export const CardItem = ({ card }: CardItemProps) => {
 
     }
 
+    const deleteCard = () => {
+
+    }
+
     return (
         <li className={cls.CardItem} >
+            <div className={cls.CardAmountButtons}>
+                <span
+                    className={cls.plus}
+                    onClick={increaseCardAmount}>+</span>
+                <span
+                    className={cls.minus}
+                    onClick={decreaseCardAmount}>-</span>
+            </div>
             <div
                 className={cls.CardAmountWrapper}
             >
-                <div className={cls.CardAmountButtons}>
-                    <span
-                        className={cls.plus}
-                        onClick={increaseCardAmount}>+</span>
-                    <span
-                        className={cls.minus}
-                        onClick={decreaseCardAmount}>-</span>
-                </div>
                 <span className={cls.CardAmount}>{card.amount}</span>
             </div>
             <span
@@ -45,13 +50,20 @@ export const CardItem = ({ card }: CardItemProps) => {
                     src={getElite(card.elite, card.unique)} />
             </span>
             <span>{card.elements
-                .map(element =>
+                .map((element, i) =>
                     <SymbolIcon
+                        key={i}
                         src={getElement(element)} />)
             }
             </span>
             <SymbolIcon
                 src={getRarity(card.rarity, card.set)} />
+            <div className={cls.DeleteCardButton}>
+                <img
+                    src={trashcanImage}
+                    className={cls.trashcanImage}
+                    onClick={deleteCard} />
+            </div>
         </li>
     );
 }

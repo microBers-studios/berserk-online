@@ -47,7 +47,7 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
         >
             <img
                 className={cls.DeckImage}
-                src={deck.cards[0].image}
+                src={deck.main[0].image}
             />
             <div
                 className={cls.TrashCanImageWrapper}
@@ -72,9 +72,9 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
                     </span>
                     <span
                         className={cls.CardsCount}
-                    >{deck.cards.length} {deck.cards.length % 10 === 1
+                    >{deck.main.length} {deck.main.length % 10 === 1
                         ? 'карта'
-                        : deck.cards.length % 10 < 5
+                        : deck.main.length % 10 < 5
                             ? 'карты'
                             : 'карт'}
                     </span>

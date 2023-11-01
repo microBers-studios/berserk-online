@@ -63,7 +63,8 @@ export interface IDeck {
     id: number;
     name: string;
     elements: Elements[];
-    cards: IDeckCard[]
+    main: IDeckCard[];
+    sideboard?: IDeckCard[];
 }
 
 export type DecksArray = IDeck[]

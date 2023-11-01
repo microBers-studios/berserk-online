@@ -15,6 +15,7 @@ export const Searchbar = () => {
                 <input
                     className={cls.SearchbarInput}
                     type="text"
+                    placeholder="Вайл..."
                 />
 
             </label>
