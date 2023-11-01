@@ -1,0 +1,25 @@
+.Searchbar {
+    background-color: var(--dark-primary-color);
+    width: 27vw;
+}
+
+.SearchbarLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.SearchbarInput {
+    width: 20vw;
+    border: none;
+    outline: none;
+    height: 20px;
+    border-radius: 7px;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 1px 5px;
+}
+
+.SearchbarHeader {
+    color: white;
+}

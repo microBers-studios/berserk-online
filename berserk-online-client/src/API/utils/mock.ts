@@ -5,8 +5,8 @@ export const decksObj: Record<string, DecksArray> = {
     decks: [
         {
             id: 0,
-            name: 'Демоны',
-            elements: [Elements.DARKNESS, Elements.NEUTRAL],
+            name: 'Битки',
+            elements: [Elements.PLAINS],
             cards: [
                 {
                     id: 0,

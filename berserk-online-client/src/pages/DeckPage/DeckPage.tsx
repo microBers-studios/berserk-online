@@ -6,6 +6,7 @@ import { useAlert } from 'src/helpers/hooks/useAlert';
 import ReactLoading from 'react-loading';
 import APIController from 'src/API/Controller';
 import { CardItem } from './CardItem/CardItem';
+import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
 
 export const DeckPage = () => {
     const setAlert = useAlert()
@@ -43,42 +44,46 @@ export const DeckPage = () => {
         {!deck
             ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
             : <>
-                <h1
-                    className={cls.DeckPageHeader}
-                >{deck.name}</h1>
-                <div
-                    className={cls.CardsContainer}
-                >
-                    <div
-                        className={cls.OrdinaryCardsContainer}
-                    >
-                        <h2
-                            className={cls.OrdinaryCardsHeader}
-                        >Рядовые карты ({ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
 
-                        <ul
-                            className={cls.CardsWrapper}
-                        >
-                            {ordinaryCards && ordinaryCards.map(card =>
-                                <CardItem key={card.id} card={card} />)}
-                        </ul>
-                    </div>
+                <div className={cls.DeckContainer}>
+                    <h1
+                        className={cls.DeckPageHeader}
+                    >{deck.name}</h1>
                     <div
-                        className={cls.EliteCardsContainer}
+                        className={cls.CardsContainer}
                     >
-                        <h2
-                            className={cls.EliteCardsHeader}
-                        >Элитные карты ({eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
-
-                        <ul
-                            className={cls.CardsWrapper}
+                        <div
+                            className={cls.OrdinaryCardsContainer}
                         >
-                            {eliteCards && eliteCards.map(card =>
-                                <CardItem key={card.id} card={card} />)}
-                        </ul>
+                            <h2
+                                className={cls.OrdinaryCardsHeader}
+                            >Рядовые карты ({ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
+
+                            <ul
+                                className={cls.CardsWrapper}
+                            >
+                                {ordinaryCards && ordinaryCards.map(card =>
+                                    <CardItem key={card.id} card={card} />)}
+                            </ul>
+                        </div>
+                        <div
+                            className={cls.EliteCardsContainer}
+                        >
+                            <h2
+                                className={cls.EliteCardsHeader}
+                            >Элитные карты ({eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
+
+                            <ul
+                                className={cls.CardsWrapper}
+                            >
+                                {eliteCards && eliteCards.map(card =>
+                                    <CardItem key={card.id} card={card} />)}
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
+                <Searchbar />
             </>
         }
     </div >

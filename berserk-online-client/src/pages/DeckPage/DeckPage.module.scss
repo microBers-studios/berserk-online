@@ -3,8 +3,7 @@
     height: 100vh;
     background-color: var(--primary-color);
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
 .DeckPageHeader {
@@ -12,8 +11,16 @@
     color: white;
 }
 
-.CardsContainer {
+.DeckContainer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.CardsContainer {
+    width: 73vw;
+    display: flex;
+    justify-content: space-around;
     color: white;
 }
 
@@ -21,7 +28,7 @@
 .EliteCardsContainer {
     display: flex;
     flex-direction: column;
-    width: 40vw;
+    width: 30vw;
     align-items: center;
 }
 
