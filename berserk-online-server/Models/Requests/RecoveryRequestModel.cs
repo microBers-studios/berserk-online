@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Models.User
+﻿namespace berserk_online_server.Models.Requests
 {
     public class RecoveryRequestModel
     {

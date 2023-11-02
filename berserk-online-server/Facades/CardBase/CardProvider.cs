@@ -1,5 +1,4 @@
 ﻿using berserk_online_server.Models.Cards;
-using System.Linq;
 using System.Text.Json;
 
 namespace berserk_online_server.Facades.CardBase
@@ -20,6 +19,7 @@ namespace berserk_online_server.Facades.CardBase
             _cards = JsonSerializer.Deserialize<DeserealizedCard[]>(jsonString);
             if (_cards == null)
                 throw new ArgumentNullException(nameof(_cards) + " is null");
+            _cards = _cards.OrderBy(x => x.Id).ToArray();
         }
         public DeserealizedCard[] GetAll()
         {
@@ -37,6 +37,19 @@ namespace berserk_online_server.Facades.CardBase
             return _cards
                 .OrderBy(card => compareNames(card.Name, query))
                 .ToArray();
+        }
+        public DeserealizedCard GetCard(int id)
+        {
+            return _cards[id];
+        }
+        public DeserealizedCard[] GetCards(int[] ids)
+        {
+            var cards = new List<DeserealizedCard>();
+            foreach (var id in ids)
+            {
+                cards.Add(GetCard(id));
+            }
+            return cards.ToArray();
         }
         private int compareNames(string cardName, string userInput)
         {
@@ -58,7 +71,7 @@ namespace berserk_online_server.Facades.CardBase
             var m = s2.Length + 1;
             var matrixD = new int[n, m];
 
-            const int deletionCost = 1;
+            const int deletionCost = 0;
             const int insertionCost = 1;
 
             for (var i = 0; i < n; i++)

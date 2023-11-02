@@ -1,7 +1,11 @@
 ﻿using BCrypt.Net;
 using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
-using berserk_online_server.Models.User;
+using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Models.Cards;
+using berserk_online_server.Models.Db;
+using berserk_online_server.Models.Requests;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace berserk_online_server.Facades
 {
@@ -9,15 +13,16 @@ namespace berserk_online_server.Facades
     public class UsersDatabase
     {
         private readonly Databases _db;
-        public UsersDatabase(Databases db, StaticContentService staticContent)
+        private readonly string _avatarUrlBase;
+        private readonly StaticContentService _staticContent;
+        public DeckDatabase Decks { get; private set; }
+        public UsersDatabase(Databases db, StaticContentService staticContent, DeckBuilder deckBuilder)
         {
             _db = db;
             _avatarUrlBase = staticContent.AvatarsUrl;
             _staticContent = staticContent;
+            Decks = new DeckDatabase(this, deckBuilder);
         }
-        private readonly string _avatarUrlBase;
-        private readonly StaticContentService _staticContent;
-
         public void AddUser(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -68,11 +73,15 @@ namespace berserk_online_server.Facades
                 throw new NotFoundException();
             }
         }
-        public UserInfo ConfirmEmail(string mail)
+        public UserInfo ConfirmEmail(string email)
         {
             try
             {
-                var user = _db.Users.Where(u => u.Email == mail).First();
+                var user = findUserFromRequest(new UserInfoRequest() { Email = email });
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
                 user.IsEmailConfirmed = true;
                 _db.Update(user);
                 _db.SaveChanges();
@@ -87,7 +96,11 @@ namespace berserk_online_server.Facades
         {
             try
             {
-                var user = _db.Users.Where(u => u.Email == email).First();
+                var user = findUserFromRequest(new UserInfoRequest() { Email = email });
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
                 user.AvatarUrl = null;
                 _db.Users.Update(user);
                 _db.SaveChanges();
@@ -118,7 +131,7 @@ namespace berserk_online_server.Facades
         {
             var matchingUser = _db.Users.Where(
                 dbUser => dbUser.Email == user.Email
-                ).Select(dbUser => dbUser).FirstOrDefault();
+                ).FirstOrDefault();
             if (matchingUser == null)
                 throw new ArgumentException($"User with email: {user.Email} not found!");
             if (!tryVerifyPassword(user, matchingUser))
@@ -158,6 +171,62 @@ namespace berserk_online_server.Facades
         {
             u1.Name = request.Name ?? u1.Name;
             u1.Email = request.Email ?? u1.Email;
+        }
+        public class DeckDatabase
+        {
+            private readonly UsersDatabase _db;
+            private readonly DeckBuilder _deckBuilder;
+            public DeckDatabase(UsersDatabase db, DeckBuilder deckBuilder)
+            {
+                _db = db;
+                _deckBuilder = deckBuilder;
+            }
+            public Deck[] GetAll(string email)
+            {
+                var decks = getDecks(new UserInfoRequest() { Email = email });
+                return decks.Select(_deckBuilder.BuildFromDb).ToArray();
+            }
+            public void Update(string email, DeckRequest deck)
+            {
+                var user = _db.findUserFromRequest(new UserInfoRequest() { Email = email });
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                var preparedDeck = _deckBuilder.BuildFromRequest(deck);
+                replaceDeck(user.Decks.ToArray(), _deckBuilder.PrepareForDb(preparedDeck));
+                _db.UpdateUser(user, user.Email);
+            }
+            public void Add(string email, DeckRequest deck)
+            {
+                var user = _db.findUserFromRequest(new UserInfoRequest() { Email = email });
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                var buildedDeck = _deckBuilder.BuildFromRequest(deck);
+                var preparedDeck = _deckBuilder.PrepareForDb(buildedDeck);
+                user.Decks.Add(preparedDeck);
+                _db.UpdateUser(user, user.Email);
+            }
+            private DeckDb[] getDecks(UserInfoRequest request)
+            {
+                var decks = _db._db.Users.Where(u => (request.Name == null || request.Name == u.Name)
+                && (request.Email == null || request.Email == u.Email)
+                && (request.Id == null || request.Id == u.Id)).Select(user => user.Decks).FirstOrDefault();
+                if (decks == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                return decks.ToArray();
+            }
+            private void replaceDeck(DeckDb[] decks, DeckDb deck)
+            {
+                for (int i = 0; i < decks.Length; i++)
+                {
+                    if (decks[i].Id == deck.Id) decks[i] = deck;
+                }
+            }
         }
     }
 }

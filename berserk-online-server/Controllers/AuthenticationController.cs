@@ -1,7 +1,8 @@
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.MailSenders;
-using berserk_online_server.Models.User;
+using berserk_online_server.Models.Db;
+using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -29,7 +30,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                UserInfo matchingUser = _db.VerifyUser(authRequest);
+                UserInfo matchingUser = _db.VerifyUser(createUser(authRequest));
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }
@@ -52,10 +53,10 @@ namespace berserk_online_server.Controllers
         {
             if (_db.IsUnique(new UserInfoRequest() { Email = user.Email, Name = user.Email }))
             {
-                _db.AddUser(user);
-                await authenticate(new UserInfo(user), user.RememberMe);
+                _db.AddUser(createUser(user));
+                await authenticate(new UserInfo(createUser(user)), user.RememberMe);
                 _confirmEmailManager.Push(user.Email);
-                return Results.Ok(new UserInfo(user));
+                return Results.Ok(new UserInfo(createUser(user)));
             }
             else return userAlreadyExists(user);
         }
@@ -150,9 +151,19 @@ namespace berserk_online_server.Controllers
             var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
             await manager.Authenticate(user, rememberMe);
         }
-        private IResult userPasswordNotMatching(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
-        private IResult userEmailNotFound(User user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
-        private IResult userAlreadyExists(User user)
+        private User createUser(UserAuthenticationRequest request)
+        {
+            return new User()
+            {
+                Email = request.Email,
+                Id = request.Id,
+                Name = request.Name,
+                Password = request.Password,
+            };
+        }
+        private IResult userPasswordNotMatching(UserAuthenticationRequest user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
+        private IResult userEmailNotFound(UserAuthenticationRequest user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
+        private IResult userAlreadyExists(UserAuthenticationRequest user)
         {
             return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, user));
         }

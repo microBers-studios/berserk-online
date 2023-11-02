@@ -1,6 +1,5 @@
 ﻿using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Models.Cards;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace berserk_online_server.Controllers

@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
-using berserk_online_server.Models.User;
+using berserk_online_server.Models.Db;
+using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

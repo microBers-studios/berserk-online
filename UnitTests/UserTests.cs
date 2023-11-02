@@ -1,4 +1,4 @@
-using berserk_online_server.Models.User;
+using berserk_online_server.Models.Db;
 
 namespace UnitTests
 {
