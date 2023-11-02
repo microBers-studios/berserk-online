@@ -52,6 +52,7 @@ export interface ICard {
     description: string | null;
     painter: string;
     set: Sets;
+    number: number;
     image: string;
 }
 

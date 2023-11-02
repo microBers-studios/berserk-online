@@ -33,8 +33,14 @@
     align-items: center;
 }
 
+.CardAmount {
+    width: 1px;
+    text-align: center;
+}
+
 .CardAmountButtons {
     display: none;
+    user-select: none;
     position: absolute;
     width: 20px;
     top: -1px;

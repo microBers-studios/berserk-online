@@ -12,4 +12,5 @@ export enum Paths {
     LOAD_AVATAR = '/User/loadAvatar',
     DELETE_AVATAR = '/User/deleteAvatar',
     UPDATE_ME = '/User/updateMe',
+    FIND_CARDS = '/CardBase/find'
 }

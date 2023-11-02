@@ -20,10 +20,6 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
 
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
 
-    const deckElementsList = deck.elements.map((element, index) =>
-        <SymbolIcon key={index} src={getElement(element)} />
-    )
-
     const deleteDeck = async (e: React.MouseEvent) => {
         e.stopPropagation()
         const { code, obj } = await APIController.deleteDeck(deck.id)
@@ -68,7 +64,8 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
                 </div>
                 <div className={cls.DeckItemHeaderBottomWrapper}>
                     <span className={cls.DeckElements}>
-                        {deckElementsList}
+                        {deck.elements.map((element, index) =>
+                            <SymbolIcon key={index} src={getElement(element)} />)}
                     </span>
                     <span
                         className={cls.CardsCount}

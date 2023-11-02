@@ -1,0 +1,20 @@
+.SearchbarCardItem {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-shadow-color);
+    border-radius: 20px;
+    width: 93.7%;
+    display: flex;
+    gap: 10px;
+}
+
+.CardName,
+.CardPrice {
+    color: white;
+    display: flex;
+}
+
+.CardName {
+    gap: 12px;
+    width: 200px;
+}

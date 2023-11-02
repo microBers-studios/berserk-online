@@ -1,5 +1,5 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray, IResponseDeckInfo } from "./utils/types";
+import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray, IResponseDeckInfo, ICard } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 import { decksObj } from "./utils/mock";
@@ -205,6 +205,16 @@ export default class APIController {
             : defaultAvatar
 
         return { code: response.status, obj }
+    }
+
+    static async findCards(query: string, limit = 15): Promise<ICard[]> {
+        const path = URL + Paths.FIND_CARDS + `?query=${query}&limit=${limit}`
+
+        const response = await fetch(path)
+
+        const arr = await response.json()
+
+        return arr
     }
 
     static async getDecks(): Promise<DecksArray> {
