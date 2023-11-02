@@ -1,0 +1,33 @@
+.CardTitleItem {
+    position: absolute;
+    top: 100%;
+    left: 30%;
+    z-index: 60;
+
+    &::before {
+        content: '';
+        position: absolute;
+        /* Абсолютное позиционирование */
+        width: 0.1vw;
+        left: 43%;
+        top: -1.2vw;
+        /* Положение треугольника */
+        border: 10px solid transparent;
+        /* Прозрачные границы */
+        border-bottom: 10px solid var(--border-color);
+    }
+}
+
+.CardImage {
+    margin: 0;
+    padding: 0;
+    width: 12vw;
+}
+
+.CardImageWrapper {
+    height: 16.9vw;
+    padding: 0;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+}

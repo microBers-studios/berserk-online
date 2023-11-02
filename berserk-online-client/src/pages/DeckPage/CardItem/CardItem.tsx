@@ -6,6 +6,7 @@ import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getS
 import { CardTypes } from "src/API/utils/data";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { useAlert } from "src/helpers/hooks/useAlert";
+import { CardTitleItem } from 'src/widgets/CardTitleItem/CardTitleItem';
 
 interface CardItemProps {
     card: IDeckCard;
@@ -18,6 +19,7 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
 
     const setAlert = useAlert()
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
+    const [isMouseOver, setIsMouseOver] = useState(false)
 
     const changeCardAmount = (isIncrease: boolean) => {
         const newDeck = JSON.parse(JSON.stringify(deck))
@@ -77,7 +79,11 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
     }
 
     return (
-        <li className={`${cls.CardItem} ${isDeleteAnimation && cls.deleting}`} >
+        <li
+            className={`${cls.CardItem} ${isDeleteAnimation && cls.deleting}`}
+            onMouseOver={() => setIsMouseOver(true)}
+            onMouseLeave={() => setIsMouseOver(false)}
+        >
             <div className={cls.CardAmountButtons}>
                 <span
                     className={cls.plus}
@@ -114,6 +120,9 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
                     onClick={deleteCard}
                 />
             </div>
+
+            {isMouseOver &&
+                <CardTitleItem cardSrc={card.image} />}
         </li>
     );
 }
