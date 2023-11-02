@@ -114,7 +114,6 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
         const { code, obj } = result
 
         setRegStatus(code)
-        if (!isRegistration) setIsUserLoading(false)
 
         console.log(code, isRegistration)
         if (code === 200) {
@@ -122,11 +121,15 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 setModal(Modals.CLOSE, { email })
             } else {
                 closeModal()
+                setIsUserLoading(false, true)
                 if (!isRegistration) setAlert('Вы вошли в аккаунт')
             }
+
             setUser(obj as IUser)
 
         } else if (code === 400 && !isRegistration) {
+
+            setIsUserLoading(false)
 
             switch (Number(obj.id)) {
                 case 2:

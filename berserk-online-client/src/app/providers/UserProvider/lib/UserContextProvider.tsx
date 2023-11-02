@@ -16,16 +16,22 @@ interface UserContextProviderProps {
 
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [user, setUser] = useState<IUser>(defaultUser)
-    const [isUserLoading, setIsUserLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
+    const [isSignificant, setIsSignificant] = useState(false)
 
     const defaultValue = useMemo(() => {
         return {
             user,
             setUser,
-            isUserLoading,
-            setIsUserLoading
+            isUserLoading: isLoading,
+            setIsUserLoading: (isLoad: boolean, isSignificant = false) => {
+                setIsLoading(isLoad)
+                setIsSignificant(isSignificant)
+            },
+            isSignificant,
+            setIsSignificant
         }
-    }, [user, isUserLoading])
+    }, [user, isLoading])
 
     return (
         <UserContext.Provider value={defaultValue}>

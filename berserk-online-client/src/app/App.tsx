@@ -33,7 +33,7 @@ function App() {
         return
       }
 
-      setIsUserLoading(false)
+      setIsUserLoading(false, true)
 
       if (res.code === 200) {
         setUser(res.obj as IUser)

@@ -29,7 +29,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
     const [email, setEmail] = useState<string>(user.email)
     const [emailError, setEmailError] = useState<number>(0)
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { isUserLoading, setIsUserLoading } = useRequiredContext(UserContext)
 
     const closeModal = () => {
         setIsCloseAnimation(true)
@@ -40,7 +40,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
     const onFormSubmit = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        setIsLoading(true)
+        setIsUserLoading(true)
 
         const updateObject: Partial<IUser> = {}
 
@@ -57,7 +57,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         }
 
         if (!flag) {
-            setIsLoading(false)
+            setIsUserLoading(false)
             closeModal()
             return
         }
@@ -66,10 +66,11 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
         if (code === 200) {
             setUser(obj as IUser)
+            setIsUserLoading(false, true)
             closeModal()
             setAlert('Данные изменены')
         } else if (code === 400) {
-            setIsLoading(false)
+            setIsUserLoading(false)
             setEmailError(4)
         } else {
             setAlert('Ошибка!')
@@ -106,7 +107,7 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
                     />}
                     <ModalButton
                         text="Сохранить"
-                        isActive={isLoading}
+                        isActive={isUserLoading}
                         onButtonClick={onFormSubmit}
                     />
                 </form>

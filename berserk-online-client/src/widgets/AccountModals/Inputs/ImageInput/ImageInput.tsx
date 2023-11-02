@@ -13,7 +13,7 @@ import { useAlert } from 'src/helpers/hooks/useAlert';
 // }
 
 export const ImageInput = () => {
-    const { user, setUser } = useRequiredContext(UserContext)
+    const { user, setUser, setIsUserLoading } = useRequiredContext(UserContext)
     const setAlert = useAlert()
     const [isMouseOver, setIsMouseOver] = useState(false);
     const inputRef = useRef(null)
@@ -24,11 +24,15 @@ export const ImageInput = () => {
                 throw new Error('Avatar Error')
             }
 
+            setIsUserLoading(true)
+
             const { code, obj } = await APIController.loadAvatar(inputRef.current)
 
             if (code === 200) {
+                setIsUserLoading(false)
                 setUser({ ...user, ...obj })
             } else {
+                setIsUserLoading(false)
                 setAlert('Ошибка!')
             }
         } catch (e) {

@@ -13,13 +13,18 @@ import { DecksContext } from 'src/app/providers/DecksProvider/utils/DecksContext
 // }
 
 export const DecksContainer = () => {
-    const { user, isUserLoading } = useRequiredContext(UserContext)
+    const { user, isUserLoading, isSignificant } = useRequiredContext(UserContext)
     const { decks, setDecks } = useRequiredContext(DecksContext)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     let userIsUnauthorized = user === defaultUser && !isUserLoading
 
     useEffect(() => {
+        console.log(isSignificant)
+        if (!isSignificant) {
+            return
+        }
+
         if (userIsUnauthorized) {
             setIsLoading(false)
             return
@@ -30,7 +35,11 @@ export const DecksContainer = () => {
             setIsLoading(false)
             setDecks(decks)
         })
-    }, [])
+    }, [isUserLoading])
+
+    useEffect(() => {
+        console.log('significant:', isSignificant, isUserLoading)
+    }, [isUserLoading])
 
     const decksList = useMemo(() => decks.map(deck =>
         <DeckItem

@@ -16,12 +16,13 @@ interface UserButtonProps {
 
 export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
-    const { setUser } = useRequiredContext(UserContext)
+    const { setUser, setIsUserLoading } = useRequiredContext(UserContext)
 
-    const onExitClick = () => {
+    const onExitClick = async () => {
+        setIsUserLoading(true)
+        await APIController.logout()
         setUser(defaultUser)
-
-        APIController.logout()
+        setIsUserLoading(false)
     }
 
     const onAccountEditClick = () => {
