@@ -69,7 +69,7 @@ export const DeckItem = ({ deck, setDecks }: DeckItemProps) => {
                     </span>
                     <span
                         className={cls.CardsCount}
-                    >{deck.main.length} {deck.main.length % 10 === 1
+                    >{deck.main.reduce((acc, curr) => acc + curr.amount, 0)} {deck.main.reduce((acc, curr) => acc + curr.amount, 0) % 10 === 1
                         ? 'карта'
                         : deck.main.length % 10 < 5
                             ? 'карты'
