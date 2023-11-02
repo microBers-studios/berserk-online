@@ -1,5 +1,5 @@
 ﻿using berserk_online_server.Constants;
-using berserk_online_server.Models.User;
+using berserk_online_server.Models.Db;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 

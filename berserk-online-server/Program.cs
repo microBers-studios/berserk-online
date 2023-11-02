@@ -33,6 +33,7 @@ builder.Services.AddTransient<FrontendURLCreator>();
 builder.Services.AddTransient<UsersDatabase>();
 builder.Services.AddTransient<RecoveryMailSender>();
 builder.Services.AddTransient<ConfirmEmailSender>();
+builder.Services.AddTransient<DeckBuilder>();
 builder.Services.AddSingleton<StaticContentService>();
 builder.Services.AddSingleton<MailClient>();
 builder.Services.AddSingleton<TempRequestsManager<RecoveryMailSender>>();

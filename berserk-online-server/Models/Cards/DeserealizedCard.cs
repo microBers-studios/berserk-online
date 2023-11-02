@@ -28,5 +28,11 @@ namespace berserk_online_server.Models.Cards
         public HitInfo? Hit { get; set; }
         [JsonPropertyName("moves")]
         public int? Moves { get; set; }
+        [JsonPropertyName("number")]
+        public int Number { get; set; }
+        [JsonPropertyName("set")]
+        public string Set { get; set; }
+        [JsonPropertyName("unique")]
+        public bool Unique { get; set; }
     }
 }

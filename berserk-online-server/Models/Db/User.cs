@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using berserk_online_server.Models.Cards;
+using System.ComponentModel.DataAnnotations;
 
-namespace berserk_online_server.Models.User
+namespace berserk_online_server.Models.Db
 {
     public class User
     {
@@ -24,6 +25,7 @@ namespace berserk_online_server.Models.User
             set { name = value; }
         }
         public string? AvatarUrl { get; set; }
+        public List<DeckDb> Decks { get; set; } = new List<DeckDb>();
         public bool IsEmailConfirmed { get; set; } = false;
         private string? name;
     }

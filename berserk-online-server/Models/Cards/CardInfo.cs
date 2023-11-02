@@ -23,5 +23,7 @@ namespace berserk_online_server.Models.Cards
         public string[] Element { get; set; }
         [JsonPropertyName("price")]
         public int Price { get; set; }
+        [JsonPropertyName("number")]
+        public int Number { get; set; }
     }
 }
