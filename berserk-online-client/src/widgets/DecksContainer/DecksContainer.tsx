@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import cls from "./DecksContainer.module.scss";
 import APIController from 'src/API/Controller';
 import { DeckItem } from './DeckItem/DeckItem';
@@ -9,7 +9,7 @@ import ReactLoading from 'react-loading';
 import { DecksContext } from 'src/app/providers/DecksProvider/utils/DecksContext';
 
 // interface DecksContainerProps {
-//     className?: string;
+//     setPage: (page: RouterPaths | null) => void
 // }
 
 export const DecksContainer = () => {
@@ -37,18 +37,6 @@ export const DecksContainer = () => {
         })
     }, [isUserLoading])
 
-    useEffect(() => {
-        console.log('significant:', isSignificant, isUserLoading)
-    }, [isUserLoading])
-
-    const decksList = useMemo(() => decks.map(deck =>
-        <DeckItem
-            key={deck.id}
-            deck={deck}
-            setDecks={setDecks}
-        />
-    ), [decks])
-
     return (
         <div className={cls.DecksContainer} >
             <div className={cls.DecksHeaderWrapper}>
@@ -73,7 +61,7 @@ export const DecksContainer = () => {
                     </button>}
             </div>
             <div className={`${cls.DecksWrapper} ${(userIsUnauthorized
-                || !decksList.length
+                || !decks.length
             ) && cls.NoDecks}`}>
                 {isLoading
                     ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
@@ -83,8 +71,14 @@ export const DecksContainer = () => {
                         >
                             Войдите в аккаунт, чтобы увидеть колоды
                         </span>
-                        : decksList.length
-                            ? decksList
+                        : decks.length
+                            ? decks.map(deck =>
+                                <DeckItem
+                                    key={deck.id}
+                                    deck={deck}
+                                    setDecks={setDecks}
+                                />
+                            )
                             : <span className={cls.NoDecksContent}>Колод пока нет</span>}
             </div>
         </div >

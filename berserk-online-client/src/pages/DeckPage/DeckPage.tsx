@@ -7,8 +7,13 @@ import ReactLoading from 'react-loading';
 import APIController from 'src/API/Controller';
 import { CardItem } from './CardItem/CardItem';
 import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
+import { RouterPaths } from 'src/app/providers/router/router-paths';
 
-export const DeckPage = () => {
+interface DeckPageProps {
+    setPage: (page: RouterPaths | null) => void;
+}
+
+export const DeckPage = ({ setPage }: DeckPageProps) => {
     const setAlert = useAlert()
     const navigate = useNavigate()
 
@@ -27,6 +32,9 @@ export const DeckPage = () => {
         .filter(c => c.elite)
 
     useEffect(() => {
+
+        setPage(null)
+
         new Promise(async () => {
             const { code, obj } = await APIController.getDeck(Number(id))
 

@@ -16,7 +16,7 @@ import { CookieModalContext } from "src/app/providers/CookieModalProvider/lib/Co
 import { UserContext } from "src/app/providers/UserProvider";
 
 interface NavbarProps {
-    currentPage: RouterPaths;
+    currentPage: RouterPaths | null;
 }
 
 export enum Modals {

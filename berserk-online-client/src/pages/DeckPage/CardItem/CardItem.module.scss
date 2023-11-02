@@ -1,12 +1,7 @@
 .CardItem {
     position: relative;
     list-style: none;
-    display: flex;
-    gap: 10px;
     border-bottom: 1px solid var(--border-color);
-    padding: 10px;
-    color: white;
-    align-items: center;
     animation: entering 0.3s ease-in;
 
     &:hover {
@@ -106,6 +101,14 @@
     .DeleteCardButton {
         display: flex;
     }
+}
+
+.CardContentWrapper {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    align-items: center;
 }
 
 @keyframes deleting {

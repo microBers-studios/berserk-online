@@ -7,7 +7,7 @@ import { EmailConfirmPage } from 'src/pages/EmailConfirmPage/EmailConfirmPage';
 import { ErrorModalPage } from 'src/pages/ErrorModalPage/ErrorModalPage';
 import { DeckPage } from 'src/pages/DeckPage/DeckPage';
 interface AppRouterProps {
-    setPage: (page: RouterPaths) => void
+    setPage: (page: RouterPaths | null) => void
 }
 
 export const AppRouter = ({ setPage }: AppRouterProps) => {
@@ -19,7 +19,7 @@ export const AppRouter = ({ setPage }: AppRouterProps) => {
                 <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
                 <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
                 <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
-                <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage />} />
+                <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage setPage={setPage} />} />
                 <Route path={RouterPaths.DECK} element={<Navigate to={`${RouterPaths.DECK}/1`} />} />
             </Routes>
         </>

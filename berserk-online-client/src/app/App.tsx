@@ -18,7 +18,7 @@ import { Footer } from 'src/widgets/Footer/Footer'
 function App() {
   const { alerts } = useRequiredContext<AlertContextProps>(AlertContext)
   const { setUser, setIsUserLoading } = useRequiredContext<UserContextProps>(UserContext)
-  const [currentPage, setCurrentPage] = useState<RouterPaths>(RouterPaths.MAIN)
+  const [currentPage, setCurrentPage] = useState<RouterPaths | null>(RouterPaths.MAIN)
 
   const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
   const cookied = useCookie()

@@ -74,15 +74,13 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
             }
 
             setDeck(newDeck)
-        }, 300)
+        }, 250)
 
     }
 
     return (
         <li
             className={`${cls.CardItem} ${isDeleteAnimation && cls.deleting}`}
-            onMouseOver={() => setIsMouseOver(true)}
-            onMouseLeave={() => setIsMouseOver(false)}
         >
             <div className={cls.CardAmountButtons}>
                 <span
@@ -92,27 +90,33 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
                     className={cls.minus}
                     onClick={() => changeCardAmount(false)}>-</span>
             </div>
-            <span className={cls.CardAmount}>{card.amount}</span>
-            <span
-                className={cls.CardName}
-            >{card.name} {card.type !== CardTypes.CREATURE &&
-                <SymbolIcon src={getTypeSymbol(card.type)} />}
-            </span>
-            <span
-                className={cls.CardPrice}>
-                {card.price}
-                <SymbolIcon
-                    src={getElite(card.elite, card.unique)} />
-            </span>
-            <span>{card.elements
-                .map((element, i) =>
+            <div
+                className={cls.CardContentWrapper}
+                onMouseOver={() => setIsMouseOver(true)}
+                onMouseLeave={() => setIsMouseOver(false)}
+            >
+                <span className={cls.CardAmount}>{card.amount}</span>
+                <span
+                    className={cls.CardName}
+                >{card.name} {card.type !== CardTypes.CREATURE &&
+                    <SymbolIcon src={getTypeSymbol(card.type)} />}
+                </span>
+                <span
+                    className={cls.CardPrice}>
+                    {card.price}
                     <SymbolIcon
-                        key={i}
-                        src={getElement(element)} />)
-            }
-            </span>
-            <SymbolIcon
-                src={getRarity(card.rarity, card.set)} />
+                        src={getElite(card.elite, card.unique)} />
+                </span>
+                <span>{card.elements
+                    .map((element, i) =>
+                        <SymbolIcon
+                            key={i}
+                            src={getElement(element)} />)
+                }
+                </span>
+                <SymbolIcon
+                    src={getRarity(card.rarity, card.set)} />
+            </div>
             <div className={cls.DeleteCardButton}>
                 <img
                     src={trashcanImage}

@@ -14,7 +14,7 @@ export const decksObj: Record<string, DecksArray> = {
                     amount: 3,
                     "rarity": Rarities.ULTRARARE,
                     "name": "Дегаска",
-                    "id": 0,
+                    "id": 45,
                     "elite": true,
                     "type": CardTypes.CREATURE,
                     image: 'https://berserk.ru/image/data/00_Berserk/01_%D0%92%D0%BE%D0%B9%D0%BD%D0%B0%20%D1%81%D1%82%D0%B8%D1%85%D0%B8%D0%B9/Berserk_VS_all_card%2032-page-00001.jpg',
