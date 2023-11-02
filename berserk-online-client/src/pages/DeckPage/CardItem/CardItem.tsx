@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ICard, IDeck, IDeckCard } from "src/API/utils/types";
 import cls from "./CardItem.module.scss"
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
@@ -16,6 +17,7 @@ interface CardItemProps {
 export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps) => {
 
     const setAlert = useAlert()
+    const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
 
     const changeCardAmount = (isIncrease: boolean) => {
         const newDeck = JSON.parse(JSON.stringify(deck))
@@ -54,23 +56,28 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
     }
 
     const deleteCard = () => {
-        const newDeck = JSON.parse(JSON.stringify(deck))
+        setIsDeleteAnimation(true)
 
-        const cardsList = isSide
-            ? newDeck.sideboard
-            : newDeck.main
+        setTimeout(() => {
+            const newDeck = JSON.parse(JSON.stringify(deck))
 
-        if (isSide) {
-            newDeck.sideboard = cardsList.filter((c: ICard) => c.id !== card.id)
-        } else {
-            newDeck.main = cardsList.filter((c: ICard) => c.id !== card.id)
-        }
+            const cardsList = isSide
+                ? newDeck.sideboard
+                : newDeck.main
 
-        setDeck(newDeck)
+            if (isSide) {
+                newDeck.sideboard = cardsList.filter((c: ICard) => c.id !== card.id)
+            } else {
+                newDeck.main = cardsList.filter((c: ICard) => c.id !== card.id)
+            }
+
+            setDeck(newDeck)
+        }, 300)
+
     }
 
     return (
-        <li className={cls.CardItem} >
+        <li className={`${cls.CardItem} ${isDeleteAnimation && cls.deleting}`} >
             <div className={cls.CardAmountButtons}>
                 <span
                     className={cls.plus}
@@ -104,7 +111,8 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
                 <img
                     src={trashcanImage}
                     className={cls.trashcanImage}
-                    onClick={deleteCard} />
+                    onClick={deleteCard}
+                />
             </div>
         </li>
     );

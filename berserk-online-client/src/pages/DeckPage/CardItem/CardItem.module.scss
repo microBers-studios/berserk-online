@@ -7,6 +7,7 @@
     padding: 10px;
     color: white;
     align-items: center;
+    animation: entering 0.3s ease-in;
 
     &:hover {
         cursor: pointer;
@@ -19,6 +20,10 @@
     &:first-child {
         border-top: 1px solid transparent;
     }
+}
+
+.deleting {
+    animation: deleting 0.3s ease-out;
 }
 
 .CardPrice {
@@ -100,5 +105,25 @@
 
     .DeleteCardButton {
         display: flex;
+    }
+}
+
+@keyframes deleting {
+    from {
+        transform: translate(0);
+    }
+
+    to {
+        transform: translate(-100%);
+    }
+}
+
+@keyframes entering {
+    from {
+        transform: translate(-100%);
+    }
+
+    to {
+        transform: translate(0);
     }
 }
