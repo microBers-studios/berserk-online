@@ -17,8 +17,8 @@ namespace berserk_online_server.Facades.CardBase
             deck.Id = deckDb.Id;
             deck.Name = deckDb.Name;
             if (deckDb.SideBoard != null)
-                deck.SideBoard = _cardProvider.GetCards(deckDb.SideBoard);
-            deck.Main = _cardProvider.GetCards(deckDb.Main);
+                deck.SideBoard = deckDb.Main.Select(convertFromCardCode).ToArray();
+            deck.Main = deckDb.Main.Select(convertFromCardCode).ToArray();
             deck.Elements = deckDb.Elements;
             return deck;
         }
@@ -28,10 +28,10 @@ namespace berserk_online_server.Facades.CardBase
             dbDeck.Id = deck.Id;
             dbDeck.Name = deck.Name;
             dbDeck.Elements = deck.Elements;
-            dbDeck.Main = deck.Main.Select(card => card.Id).ToArray();
+            dbDeck.Main = deck.Main.Select(convertToCardCode).ToArray();
             if (deck.SideBoard != null)
             {
-                dbDeck.SideBoard = deck.SideBoard.Select(card => card.Id).ToArray();
+                dbDeck.SideBoard = deck.SideBoard.Select(convertToCardCode).ToArray();
             }
             return dbDeck;
         }
@@ -64,6 +64,19 @@ namespace berserk_online_server.Facades.CardBase
                 }
             }
             return elements.ToArray();
+        }
+        private DeckCardInfo convertFromCardCode(string code)
+        {
+            var values = code.Split('-').Select(x => int.Parse(x)).Take(2).ToArray();
+            var card = new DeckCardInfo(_cardProvider.GetCard(values[0]));
+            if (card == null)
+                throw new ArgumentNullException();
+            card.Amount = values[1];
+            return card;
+        }
+        private string convertToCardCode(DeckCardInfo card)
+        {
+            return $"{card.Id}-{card.Amount}";
         }
     }
 }

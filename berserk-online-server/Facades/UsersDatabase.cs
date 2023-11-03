@@ -188,14 +188,15 @@ namespace berserk_online_server.Facades
             }
             public void Update(string email, DeckRequest deck)
             {
-                var user = _db.findUserFromRequest(new UserInfoRequest() { Email = email });
+                var user = _db._db.Users.Where(u => u.Email == email).FirstOrDefault();
                 if (user == null)
                 {
                     throw new InvalidOperationException();
                 }
                 var preparedDeck = _deckBuilder.BuildFromRequest(deck);
-                replaceDeck(user.Decks.ToArray(), _deckBuilder.PrepareForDb(preparedDeck));
-                _db.UpdateUser(user, user.Email);
+                user.Decks = new List<DeckDb>() { _deckBuilder.PrepareForDb(preparedDeck) };
+                _db._db.Update(user);
+                _db._db.SaveChanges();
             }
             public void Add(string email, DeckRequest deck)
             {
@@ -220,12 +221,13 @@ namespace berserk_online_server.Facades
                 }
                 return decks.ToArray();
             }
-            private void replaceDeck(DeckDb[] decks, DeckDb deck)
+            private DeckDb[] replaceDeck(DeckDb[] decks, DeckDb deck)
             {
                 for (int i = 0; i < decks.Length; i++)
                 {
                     if (decks[i].Id == deck.Id) decks[i] = deck;
                 }
+                return decks;
             }
         }
     }

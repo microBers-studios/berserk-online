@@ -22,15 +22,17 @@ namespace berserk_online_server.Controllers
             {
                 var email = getMail();
                 return Results.Ok(_db.Decks.GetAll(email));
-            } catch (ArgumentNullException)
+            }
+            catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
-            } catch (InvalidOperationException ex)
+            }
+            catch (InvalidOperationException ex)
             {
                 return Results.BadRequest(ex.Message);
             }
-            
-            
+
+
         }
         [HttpPost("Add")]
         public IResult Add(DeckRequest request)
@@ -46,6 +48,19 @@ namespace berserk_online_server.Controllers
                 return Results.Unauthorized();
             }
             catch (InvalidOperationException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("Update")]
+        public IResult Put(DeckRequest request)
+        {
+            try
+            {
+                var email = getMail();
+                _db.Decks.Update(email, request);
+                return Results.Ok();
+            } catch (Exception ex)
             {
                 return Results.BadRequest(ex.Message);
             }
