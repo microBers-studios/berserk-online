@@ -34,6 +34,31 @@ namespace berserk_online_server.Controllers
 
 
         }
+        [HttpGet("getMe/{id}")]
+        public IResult Get(string id)
+        {
+            try
+            {
+                var email = getMail();
+                return Results.Ok(_db.Decks.Get(email, id));
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            }
+            catch (NotFoundException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                {
+                    id,
+                    message = "deck with current id not exists"
+                }));
+            }
+        }
         [HttpPost("add")]
         public IResult Add(DeckRequest request)
         {

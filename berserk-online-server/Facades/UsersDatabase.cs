@@ -186,6 +186,19 @@ namespace berserk_online_server.Facades
                 var decks = getDecks(new UserInfoRequest() { Email = email });
                 return decks.Select(_deckBuilder.BuildFromDb).ToArray();
             }
+            public Deck Get(string email, string id)
+            {
+                var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                var deck = user.Decks.FirstOrDefault(u => u.Id == id);
+                if (deck == null) {
+                    throw new NotFoundException();
+                }
+                return _deckBuilder.BuildFromDb(deck);
+            }
             public void Update(string email, DeckRequest deck)
             {
                 var user = _db._db.Users.Where(u => u.Email == email).FirstOrDefault();
