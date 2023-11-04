@@ -5,6 +5,7 @@ using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices.JavaScript;
 
 namespace berserk_online_server.Facades
@@ -198,6 +199,22 @@ namespace berserk_online_server.Facades
                 _db._db.Update(user);
                 _db._db.SaveChanges();
             }
+            public void Delete(string email, string id) { 
+                var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
+                if (user == null)
+                {
+                    throw new InvalidOperationException(nameof(user));
+                }
+                var decks = user.Decks.ToDictionary(deck => deck.Id);
+                try
+                {
+                    _db._db.Decks.Remove(decks[id]);
+                } catch (ArgumentOutOfRangeException)
+                {
+                    throw new NotFoundException();
+                }
+                _db._db.SaveChanges();
+            }
             public void Add(string email, DeckRequest deck)
             {
                 var user = _db.findUserFromRequest(new UserInfoRequest() { Email = email });
@@ -214,7 +231,10 @@ namespace berserk_online_server.Facades
             {
                 var decks = _db._db.Users.Where(u => (request.Name == null || request.Name == u.Name)
                 && (request.Email == null || request.Email == u.Email)
-                && (request.Id == null || request.Id == u.Id)).Select(user => user.Decks).FirstOrDefault();
+                && (request.Id == null || request.Id == u.Id))
+                    .Include(u => u.Decks)
+                    .Select(u => u.Decks)
+                    .FirstOrDefault();
                 if (decks == null)
                 {
                     throw new InvalidOperationException();

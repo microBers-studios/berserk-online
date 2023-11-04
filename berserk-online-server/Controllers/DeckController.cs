@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Facades;
+﻿using berserk_online_server.Exceptions;
+using berserk_online_server.Facades;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -27,9 +28,9 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                return Results.BadRequest(ex.Message);
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
 
 
@@ -47,9 +48,9 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                return Results.BadRequest(ex.Message);
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
         }
         [HttpPut("Update")]
@@ -60,10 +61,38 @@ namespace berserk_online_server.Controllers
                 var email = getMail();
                 _db.Decks.Update(email, request);
                 return Results.Ok();
-            } catch (Exception ex)
-            {
-                return Results.BadRequest(ex.Message);
             }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            }
+        }
+        [HttpDelete("Delete")]
+        public IResult Delete(string id)
+        {
+            try
+            {
+                var email = getMail();
+                _db.Decks.Delete(email, id);
+                return Results.Ok();
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (NotFoundException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                {
+                    id,
+                    message = "deck with current id not exists"
+                }));
+            }
+
         }
         private string getMail()
         {

@@ -48,7 +48,7 @@ namespace berserk_online_server.Facades.CardBase
             }
             if (request.Id != null)
             {
-                deck.Id = (int)request.Id;
+                deck.Id = request.Id;
             }
             deck.Elements = getElements(allCards);
             return deck;
