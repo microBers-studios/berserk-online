@@ -1,5 +1,4 @@
-﻿using berserk_online_server.Models.Cards;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace berserk_online_server.Models.Db
 {

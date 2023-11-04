@@ -2,7 +2,6 @@
 using berserk_online_server.Facades;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace berserk_online_server.Controllers
@@ -35,7 +34,7 @@ namespace berserk_online_server.Controllers
 
 
         }
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public IResult Add(DeckRequest request)
         {
             try
@@ -53,7 +52,7 @@ namespace berserk_online_server.Controllers
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
         }
-        [HttpPut("Update")]
+        [HttpPut("update")]
         public IResult Put(DeckRequest request)
         {
             try
@@ -71,7 +70,7 @@ namespace berserk_online_server.Controllers
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
         }
-        [HttpDelete("Delete")]
+        [HttpDelete("delete")]
         public IResult Delete(string id)
         {
             try

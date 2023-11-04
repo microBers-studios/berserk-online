@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace berserk_online_server.Models.Cards
+﻿namespace berserk_online_server.Models.Cards
 {
     public class DeckCardInfo : DeserealizedCard
     {

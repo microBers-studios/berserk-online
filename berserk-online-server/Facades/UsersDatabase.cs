@@ -6,7 +6,6 @@ using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices.JavaScript;
 
 namespace berserk_online_server.Facades
 {
@@ -199,7 +198,8 @@ namespace berserk_online_server.Facades
                 _db._db.Update(user);
                 _db._db.SaveChanges();
             }
-            public void Delete(string email, string id) { 
+            public void Delete(string email, string id)
+            {
                 var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
                 if (user == null)
                 {
@@ -209,7 +209,8 @@ namespace berserk_online_server.Facades
                 try
                 {
                     _db._db.Decks.Remove(decks[id]);
-                } catch (ArgumentOutOfRangeException)
+                }
+                catch (ArgumentOutOfRangeException)
                 {
                     throw new NotFoundException();
                 }
