@@ -1,5 +1,5 @@
 import { IUser } from "src/app/providers/UserProvider/lib/types/types";
-import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray, IResponseDeckInfo, ICard } from "./utils/types";
+import { IRegistration, ILogin, IResponseUserInfo, IResponseDecksInfo, DecksArray, IResponseDeckInfo, ICard, IDeck } from "./utils/types";
 import { URL, Paths } from "./utils/urls";
 import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 import { decksObj } from "./utils/mock";
@@ -223,7 +223,16 @@ export default class APIController {
         })
     }
 
-    static async deleteDeck(id: number): Promise<IResponseDecksInfo> {
+    static async createDeck(deck: IDeck): Promise<number> {
+        return new Promise(res => {
+            setTimeout(() => {
+                decksObj.decks.push(deck)
+                res(1)
+            }, 300)
+        })
+    }
+
+    static async deleteDeck(id: string): Promise<IResponseDecksInfo> {
         return new Promise(res => {
             setTimeout(() => {
                 decksObj.decks = decksObj.decks.filter(d => d.id !== id)
@@ -232,7 +241,7 @@ export default class APIController {
         })
     }
 
-    static async getDeck(id: number): Promise<IResponseDeckInfo> {
+    static async getDeck(id: string): Promise<IResponseDeckInfo> {
         return new Promise(res => {
             setTimeout(() => {
                 const deck = decksObj.decks.find(d => d.id === id)

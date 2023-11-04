@@ -24,6 +24,7 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
     }
 
     const [deck, setDeck] = useState<IDeck | null>(null)
+    const [isSaveDisabled, setIsSaveDisabled] = useState(false)
 
     const ordinaryCards = deck?.main
         .filter(c => !c.elite)
@@ -36,7 +37,7 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
         setPage(null)
 
         new Promise(async () => {
-            const { code, obj } = await APIController.getDeck(Number(id))
+            const { code, obj } = await APIController.getDeck(String(id))
 
             if (code === 200) {
                 setDeck(obj as IDeck)
@@ -48,15 +49,33 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
         })
     }, [])
 
+    useEffect(() => console.log(deck), [deck])
+
+    const onSaveClick = () => {
+        setIsSaveDisabled(true)
+
+    }
+
     return (<div className={cls.DeckPage} >
         {!deck
             ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
             : <>
 
                 <div className={cls.DeckContainer}>
-                    <h1
-                        className={cls.DeckPageHeader}
-                    >{deck.name}</h1>
+                    <div
+                        className={cls.DeckHeaderWrapper}
+                    >
+                        <h1 className={cls.DeckPageHeader}>{deck.name}</h1>
+                        <p className={cls.DeckCardsCount}>Всего карт: {Number(eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)) + Number(ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0))}</p>
+                        <button
+                            className={cls.SaveDeckButton}
+                            disabled={deck.main.concat(deck.sideboard === undefined ? [] : deck.sideboard).length === 0
+                                || isSaveDisabled}
+                            onClick={onSaveClick}
+                        >
+                            Сохранить
+                        </button>
+                    </div>
                     <div
                         className={cls.CardsContainer}
                     >
@@ -104,7 +123,7 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
                                         className={cls.NoCardsText}>Карт нет</span>}
                             </ul>
                         </div>
-                        {deck.sideboard && <div
+                        <div
                             className={cls.SideboardCardsContainer}
                         >
                             <h2
@@ -127,11 +146,14 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
                                 </ul>
                                 : <span
                                     className={cls.NoCardsText}>Карт нет</span>}
-                        </div>}
+                        </div>
                     </div>
 
                 </div>
-                <Searchbar />
+                <Searchbar
+                    deck={deck}
+                    setDeck={setDeck}
+                />
             </>
         }
     </div >

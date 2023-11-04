@@ -44,7 +44,6 @@ export const getElement = (element: Elements) => {
 }
 
 export const getRarity = (rarity: Rarities, set: Sets): string => {
-    console.log(rarity, set)
     let rarityStr: string;
 
     const elementsWarRarities: Record<string, string> = {

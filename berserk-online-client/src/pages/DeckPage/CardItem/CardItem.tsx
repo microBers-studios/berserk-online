@@ -16,10 +16,10 @@ interface CardItemProps {
 }
 
 export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps) => {
-
     const setAlert = useAlert()
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
     const [isMouseOver, setIsMouseOver] = useState(false)
+    const [clientY, setClientY] = useState(0)
 
     const changeCardAmount = (isIncrease: boolean) => {
         const newDeck = JSON.parse(JSON.stringify(deck))
@@ -75,7 +75,6 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
 
             setDeck(newDeck)
         }, 250)
-
     }
 
     return (
@@ -94,6 +93,7 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
                 className={cls.CardContentWrapper}
                 onMouseOver={() => setIsMouseOver(true)}
                 onMouseLeave={() => setIsMouseOver(false)}
+                onMouseMove={(e: React.MouseEvent) => setClientY(e.clientY)}
             >
                 <span className={cls.CardAmount}>{card.amount}</span>
                 <span
@@ -126,7 +126,7 @@ export const CardItem = ({ card, deck, setDeck, isSide = false }: CardItemProps)
             </div>
 
             {isMouseOver &&
-                <CardTitleItem cardSrc={card.image} />}
+                <CardTitleItem cardSrc={card.image} clientY={clientY} />}
         </li>
     );
 }

@@ -44,7 +44,7 @@
     position: absolute;
     width: 20px;
     top: -1px;
-    bottom: -0.5px;
+    bottom: -1px;
     left: -20px;
     border: 1px solid var(--border-color);
     flex-direction: column;
@@ -72,9 +72,9 @@
     position: absolute;
     width: 30px;
     padding-right: 5px;
-    top: -1px;
-    bottom: -0.5px;
-    right: -30px;
+    top: -0.5px;
+    bottom: -1px;
+    right: -35px;
     border: 1px solid var(--border-color);
     flex-direction: column;
     border-left: none;
@@ -114,19 +114,23 @@
 @keyframes deleting {
     from {
         transform: translate(0);
+        opacity: 1;
     }
 
     to {
         transform: translate(-100%);
+        opacity: 0;
     }
 }
 
 @keyframes entering {
     from {
         transform: translate(-100%);
+        opacity: 1;
     }
 
     to {
         transform: translate(0);
+        opacity: 0;
     }
 }

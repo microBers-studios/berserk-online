@@ -61,11 +61,11 @@ export interface IDeckCard extends ICard {
 }
 
 export interface IDeck {
-    id: number;
+    id: string;
     name: string;
     elements: Elements[];
     main: IDeckCard[];
-    sideboard?: IDeckCard[];
+    sideboard: IDeckCard[];
 }
 
 export type DecksArray = IDeck[]

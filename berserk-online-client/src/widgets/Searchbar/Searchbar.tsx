@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import ReactLoading from 'react-loading'
 import cls from "./Searchbar.module.scss"
 import APIController from "src/API/Controller";
-import { ICard } from "src/API/utils/types";
+import { ICard, IDeck } from "src/API/utils/types";
 import { SearchbarCardItem } from "./SearchbarCardItem/SearchbarCardItem";
 
-// interface SearchBarProps {
-//     className?: string;
-// }
+interface SearchBarProps {
+    deck: IDeck;
+    setDeck: (deck: IDeck) => void;
+}
 
-export const Searchbar = () => {
+export const Searchbar = ({ deck, setDeck }: SearchBarProps) => {
     const [value, setValue] = useState('')
     const [results, setResults] = useState<ICard[]>([])
     const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +55,11 @@ export const Searchbar = () => {
                     {isLoading
                         ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                         : results.map(res =>
-                            <SearchbarCardItem key={res.id} card={res} />)
+                            <SearchbarCardItem
+                                key={res.id}
+                                deck={deck}
+                                setDeck={setDeck}
+                                card={res} />)
                     }
                 </ul>
             </div>
