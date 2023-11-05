@@ -7,7 +7,7 @@ namespace berserk_online_server.ApiErrors.Decks
         public DeckAlreadyExists(object? ctx) : base(ctx)
         {
             Id = (int)ApiErrorType.DeckAlreadyExists;
-            Message = "deck with this id already exists";
+            Message = "Deck with this id already exists";
         }
     }
 }

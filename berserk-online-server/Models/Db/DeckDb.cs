@@ -6,6 +6,6 @@
         public string Name { get; set; }
         public string[] Elements { get; set; }
         public string[] Main { get; set; }
-        public string[]? SideBoard { get; set; }
+        public string[]? Sideboard { get; set; }
     }
 }

@@ -202,7 +202,7 @@ namespace berserk_online_server.Facades
             }
             public void Update(string email, DeckRequest deck)
             {
-                var user = _db._db.Users.Include(u => u.Decks).Where(u => u.Email == email).FirstOrDefault();
+                var user = _db._db.Users.Where(u => u.Email == email).FirstOrDefault();
                 if (user == null)
                 {
                     throw new InvalidOperationException();
@@ -213,7 +213,7 @@ namespace berserk_online_server.Facades
                 {
                     throw new InvalidDataException();
                 }
-                oldDeck.SideBoard = newDeck.SideBoard;
+                oldDeck.Sideboard = newDeck.Sideboard;
                 oldDeck.Main = newDeck.Main;
                 oldDeck.Name = newDeck.Name;
                 _db._db.Update(oldDeck);

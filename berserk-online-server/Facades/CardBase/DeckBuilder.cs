@@ -16,8 +16,8 @@ namespace berserk_online_server.Facades.CardBase
             var deck = new Deck();
             deck.Id = deckDb.Id;
             deck.Name = deckDb.Name;
-            if (deckDb.SideBoard != null)
-                deck.SideBoard = deckDb.Main.Select(convertFromCardCode).ToArray();
+            if (deckDb.Sideboard != null)
+                deck.Sideboard = deckDb.Main.Select(convertFromCardCode).ToArray();
             deck.Main = deckDb.Main.Select(convertFromCardCode).ToArray();
             deck.Elements = deckDb.Elements;
             return deck;
@@ -29,9 +29,9 @@ namespace berserk_online_server.Facades.CardBase
             dbDeck.Name = deck.Name;
             dbDeck.Elements = deck.Elements;
             dbDeck.Main = deck.Main.Select(convertToCardCode).ToArray();
-            if (deck.SideBoard != null)
+            if (deck.Sideboard != null)
             {
-                dbDeck.SideBoard = deck.SideBoard.Select(convertToCardCode).ToArray();
+                dbDeck.Sideboard = deck.Sideboard.Select(convertToCardCode).ToArray();
             }
             return dbDeck;
         }
@@ -39,12 +39,12 @@ namespace berserk_online_server.Facades.CardBase
         {
             var deck = new Deck();
             deck.Main = request.Main;
-            deck.SideBoard = request.SideBoard;
+            deck.Sideboard = request.Sideboard;
             deck.Name = request.Name;
             var allCards = request.Main;
-            if (request.SideBoard != null)
+            if (request.Sideboard != null)
             {
-                allCards = allCards.Concat(request.SideBoard).ToArray();
+                allCards = allCards.Concat(request.Sideboard).ToArray();
             }
             if (request.Id != null)
             {
