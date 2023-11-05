@@ -1,5 +1,6 @@
 ﻿using berserk_online_server.ApiErrors;
 using berserk_online_server.ApiErrors.Authentication;
+using berserk_online_server.ApiErrors.Decks;
 
 namespace berserk_online_server.Facades
 {
@@ -13,7 +14,8 @@ namespace berserk_online_server.Facades
         InvalidFileName,
         RememberMeLost,
         InvalidToken,
-        EmailNotConfirmed
+        EmailNotConfirmed,
+        DeckAlreadyExists,
     }
     public static class ApiErrorFabric
     {
@@ -39,6 +41,8 @@ namespace berserk_online_server.Facades
                     return new InvalidToken(ctx);
                 case ApiErrorType.EmailNotConfirmed:
                     return new EmailNotConfirmed(ctx);
+                case ApiErrorType.DeckAlreadyExists:
+                    return new DeckAlreadyExists(ctx);
             }
             throw new NotImplementedException();
         }

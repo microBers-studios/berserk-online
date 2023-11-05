@@ -194,21 +194,29 @@ namespace berserk_online_server.Facades
                     throw new InvalidOperationException();
                 }
                 var deck = user.Decks.FirstOrDefault(u => u.Id == id);
-                if (deck == null) {
+                if (deck == null)
+                {
                     throw new NotFoundException();
                 }
                 return _deckBuilder.BuildFromDb(deck);
             }
             public void Update(string email, DeckRequest deck)
             {
-                var user = _db._db.Users.Where(u => u.Email == email).FirstOrDefault();
+                var user = _db._db.Users.Include(u => u.Decks).Where(u => u.Email == email).FirstOrDefault();
                 if (user == null)
                 {
                     throw new InvalidOperationException();
                 }
-                var preparedDeck = _deckBuilder.BuildFromRequest(deck);
-                user.Decks = new List<DeckDb>() { _deckBuilder.PrepareForDb(preparedDeck) };
-                _db._db.Update(user);
+                var newDeck = _deckBuilder.PrepareForDb(_deckBuilder.BuildFromRequest(deck));
+                var oldDeck = _db._db.Decks.Where(d => d.Id == newDeck.Id).FirstOrDefault();
+                if (oldDeck == null)
+                {
+                    throw new InvalidDataException();
+                }
+                oldDeck.SideBoard = newDeck.SideBoard;
+                oldDeck.Main = newDeck.Main;
+                oldDeck.Name = newDeck.Name;
+                _db._db.Update(oldDeck);
                 _db._db.SaveChanges();
             }
             public void Delete(string email, string id)
@@ -223,7 +231,7 @@ namespace berserk_online_server.Facades
                 {
                     _db._db.Decks.Remove(decks[id]);
                 }
-                catch (ArgumentOutOfRangeException)
+                catch (KeyNotFoundException)
                 {
                     throw new NotFoundException();
                 }
@@ -235,6 +243,10 @@ namespace berserk_online_server.Facades
                 if (user == null)
                 {
                     throw new InvalidOperationException();
+                }
+                if (_db._db.Decks.Where(d => d.Id == deck.Id).Any())
+                {
+                    throw new InvalidDataException();
                 }
                 var buildedDeck = _deckBuilder.BuildFromRequest(deck);
                 var preparedDeck = _deckBuilder.PrepareForDb(buildedDeck);
@@ -254,14 +266,6 @@ namespace berserk_online_server.Facades
                     throw new InvalidOperationException();
                 }
                 return decks.ToArray();
-            }
-            private DeckDb[] replaceDeck(DeckDb[] decks, DeckDb deck)
-            {
-                for (int i = 0; i < decks.Length; i++)
-                {
-                    if (decks[i].Id == deck.Id) decks[i] = deck;
-                }
-                return decks;
             }
         }
     }
