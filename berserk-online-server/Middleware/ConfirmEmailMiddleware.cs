@@ -22,33 +22,22 @@ namespace berserk_online_server.Middleware
             }
             try
             {
-                if (!isConfirmed(context, db))
+                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
+                context);
+                var user = db.GetUser(new UserInfoRequest() { Email = authManager.GetMail() });
+                if (!user.IsEmailConfirmed)
                 {
-                    writeBadRequest(context);
+                    writeBadRequest(context, user.Email);
                     return;
                 }
             }
             catch (Exception) { }
             await _next.Invoke(context);
         }
-        private bool isConfirmed(HttpContext context, UsersDatabase db)
-        {
-            try
-            {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                context);
-                var user = db.GetUser(new UserInfoRequest() { Email = authManager.GetMail() });
-                return user.IsEmailConfirmed;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
-        }
-        private void writeBadRequest(HttpContext context)
+        private void writeBadRequest(HttpContext context, string email)
         {
             context.Response.StatusCode = 403;
-            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed));
+            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new {email}));
         }
         private bool isTryToConfirm(HttpContext context)
         {
