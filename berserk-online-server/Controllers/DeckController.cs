@@ -108,8 +108,8 @@ namespace berserk_online_server.Controllers
             try
             {
                 var email = getMail();
-                _db.Decks.Delete(email, id);
-                return Results.Ok();
+                var decks = _db.Decks.Delete(email, id);
+                return Results.Ok(decks);
             }
             catch (ArgumentNullException)
             {
