@@ -1,7 +1,7 @@
-﻿using berserk_online_server.Facades;
+﻿using berserk_online_server.Exceptions;
+using berserk_online_server.Facades;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace berserk_online_server.Controllers
@@ -22,17 +22,44 @@ namespace berserk_online_server.Controllers
             {
                 var email = getMail();
                 return Results.Ok(_db.Decks.GetAll(email));
-            } catch (ArgumentNullException)
+            }
+            catch (ArgumentNullException)
             {
                 return Results.Unauthorized();
-            } catch (InvalidOperationException ex)
-            {
-                return Results.BadRequest(ex.Message);
             }
-            
-            
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            }
+
+
         }
-        [HttpPost("Add")]
+        [HttpGet("getMe/{id}")]
+        public IResult Get(string id)
+        {
+            try
+            {
+                var email = getMail();
+                return Results.Ok(_db.Decks.Get(email, id));
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            }
+            catch (NotFoundException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                {
+                    id,
+                    message = "deck with current id not exists"
+                }));
+            }
+        }
+        [HttpPost("add")]
         public IResult Add(DeckRequest request)
         {
             try
@@ -45,10 +72,58 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                return Results.BadRequest(ex.Message);
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            } catch (InvalidDataException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.DeckAlreadyExists, request.Id));
             }
+        }
+        [HttpPut("update")]
+        public IResult Put(DeckRequest request)
+        {
+            try
+            {
+                var email = getMail();
+                _db.Decks.Update(email, request);
+                return Results.Ok();
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+            }
+            catch (InvalidDataException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, "deck with this id not found."));
+            }
+        }
+        [HttpDelete("delete")]
+        public IResult Delete(string id)
+        {
+            try
+            {
+                var email = getMail();
+                _db.Decks.Delete(email, id);
+                return Results.Ok();
+            }
+            catch (ArgumentNullException)
+            {
+                return Results.Unauthorized();
+            }
+            catch (NotFoundException)
+            {
+                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                {
+                    id,
+                    message = "deck with current id not exists"
+                }));
+            }
+
         }
         private string getMail()
         {

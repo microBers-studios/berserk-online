@@ -5,7 +5,7 @@ using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using System.Runtime.InteropServices.JavaScript;
+using Microsoft.EntityFrameworkCore;
 
 namespace berserk_online_server.Facades
 {
@@ -186,16 +186,56 @@ namespace berserk_online_server.Facades
                 var decks = getDecks(new UserInfoRequest() { Email = email });
                 return decks.Select(_deckBuilder.BuildFromDb).ToArray();
             }
-            public void Update(string email, DeckRequest deck)
+            public Deck Get(string email, string id)
             {
-                var user = _db.findUserFromRequest(new UserInfoRequest() { Email = email });
+                var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
                 if (user == null)
                 {
                     throw new InvalidOperationException();
                 }
-                var preparedDeck = _deckBuilder.BuildFromRequest(deck);
-                replaceDeck(user.Decks.ToArray(), _deckBuilder.PrepareForDb(preparedDeck));
-                _db.UpdateUser(user, user.Email);
+                var deck = user.Decks.FirstOrDefault(u => u.Id == id);
+                if (deck == null)
+                {
+                    throw new NotFoundException();
+                }
+                return _deckBuilder.BuildFromDb(deck);
+            }
+            public void Update(string email, DeckRequest deck)
+            {
+                var user = _db._db.Users.Include(u => u.Decks).Where(u => u.Email == email).FirstOrDefault();
+                if (user == null)
+                {
+                    throw new InvalidOperationException();
+                }
+                var newDeck = _deckBuilder.PrepareForDb(_deckBuilder.BuildFromRequest(deck));
+                var oldDeck = _db._db.Decks.Where(d => d.Id == newDeck.Id).FirstOrDefault();
+                if (oldDeck == null)
+                {
+                    throw new InvalidDataException();
+                }
+                oldDeck.SideBoard = newDeck.SideBoard;
+                oldDeck.Main = newDeck.Main;
+                oldDeck.Name = newDeck.Name;
+                _db._db.Update(oldDeck);
+                _db._db.SaveChanges();
+            }
+            public void Delete(string email, string id)
+            {
+                var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
+                if (user == null)
+                {
+                    throw new InvalidOperationException(nameof(user));
+                }
+                var decks = user.Decks.ToDictionary(deck => deck.Id);
+                try
+                {
+                    _db._db.Decks.Remove(decks[id]);
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new NotFoundException();
+                }
+                _db._db.SaveChanges();
             }
             public void Add(string email, DeckRequest deck)
             {
@@ -203,6 +243,10 @@ namespace berserk_online_server.Facades
                 if (user == null)
                 {
                     throw new InvalidOperationException();
+                }
+                if (_db._db.Decks.Where(d => d.Id == deck.Id).Any())
+                {
+                    throw new InvalidDataException();
                 }
                 var buildedDeck = _deckBuilder.BuildFromRequest(deck);
                 var preparedDeck = _deckBuilder.PrepareForDb(buildedDeck);
@@ -213,19 +257,15 @@ namespace berserk_online_server.Facades
             {
                 var decks = _db._db.Users.Where(u => (request.Name == null || request.Name == u.Name)
                 && (request.Email == null || request.Email == u.Email)
-                && (request.Id == null || request.Id == u.Id)).Select(user => user.Decks).FirstOrDefault();
+                && (request.Id == null || request.Id == u.Id))
+                    .Include(u => u.Decks)
+                    .Select(u => u.Decks)
+                    .FirstOrDefault();
                 if (decks == null)
                 {
                     throw new InvalidOperationException();
                 }
                 return decks.ToArray();
-            }
-            private void replaceDeck(DeckDb[] decks, DeckDb deck)
-            {
-                for (int i = 0; i < decks.Length; i++)
-                {
-                    if (decks[i].Id == deck.Id) decks[i] = deck;
-                }
             }
         }
     }

@@ -5,7 +5,6 @@ using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 
 namespace berserk_online_server.Controllers
 {
@@ -42,11 +41,6 @@ namespace berserk_online_server.Controllers
             {
                 return userPasswordNotMatching(authRequest);
             }
-        }
-        [HttpGet("test")]
-        public IEnumerable Test()
-        {
-            return User.Claims.Select(claim => new { Type = claim.Type, Value = claim.Value }).ToList();
         }
         [HttpPost("register")]
         public async Task<IResult> Register(UserAuthenticationRequest user)

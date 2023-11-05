@@ -1,6 +1,5 @@
 ﻿using berserk_online_server.Models.Db;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace berserk_online_server.Models.Requests
 {
