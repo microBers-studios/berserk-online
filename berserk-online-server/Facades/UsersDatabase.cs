@@ -216,10 +216,11 @@ namespace berserk_online_server.Facades
                 oldDeck.Sideboard = newDeck.Sideboard;
                 oldDeck.Main = newDeck.Main;
                 oldDeck.Name = newDeck.Name;
+                oldDeck.Elements = newDeck.Elements;
                 _db._db.Update(oldDeck);
                 _db._db.SaveChanges();
             }
-            public void Delete(string email, string id)
+            public Deck[] Delete(string email, string id)
             {
                 var user = _db._db.Users.Include(u => u.Decks).FirstOrDefault(u => u.Email == email);
                 if (user == null)
@@ -230,12 +231,14 @@ namespace berserk_online_server.Facades
                 try
                 {
                     _db._db.Decks.Remove(decks[id]);
+                    decks.Remove(id);
                 }
                 catch (KeyNotFoundException)
                 {
                     throw new NotFoundException();
                 }
                 _db._db.SaveChanges();
+                return decks.Select(deck => _deckBuilder.BuildFromDb(deck.Value)).ToArray();
             }
             public void Add(string email, DeckRequest deck)
             {
