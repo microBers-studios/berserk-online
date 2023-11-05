@@ -10,7 +10,8 @@ import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/type
 import { UserContext } from "src/app/providers/UserProvider";
 import { ImageInput } from "../Inputs/ImageInput/ImageInput";
 import APIController from "src/API/Controller";
-import { AlertContext, AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
+import { ModalButton } from "src/widgets/ModalButton/ModalButton";
+import { useAlert } from "src/helpers/hooks/useAlert";
 
 interface AccountEditModalProps {
     setModal: (modal: false | Modals) => void;
@@ -21,14 +22,14 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
     const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
+    const setAlert = useAlert()
 
     const [name, setName] = useState<string>(user.name)
     const [nameError, setNameError] = useState<boolean>(false)
     const [email, setEmail] = useState<string>(user.email)
     const [emailError, setEmailError] = useState<number>(0)
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { isUserLoading, setIsUserLoading } = useRequiredContext(UserContext)
 
     const closeModal = () => {
         setIsCloseAnimation(true)
@@ -37,9 +38,9 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         document.body.style.overflow = ''
     }
 
-    const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onFormSubmit = async (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
-        setIsLoading(true)
+        setIsUserLoading(true)
 
         const updateObject: Partial<IUser> = {}
 
@@ -56,7 +57,8 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
         }
 
         if (!flag) {
-            setIsLoading(false)
+            setIsUserLoading(false)
+            closeModal()
             return
         }
 
@@ -64,13 +66,17 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
 
         if (code === 200) {
             setUser(obj as IUser)
+            setIsUserLoading(false, true)
             closeModal()
             setAlert('Данные изменены')
         } else if (code === 400) {
-            setIsLoading(false)
+            setIsUserLoading(false)
             setEmailError(4)
+        } else {
+            setAlert('Ошибка!')
         }
     }
+
     return (
         <Modal
             isCloseAnimation={isCloseAnimation}
@@ -82,7 +88,6 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
             <div className={cls.AccountEditModal}>
                 <form
                     className={cls.AccountEditForm}
-                    onSubmit={onFormSubmit}
                 >
                     <h1 className={cls.FormHeader}>Аккаунт</h1>
                     <ImageInput />
@@ -100,13 +105,13 @@ export const AccountEditModal = ({ setModal }: AccountEditModalProps) => {
                         setEmailError={setEmailError}
                         isProtected={true}
                     />}
-                    <button
-                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
-                    >
-                        Сохранить
-                    </button>
+                    <ModalButton
+                        text="Сохранить"
+                        isActive={isUserLoading}
+                        onButtonClick={onFormSubmit}
+                    />
                 </form>
             </div >
-        </Modal>
+        </Modal >
     )
 }

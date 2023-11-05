@@ -1,33 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
+import ReactLoading from "react-loading";
 import cls from "./Navbar.module.scss"
+import { LoginModal } from "src/widgets/AccountModals/LoginModal/LoginModal";
 import { Burger } from "./items/Burger";
 import { RouterPaths } from "src/app/providers/router/router-paths";
-import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import { UserButton } from "./items/UserButton";
 import { AccountEditModal } from "src/widgets/AccountModals/AccountEditModal/AccountEditModal";
+import { EmailModal } from "../AccountModals/EmailModal/EmailModal";
+import { CloseModal } from "../AccountModals/CloseModal/CloseModal";
+import { CookieModal } from "../AccountModals/CookieModal/CookieModal";
+import { defaultUser } from "src/app/providers/UserProvider/lib/UserContextProvider";
+import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
+import { CookieModalContext } from "src/app/providers/CookieModalProvider/lib/CookieModalContext";
+import { UserContext } from "src/app/providers/UserProvider";
 
 interface NavbarProps {
-    currentPage: RouterPaths;
-    user: IUser
+    currentPage: RouterPaths | null;
 }
 
 export enum Modals {
     LOGIN = 'login',
     REGISTRATION = 'registration',
-    EDIT = 'account'
+    EDIT = 'account',
+    EMAIL = 'reset-email',
+    CLOSE = 'close',
+    COOKIE = 'cookie'
 }
 
-export const Navbar = ({ currentPage, user }: NavbarProps) => {
+export const Navbar = ({ currentPage }: NavbarProps) => {
     const [modal, setModal] = useState<false | Modals>(false)
+    const [modalProps, setModalProps] = useState<object | null>(null)
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
-    const [isUser, setIsUser] = useState<boolean>(false)
+    const { user, isUserLoading } = useRequiredContext(UserContext)
 
-    useEffect(() => {
-        setIsUser(user.id !== -1)
-    },
-        [user])
+    const { isCookieModal } = useRequiredContext(CookieModalContext)
+
+    const changeModal = (modal: false | Modals, extra: object | null = null) => {
+        setModal(modal)
+        setModalProps(extra)
+    }
 
     const onLinkClick = () => {
         setIsBurgerClicked(false)
@@ -45,12 +57,12 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
 
     return (
         <>
-            <div className={cls.Navbar}>
+            <header className={cls.Navbar}>
                 <Burger
                     isBurgerClicked={isBurgerClicked}
                     setIsBurgerClicked={setIsBurgerClicked}
                 />
-                <div className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
+                <nav className={`${cls.NavbarMenu} ${isBurgerClicked && cls.opened}`}>
                     <Link
                         to={RouterPaths.MAIN}
                         onClick={onLinkClick}
@@ -65,42 +77,57 @@ export const Navbar = ({ currentPage, user }: NavbarProps) => {
                     >
                         <span className={`${currentPage === RouterPaths.ROOMS ? cls.active : ''}`}>Комнаты</span>
                     </Link>
-                </div>
+                </nav>
 
-                {isUser
-                    ? <UserButton
-                        setModal={setModal}
-                        user={user}
-                    />
-                    : <div
-                        className={cls.NavbarLoginButtons}
-                    >
-                        <span
-                            onClick={onLoginClick}
-                            className={cls.login}
-                        >Войти</span>
-                        <span
-                            onClick={onRegistrationClick}
-                            className={cls.registration}
-                        >Зарегистрироваться</span>
-                    </div>
+                {isUserLoading
+                    ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
+                    : user !== defaultUser
+                        ? <UserButton
+                            setModal={setModal}
+                            user={user}
+                        />
+                        : <div
+                            className={cls.NavbarLoginButtons}
+                        >
+                            <span
+                                onClick={onLoginClick}
+                                className={cls.login}
+                            >Войти</span>
+                            <span
+                                onClick={onRegistrationClick}
+                                className={cls.registration}
+                            >Зарегистрироваться</span>
+                        </div>
                 }
 
-            </div >
-            {modal === Modals.LOGIN &&
+            </header>
+            {(modal === Modals.LOGIN || modal === Modals.REGISTRATION) &&
                 <LoginModal
-                    setModal={setModal}
+                    setModal={changeModal}
                     defaultModal={modal}
                 />}
-            {modal === Modals.REGISTRATION &&
-                <LoginModal
-                    setModal={setModal}
-                    defaultModal={modal}
-                />}
+
             {modal === Modals.EDIT &&
                 <AccountEditModal
-                    setModal={setModal}
+                    setModal={changeModal}
                 />}
+
+            {modal === Modals.EMAIL &&
+                <EmailModal
+                    setModal={changeModal}
+                />}
+
+            {modal === Modals.CLOSE &&
+                <CloseModal
+                    emailObject={modalProps as { email: string }}
+                />
+            }
+            {(modal === Modals.COOKIE || isCookieModal) &&
+                <CookieModal
+                    modal={modal}
+                    setModal={changeModal}
+                />
+            }
         </>
     );
 }

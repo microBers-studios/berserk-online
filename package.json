@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "@types/uuidv4": "^5.0.0",
-    "sass": "^1.69.0"
-  },
-  "dependencies": {
-    "uuidv4": "^6.2.13"
-  }
-}

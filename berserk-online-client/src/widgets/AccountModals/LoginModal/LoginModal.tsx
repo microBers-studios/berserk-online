@@ -5,8 +5,6 @@ import { PasswordInput } from "../Inputs/PasswordInput";
 import { CheckboxInput } from '../Inputs/CheckboxInput';
 import { LoginInput } from '../Inputs/LoginInput';
 import { EmailInput } from '../Inputs/EmailInput';
-import { AlertContext } from 'src/app/providers/AlertProvider';
-import { AlertContextProps } from 'src/app/providers/AlertProvider/lib/AlertContext';
 import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import cls from "./LoginModal.module.scss"
 import { UserContext } from 'src/app/providers/UserProvider';
@@ -14,13 +12,18 @@ import { IUser, UserContextProps } from 'src/app/providers/UserProvider/lib/type
 import { Modal } from 'src/widgets/Modal/Modal';
 import { Modals } from 'src/widgets/Navbar/Navbar';
 import { validatePassword } from 'src/helpers/validatePassword';
+import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
+import { useCookie } from 'src/helpers/hooks/useCookie';
+import { IResponseUserInfo } from 'src/API/utils/types';
+import { CookieModalContext, CookieModalContextProps } from 'src/app/providers/CookieModalProvider/lib/CookieModalContext';
+import { useAlert } from 'src/helpers/hooks/useAlert';
 
 interface LoginModalProps {
-    setModal: (modal: false | Modals) => void;
+    setModal: (modal: false | Modals, props?: object | null) => void;
     defaultModal: Modals
 }
 
-const regulars = {
+const formRegulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
 
@@ -31,11 +34,10 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
-    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const setAlert = useAlert()
+    const { setUser, isUserLoading, setIsUserLoading } = useRequiredContext<UserContextProps>(UserContext)
 
     const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
@@ -43,19 +45,37 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const [emailError, setEmailError] = useState<number>(0)
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
-    const [isChecked, setIsChecked] = useState<boolean>(false)
+    const [isChecked, setIsChecked] = useState<boolean>(true)
 
     const [regStatus, setRegStatus] = useState<number>(0)
+
+    const cookied = useCookie()
+    const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
 
     const onFormChangeClick = () => {
         setIsAnimation(true)
         setIsRegistration(!isRegistration)
     }
 
-    const closeModal = () => {
+    const closeModal = async (isOverflowHidden = true) => {
         setIsCloseAnimation(true)
-        setTimeout(() => setModal(false), 300)
-        document.body.style.overflow = ''
+
+        if (isOverflowHidden) {
+            document.body.style.overflow = ''
+        }
+
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                setModal(false)
+                resolve(0)
+            }, 300)
+        })
+    }
+
+
+    const onPasswordResetClick = async () => {
+        await closeModal(false)
+        setModal(Modals.EMAIL)
     }
 
     const onRegClick = async (e: React.MouseEvent<HTMLElement>) => {
@@ -68,33 +88,48 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
             return
         }
 
-        if (!email || !regulars.EMAIL_REGULAR.test(email)) {
-            setEmailError(email ? regulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
+        if (!email || !formRegulars.EMAIL_REGULAR.test(email)) {
+            setEmailError(email ? formRegulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
             return
         }
 
-        if (!password || validatePassword(password) && isRegistration) {
-            setPasswordError(password ? validatePassword(password) ? 0 : 2 : 1)
+        if (!password || !validatePassword(password) && isRegistration) {
+            const error = password ? validatePassword(password) ? 0 : 2 : 1
+            setPasswordError(error)
+            if (error) return
+        }
+
+        setIsUserLoading(true)
+
+        const result = isRegistration
+            ? await cookied<IResponseUserInfo>(APIController.registrateUser, [{ name, email, password }])
+            : await cookied(APIController.loginUser, [{ email, password, rememberMe: isChecked }])
+
+        if (!result) {
+            setIsUserLoading(false)
+            setIsCookieModal(true)
             return
         }
 
-        setIsLoading(true)
-
-        const { code, obj } = isRegistration
-            ? await APIController.registrateUser({ name, email, password })
-            : await APIController.loginUser({ email, password, rememberMe: isChecked })
+        const { code, obj } = result
 
         setRegStatus(code)
-        if (code === 200) {
-            closeModal()
-            setAlert(isRegistration
-                ? 'Вы зарегистрированы'
-                : 'Вы вошли в аккаунт')
 
-            const { obj } = await APIController.getMe()
+        console.log(code, isRegistration)
+        if (code === 200) {
+            if (isRegistration) {
+                setModal(Modals.CLOSE, { email })
+            } else {
+                closeModal()
+                setIsUserLoading(false, true)
+                if (!isRegistration) setAlert('Вы вошли в аккаунт')
+            }
+
             setUser(obj as IUser)
+
         } else if (code === 400 && !isRegistration) {
-            setIsLoading(false)
+
+            setIsUserLoading(false)
 
             switch (Number(obj.id)) {
                 case 2:
@@ -104,6 +139,8 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                     setEmailError(3)
                     break;
             }
+        } else {
+            setAlert('Ошибка!')
         }
     }
 
@@ -141,7 +178,12 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         emailError={emailError}
                         setEmailError={setEmailError}
                     />
-                    <PasswordInput value={{ password, setPassword }} error={{ passwordError, setPasswordError }} />
+                    <PasswordInput
+                        password={password}
+                        setPassword={setPassword}
+                        passwordError={passwordError}
+                        setPasswordError={setPasswordError}
+                    />
                     {isRegistration && regStatus === 400 &&
                         <span className={cls.redAlert}>*Пользователь уже существует</span>
                     }
@@ -152,14 +194,21 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                 }
 
                 <div className={cls.buttonsWrapper}>
-                    <button
-                        className={`${cls.FormButton} ${isLoading && cls.grayButton}`}
-                        onClick={onRegClick}
-                    >
-                        {isRegistration
+                    <ModalButton
+                        text={isRegistration
                             ? 'Зарегистрироваться'
                             : 'Войти'}
-                    </button>
+                        isActive={isUserLoading}
+                        onButtonClick={onRegClick}
+                    />
+                    {!isRegistration &&
+                        <span
+                            className={cls.PasswordResetButton}
+                            onClick={onPasswordResetClick}
+                        >
+                            Забыли пароль?
+                        </span>
+                    }
                     <span
                         onClick={onFormChangeClick}
                         className={cls.changeFormButton}
@@ -167,6 +216,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         ? 'Войти'
                         : 'Зарегистрироваться'}
                     </span>
+
                 </div>
             </form>
         </Modal>

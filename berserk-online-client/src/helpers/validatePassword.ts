@@ -4,17 +4,19 @@ export const validatePassword = (password: string): boolean => {
     const digits = '1234567890'.split('')
     const symbols = '!@#$%^&*()_+-=`~/?<>:"{}|,.;\'\\]['.split('')
 
-    alph.forEach(s => {
-        flag = password.includes(s)
-    })
-
-    digits.forEach(s => {
-        flag = flag && password.includes(s)
-    })
-
-    symbols.forEach(s => {
-        flag = flag && password.includes(s)
-    })
+    flag = checkEntry(alph, password)
+    flag = checkEntry(digits, password)
+    flag = checkEntry(symbols, password)
 
     return flag && password.length > 7
+}
+
+function checkEntry(symbols: string[], str: string) {
+    let flag = false;
+
+    symbols.forEach(s => {
+        flag = flag ? flag : str.includes(s)
+    })
+
+    return flag
 }

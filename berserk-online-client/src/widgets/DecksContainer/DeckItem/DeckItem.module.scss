@@ -1,0 +1,154 @@
+.DeckItem {
+    box-shadow: 3px 3px 5px black;
+    max-width: 200px;
+    max-height: 130px;
+    width: 15vw;
+    height: 18vh;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+
+    &:hover {
+        .DeckItemHeaderWrapper {
+            top: 40%;
+
+            .DeckItemHeaderBottomWrapper {
+                margin-top: 0;
+            }
+        }
+
+        .DeckImage {
+            width: 400px;
+            top: -100px;
+            left: -85px;
+        }
+
+        .TrashCanImageWrapper {
+            right: 80%;
+        }
+    }
+}
+
+.DeckItem:hover {
+    cursor: pointer;
+}
+
+.deletingDeck {
+    animation: delete 0.4s;
+}
+
+.DeckImage {
+    width: 290px;
+    position: absolute;
+    top: -46%;
+    left: -25%;
+    pointer-events: none;
+    transition: all 0.3s ease-out;
+}
+
+.DeckItemHeaderWrapper {
+    margin: 0;
+    position: absolute;
+    top: 60%;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgb(0, 0, 0, 0.8);
+    transition: top 0.3s;
+}
+
+.DeckItemHeaderTopWrapper {
+    padding: 2px 8px 0;
+}
+
+.DeckItemHeaderBottomWrapper {
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: margin 0.3s ease-out;
+}
+
+.DeckItemHeader {
+    margin: 0;
+    text-align: center;
+    color: var(--border-color);
+    grid-area: header;
+}
+
+.DeckElements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    grid-area: elements;
+}
+
+.CardsCount {
+    margin: 5px 0;
+    color: var(--border-color);
+    text-align: center;
+}
+
+.TrashCanImageWrapper {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.6);
+    border-radius: 0 10px 10px 0;
+    right: 100%;
+    top: 5%;
+    transition: right 0.3s ease-out;
+}
+
+.TrashCanImage {
+    width: 90%;
+}
+
+@keyframes delete {
+    from {
+        transform: scale(100%)
+    }
+
+    to {
+        transform: scale(30%)
+    }
+}
+
+@media (max-width: 1200px) {
+    .DeckItem {
+        width: 23vw;
+    }
+}
+
+@media (max-width: 1050px) {
+    .DeckItem {
+        max-width: none;
+        width: 25vw;
+
+        .DeckImage {
+            width: 310px;
+            left: -17%;
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    .DeckItem {
+        width: 40vw;
+
+        .DeckImage {
+            left: -6%;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .DeckItem {
+        width: 80vw;
+
+        .DeckImage {
+            width: 400px;
+            top: -80%;
+            left: 0;
+        }
+    }
+}

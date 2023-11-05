@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import cls from "./MainPage.module.scss"
+import { DecksContainer } from 'src/widgets/DecksContainer/DecksContainer';
 
 interface MainPageProps {
     setPage: (page: RouterPaths) => void
@@ -14,7 +15,7 @@ export const MainPage = ({ setPage }: MainPageProps) => {
 
     return (
         <div className={cls.MainPage}>
-            ГЛАВНАЯ
+            <DecksContainer />
         </div>
     );
 }

@@ -1,0 +1,22 @@
+.ModalButton {
+    margin: 10px auto 0;
+    font-weight: bold;
+    height: 40px;
+    width: 350px;
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    grid-area: button;
+    justify-self: center;
+}
+
+.grayButton {
+    background-color: rgb(169, 165, 165);
+}
+
+@media (max-width: 400px) {
+    .ModalButton {
+        width: 300px;
+    }
+}

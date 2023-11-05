@@ -1,0 +1,52 @@
+.Footer {
+    background-color: black;
+    width: 100%;
+    padding: 35px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FooterContent {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.HobbyworldImage {
+    max-width: 100px;
+    height: auto;
+}
+
+.GithubImageWrapper {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    // border: 3px solid white;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.GithubImage {
+    width: 50px;
+}
+
+.GithubLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    transition: color 0.1s;
+
+    &:hover {
+        cursor: pointer;
+        color: rgb(255, 255, 255, 0.8);
+    }
+}
+
+.year {
+    color: white;
+}

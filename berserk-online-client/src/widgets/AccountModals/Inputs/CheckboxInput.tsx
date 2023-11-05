@@ -31,6 +31,7 @@ export const CheckboxInput = ({ isChecked, setIsChecked }: CheckboxInputProps) =
                 name="remember"
                 className={cls.rememberInput}
                 onChange={onInputChange}
+                checked={isChecked}
             />
             Запомнить меня
         </label>

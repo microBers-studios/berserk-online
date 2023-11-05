@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IUser, UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
+import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
@@ -7,6 +7,7 @@ import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import { UserContext } from 'src/app/providers/UserProvider';
 import { Modals } from '../Navbar';
 import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
+import APIController from 'src/API/Controller';
 
 interface UserButtonProps {
     user: IUser;
@@ -15,9 +16,14 @@ interface UserButtonProps {
 
 export const UserButton = ({ user, setModal }: UserButtonProps) => {
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
-    const { setUser } = useRequiredContext<UserContextProps>(UserContext)
+    const { setUser, setIsUserLoading } = useRequiredContext(UserContext)
 
-    const onExitClick = () => setUser(defaultUser)
+    const onExitClick = async () => {
+        setIsUserLoading(true)
+        await APIController.logout()
+        setUser(defaultUser)
+        setIsUserLoading(false)
+    }
 
     const onAccountEditClick = () => {
         setModal(Modals.EDIT)

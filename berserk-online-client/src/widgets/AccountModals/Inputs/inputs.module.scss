@@ -87,7 +87,6 @@
         font-size: 20px;
         border-bottom: 2px solid black;
         box-sizing: border-box;
-        // border-radius: 5px;
     }
 }
 
@@ -112,5 +111,11 @@
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 500px) {
+    .inputContainer span {
+        font-size: 16px;
     }
 }

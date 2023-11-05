@@ -1,26 +1,57 @@
 import { useState } from 'react';
 import cls from "./ImageInput.module.scss"
-import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
 import { UserContext } from "src/app/providers/UserProvider";
 import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import camera from "src/shared/assets/images/photo.svg"
 import APIController from 'src/API/Controller';
 import { useRef } from 'react';
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { useAlert } from 'src/helpers/hooks/useAlert';
 
 // interface ImageInputProps {
 //     formRef: React.Ref<HTMLFormElement>
 // }
 
 export const ImageInput = () => {
-    const { user, setUser } = useRequiredContext<UserContextProps>(UserContext)
-    const [isMouseOver, setIsMouseOver] = useState<boolean>(false);
-    const inputRef = useRef<HTMLInputElement>(null)
+    const { user, setUser, setIsUserLoading } = useRequiredContext(UserContext)
+    const setAlert = useAlert()
+    const [isMouseOver, setIsMouseOver] = useState(false);
+    const inputRef = useRef(null)
 
     const changeAvatar = async () => {
-        const { obj } = await APIController.loadAvatar(inputRef.current as HTMLInputElement)
+        try {
+            if (!inputRef.current) {
+                throw new Error('Avatar Error')
+            }
 
-        console.log(user.avatarUrl, obj)
-        setUser({ ...user, ...obj })
+            setIsUserLoading(true)
+
+            const { code, obj } = await APIController.loadAvatar(inputRef.current)
+
+            if (code === 200) {
+                setIsUserLoading(false)
+                setUser({ ...user, ...obj })
+            } else {
+                setIsUserLoading(false)
+                setAlert('Ошибка!')
+            }
+        } catch (e) {
+            setAlert('Ошибка!')
+        }
+    }
+
+    const deleteAvatar = async () => {
+        try {
+            const { code, obj } = await APIController.deleteAvatar()
+
+            if (code === 200) {
+                setUser({ ...user, ...obj })
+            } else {
+                setAlert('Ошибка!')
+            }
+        } catch (e) {
+            setAlert('Ошибка!')
+        }
     }
 
     return (
@@ -52,9 +83,11 @@ export const ImageInput = () => {
                 </label>
                 }
             </div>
-            <span
+
+            {user.avatarUrl !== defaultAvatar && <span
                 className={cls.deleteAvatar}
-            >Удалить</span>
+                onClick={deleteAvatar}
+            >Удалить</span>}
         </div>
     );
 }

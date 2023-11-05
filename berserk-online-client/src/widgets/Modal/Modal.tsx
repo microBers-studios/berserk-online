@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import cls from "./Modal.module.scss"
 import crossImage from "src/shared/assets/images/cross.svg"
+import { Modals } from '../Navbar/Navbar';
 
 interface ModalProps {
     children: ReactNode;
@@ -11,6 +12,7 @@ interface ModalProps {
     setIsCloseAnimation: (b: boolean) => void;
     setIsAnimation?: (b: boolean) => void;
     closeModal: () => void;
+    modalClass?: Modals;
 }
 
 export const Modal = (props: ModalProps) => {
@@ -29,7 +31,7 @@ export const Modal = (props: ModalProps) => {
             className={cls.wrapper}
         >
             <div
-                className={`${cls.Modal} ${props.isOpenAnimation && cls.opened} ${props.isAnimation && cls.animated} ${props.isCloseAnimation && cls.closed}`}
+                className={`${cls.Modal} ${props.isOpenAnimation && cls.opened} ${props.isAnimation && cls.animated} ${props.isCloseAnimation && cls.closed} ${props.modalClass == Modals.EMAIL && cls.EmailModal} ${props.modalClass == Modals.CLOSE && cls.CloseModal}`}
                 onAnimationEnd={endAnimation}>
                 <img
                     src={crossImage}

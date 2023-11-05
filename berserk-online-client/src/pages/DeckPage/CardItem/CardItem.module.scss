@@ -1,0 +1,136 @@
+.CardItem {
+    position: relative;
+    list-style: none;
+    border-bottom: 1px solid var(--border-color);
+    animation: entering 0.3s ease-in;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:first-child:hover {
+        border-top: 1px solid var(--border-color);
+    }
+
+    &:first-child {
+        border-top: 1px solid transparent;
+    }
+}
+
+.deleting {
+    animation: deleting 0.3s ease-out;
+}
+
+.CardPrice {
+    display: flex;
+}
+
+.CardName {
+    padding: 0 0 0 15px;
+    display: flex;
+    width: 15vw;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CardAmount {
+    width: 1px;
+    text-align: center;
+}
+
+.CardAmountButtons {
+    display: none;
+    user-select: none;
+    position: absolute;
+    width: 20px;
+    top: -1px;
+    bottom: -1px;
+    left: -20px;
+    border: 1px solid var(--border-color);
+    flex-direction: column;
+    border-right: none;
+    border-radius: 10px 0 0 10px;
+    align-items: center;
+    overflow: hidden;
+
+    .plus,
+    .minus {
+        width: 100%;
+        text-align: center;
+        transition: background-color 0.2s;
+    }
+
+    .plus:hover,
+    .minus:hover {
+        cursor: pointer;
+        background-color: var(--border-shadow-color);
+    }
+}
+
+.DeleteCardButton {
+    display: none;
+    position: absolute;
+    width: 30px;
+    padding-right: 5px;
+    top: -0.5px;
+    bottom: -1px;
+    right: -35px;
+    border: 1px solid var(--border-color);
+    flex-direction: column;
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: background-color 0.2s;
+
+    .trashcanImage {
+        width: 30px;
+    }
+
+    &:hover {
+        background-color: var(--border-shadow-color);
+    }
+}
+
+.CardItem:hover {
+    .CardAmountButtons {
+        display: flex;
+    }
+
+    .DeleteCardButton {
+        display: flex;
+    }
+}
+
+.CardContentWrapper {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    color: white;
+    align-items: center;
+}
+
+@keyframes deleting {
+    from {
+        transform: translate(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes entering {
+    from {
+        transform: translate(-100%);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(0);
+        opacity: 0;
+    }
+}
