@@ -7,5 +7,6 @@
         public string[] Elements { get; set; }
         public string[] Main { get; set; }
         public string[]? Sideboard { get; set; }
+        public int? UserId { get; set; }
     }
 }

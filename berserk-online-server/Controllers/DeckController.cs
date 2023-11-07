@@ -27,7 +27,7 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException)
+            catch (NotFoundException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
@@ -39,16 +39,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                var email = getMail();
-                return Results.Ok(_db.Decks.Get(email, id));
-            }
-            catch (ArgumentNullException)
-            {
-                return Results.Unauthorized();
-            }
-            catch (InvalidOperationException)
-            {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
+                return Results.Ok(_db.Decks.Get(id));
             }
             catch (NotFoundException)
             {
@@ -85,8 +76,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                var email = getMail();
-                _db.Decks.Update(email, request);
+                _db.Decks.Update(request);
                 return Results.Ok();
             }
             catch (ArgumentNullException)

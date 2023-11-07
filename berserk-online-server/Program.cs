@@ -3,6 +3,7 @@ using berserk_online_server.Facades;
 using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Middleware;
+using berserk_online_server.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,15 +31,25 @@ builder.Services.AddDbContext<Databases>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
 builder.Services.AddTransient<FrontendURLCreator>();
+
 builder.Services.AddTransient<UsersDatabase>();
+
 builder.Services.AddTransient<RecoveryMailSender>();
 builder.Services.AddTransient<ConfirmEmailSender>();
+
 builder.Services.AddTransient<DeckBuilder>();
+
+builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<DeckRepository>();
+
 builder.Services.AddSingleton<StaticContentService>();
 builder.Services.AddSingleton<MailClient>();
+
 builder.Services.AddSingleton<TempRequestsManager<RecoveryMailSender>>();
 builder.Services.AddSingleton<TempRequestsManager<ConfirmEmailSender>>();
+
 builder.Services.AddSingleton<CardProvider>();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

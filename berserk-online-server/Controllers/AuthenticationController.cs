@@ -33,7 +33,7 @@ namespace berserk_online_server.Controllers
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }
-            catch (ArgumentException)
+            catch (NotFoundException)
             {
                 return userEmailNotFound(authRequest);
             }
