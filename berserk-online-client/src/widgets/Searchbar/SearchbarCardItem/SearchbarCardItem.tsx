@@ -1,51 +1,33 @@
-import { ICard, IDeck, IDeckCard } from "src/API/utils/types";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
 import cls from "./SearchbarCardItem.module.scss"
+import { ICard, IDeck } from "src/API/utils/types";
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
 import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getSymbols";
 import { CardTypes } from "src/API/utils/data";
-import { useState, useEffect } from "react";
 import { CardTitleItem } from "src/widgets/CardTitleItem/CardTitleItem";
 import tickImage from "src/shared/assets/images/green-tick.png";
 import plusImage from "src/shared/assets/images/red-plus.png";
+import { addCard } from "src/app/store/slices/decksSlice/decksSlice";
 
 interface SearchbarCardItemProps {
     card: ICard;
-    deck: IDeck;
-    setDeck: (deck: IDeck) => void;
+    setIsSaveDisabled: (b: boolean) => void;
 }
 
-export const SearchbarCardItem = ({ card, deck, setDeck }: SearchbarCardItemProps) => {
-    const [isInDeck, setIsInDeck] = useState(false)
-    const [isInSideDeck, setIsInSideDeck] = useState(false)
+export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItemProps) => {
+    const deck = useAppSelector(state => state.decks.currentDeck) as IDeck
+    const dispatch = useAppDispatch()
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
 
-    useEffect(() => {
-        if (deck.sideboard) {
-            setIsInSideDeck(deck.sideboard.findIndex(c => c.id === card.id) !== -1)
-        }
 
-        setIsInDeck(deck.main.findIndex(c => c.id === card.id) !== -1)
-    }, [deck])
+    const isInSideDeck = deck.sideboard.findIndex(c => c.id === card.id) !== -1
+    const isInDeck = deck.main.findIndex(c => c.id === card.id) !== -1
 
     const addCardToDeck = () => {
-        console.log(isInSideDeck, isInDeck)
-        if (isInSideDeck && isInDeck) {
-            return
-        }
-
-        let newDeck = JSON.parse(JSON.stringify(deck));
-
-        if (isInDeck) {
-            newDeck.sideboard
-                .push({ ...card, amount: 1 })
-            newDeck.sideboard.sort((a: IDeckCard, b: IDeckCard) => b.amount - a.amount)
-        } else {
-            newDeck.main.push({ ...card, amount: 1 })
-            newDeck.main.sort((a: IDeckCard, b: IDeckCard) => b.amount - a.amount)
-        }
-
-        setDeck(newDeck)
+        dispatch(addCard({ card }))
+        setIsSaveDisabled(false)
     }
 
     return (

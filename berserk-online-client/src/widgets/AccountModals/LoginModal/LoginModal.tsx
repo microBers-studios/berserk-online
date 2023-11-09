@@ -1,43 +1,34 @@
 import { useState } from 'react';
-import APIController from 'src/API/Controller';
 import { IAnimator, useAnimate } from 'src/helpers/hooks/useAnimate';
 import { PasswordInput } from "../Inputs/PasswordInput";
 import { CheckboxInput } from '../Inputs/CheckboxInput';
 import { LoginInput } from '../Inputs/LoginInput';
 import { EmailInput } from '../Inputs/EmailInput';
-import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
 import cls from "./LoginModal.module.scss"
-import { UserContext } from 'src/app/providers/UserProvider';
-import { IUser, UserContextProps } from 'src/app/providers/UserProvider/lib/types/types';
 import { Modal } from 'src/widgets/Modal/Modal';
-import { Modals } from 'src/widgets/Navbar/Navbar';
+import { Mode, setMode } from "src/app/store/slices/modalSlice/modalSlice"
 import { validatePassword } from 'src/helpers/validatePassword';
 import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
-import { useCookie } from 'src/helpers/hooks/useCookie';
-import { IResponseUserInfo } from 'src/API/utils/types';
-import { CookieModalContext, CookieModalContextProps } from 'src/app/providers/CookieModalProvider/lib/CookieModalContext';
-import { useAlert } from 'src/helpers/hooks/useAlert';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { loginUser, registrateUser } from 'src/app/store/slices/userSlice/userSlice';
+import { loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
+import { toast } from 'react-toastify';
 
-interface LoginModalProps {
-    setModal: (modal: false | Modals, props?: object | null) => void;
-    defaultModal: Modals
-}
-
-const formRegulars = {
+export const formRegulars = {
     EMAIL_REGULAR: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
 }
 
-export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
+export const LoginModal = () => {
     const {
         isAnimation, setIsAnimation,
         isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
-    const setAlert = useAlert()
-    const { setUser, isUserLoading, setIsUserLoading } = useRequiredContext<UserContextProps>(UserContext)
-
-    const [isRegistration, setIsRegistration] = useState<boolean>(defaultModal === Modals.REGISTRATION)
+    const dispatch = useAppDispatch()
+    const loginUserStatus = useAppSelector(loginUserStatusSelector)
+    const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
+    const { mode } = useAppSelector(state => state.modal)
 
     const [name, setName] = useState<string>('')
     const [nameError, setNameError] = useState<boolean>(false)
@@ -46,92 +37,80 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
     const [isChecked, setIsChecked] = useState<boolean>(true)
-
-    const [regStatus, setRegStatus] = useState<number>(0)
-
-    const cookied = useCookie()
-    const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
+    const isRegistration = mode === Mode.REGISTRATION
 
     const onFormChangeClick = () => {
         setIsAnimation(true)
-        setIsRegistration(!isRegistration)
+        dispatch(setMode({ mode: isRegistration ? Mode.LOGIN : Mode.REGISTRATION }))
+        setNameError(false)
+        setEmailError(0)
+        setPasswordError(0)
     }
 
     const closeModal = async (isOverflowHidden = true) => {
-        setIsCloseAnimation(true)
+        if (!loginUserStatus.isPending && !registrateUserStatus.isPending) {
+            setIsCloseAnimation(true)
 
-        if (isOverflowHidden) {
-            document.body.style.overflow = ''
-        }
-
-        await new Promise((resolve) => {
-            setTimeout(() => {
-                setModal(false)
-                resolve(0)
-            }, 300)
-        })
-    }
-
-
-    const onPasswordResetClick = async () => {
-        await closeModal(false)
-        setModal(Modals.EMAIL)
-    }
-
-    const onRegClick = async (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault()
-
-        setRegStatus(0)
-
-        if (!name && isRegistration) {
-            setNameError(true)
-            return
-        }
-
-        if (!email || !formRegulars.EMAIL_REGULAR.test(email)) {
-            setEmailError(email ? formRegulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
-            return
-        }
-
-        if (!password || !validatePassword(password) && isRegistration) {
-            const error = password ? validatePassword(password) ? 0 : 2 : 1
-            setPasswordError(error)
-            if (error) return
-        }
-
-        setIsUserLoading(true)
-
-        const result = isRegistration
-            ? await cookied<IResponseUserInfo>(APIController.registrateUser, [{ name, email, password }])
-            : await cookied(APIController.loginUser, [{ email, password, rememberMe: isChecked }])
-
-        if (!result) {
-            setIsUserLoading(false)
-            setIsCookieModal(true)
-            return
-        }
-
-        const { code, obj } = result
-
-        setRegStatus(code)
-
-        console.log(code, isRegistration)
-        if (code === 200) {
-            if (isRegistration) {
-                setModal(Modals.CLOSE, { email })
-            } else {
-                closeModal()
-                setIsUserLoading(false, true)
-                if (!isRegistration) setAlert('Вы вошли в аккаунт')
+            if (isOverflowHidden) {
+                document.body.style.overflow = ''
             }
 
-            setUser(obj as IUser)
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    dispatch(setMode({ mode: null }))
+                    resolve(0)
+                }, 300)
+            })
+        }
+    }
 
-        } else if (code === 400 && !isRegistration) {
+    const onPasswordResetClick = async () => {
+        if (!loginUserStatus.isPending && !registrateUserStatus.isPending) {
+            await closeModal(false)
+            dispatch(setMode({ mode: Mode.EMAIL }))
+        }
+    }
 
-            setIsUserLoading(false)
+    const onRegClick = (e: React.MouseEvent<HTMLElement>) => {
+        if (!loginUserStatus.isPending && !registrateUserStatus.isPending) {
+            e.preventDefault()
 
-            switch (Number(obj.id)) {
+            if (!name && isRegistration) {
+                setNameError(true)
+                return
+            }
+
+            if (!email || !formRegulars.EMAIL_REGULAR.test(email)) {
+                setEmailError(email ? formRegulars.EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
+                return
+            }
+
+            if (!password || !validatePassword(password) && isRegistration) {
+                const error = password ? validatePassword(password) ? 0 : 2 : 1
+                setPasswordError(error)
+                if (error) return
+            }
+
+            if (isRegistration) {
+                dispatch(registrateUser([{ name, email, password }, registrationFulfilledCallback]))
+            } else {
+                dispatch(loginUser([{ email, password, rememberMe: isChecked }, loginFulfilledCallback, loginRejectedCallback]))
+            }
+        }
+    }
+
+    const loginFulfilledCallback = () => {
+        closeModal()
+        toast('Вы вошли в аккаунт')
+    }
+
+    const registrationFulfilledCallback = () => {
+        dispatch(setMode({ mode: Mode.CLOSE, extra: { email } }))
+    }
+
+    const loginRejectedCallback = (code: number, id: number) => {
+        if (code === 400) {
+            switch (Number(id)) {
                 case 2:
                     setPasswordError(3)
                     break;
@@ -139,8 +118,6 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                     setEmailError(3)
                     break;
             }
-        } else {
-            setAlert('Ошибка!')
         }
     }
 
@@ -184,7 +161,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         passwordError={passwordError}
                         setPasswordError={setPasswordError}
                     />
-                    {isRegistration && regStatus === 400 &&
+                    {isRegistration && registrateUserStatus.isRejected &&
                         <span className={cls.redAlert}>*Пользователь уже существует</span>
                     }
                 </div>
@@ -198,7 +175,7 @@ export const LoginModal = ({ setModal, defaultModal }: LoginModalProps) => {
                         text={isRegistration
                             ? 'Зарегистрироваться'
                             : 'Войти'}
-                        isActive={isUserLoading}
+                        isActive={loginUserStatus.isPending || registrateUserStatus.isPending}
                         onButtonClick={onRegClick}
                     />
                     {!isRegistration &&

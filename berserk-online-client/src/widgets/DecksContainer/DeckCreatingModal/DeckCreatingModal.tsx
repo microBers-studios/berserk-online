@@ -1,63 +1,57 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { Modal } from "src/widgets/Modal/Modal";
 import cls from "./DeckCreatingModal.module.scss"
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
-import { Modals } from "src/widgets/Navbar/Navbar";
 import { Deck } from 'src/app/providers/Deck/Deck';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
-import { DecksContext } from 'src/app/providers/DecksProvider/utils/DecksContext';
-import APIController from 'src/API/Controller';
-import { useAlert } from 'src/helpers/hooks/useAlert';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { Mode, setMode } from 'src/app/store/slices/modalSlice/modalSlice';
+import { createDeck } from 'src/app/store/slices/decksSlice/decksSlice';
+import { createDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
+import { IDeck } from 'src/API/utils/types';
 
-interface DeckCreatingModalProps {
-    closeModal: () => void
-}
-
-export const DeckCreatingModal = ({ closeModal }: DeckCreatingModalProps) => {
+export const DeckCreatingModal = () => {
     const [deckName, setDeckName] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    const createDeckStatus = useAppSelector(createDeckStatusSelector)
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const setAlert = useAlert()
 
     const {
         isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
-    const { decks, setDecks } = useRequiredContext(DecksContext)
+    let deck: IDeck = new Deck(deckName);
+
+    useEffect(() => {
+        if (createDeckStatus.isFulfilled) {
+            close()
+
+            navigate(`${RouterPaths.DECK}/${deck.id}/creating`)
+        }
+    }, [createDeckStatus])
 
     const close = () => {
-        setIsCloseAnimation(true)
+        if (!createDeckStatus.isPending) {
+            setIsCloseAnimation(true)
 
-        setTimeout(() => {
-            document.body.style.overflow = ''
-            closeModal()
-        }, 300)
+            setTimeout(() => {
+                document.body.style.overflow = ''
+                dispatch(setMode({ mode: null }))
+            }, 300)
+        }
     }
 
-    const createDeck = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const addDeck = async (e: React.FormEvent) => {
+        if (!createDeckStatus.isPending) {
+            e.preventDefault()
 
-        const deck = new Deck(deckName)
+            // const deck = new Deck(deckName)
 
-        setIsLoading(true)
-        const code = await APIController.createDeck(deck)
-        setIsLoading(false)
-
-        if (code === 200) {
-            setDecks([...decks, deck])
+            dispatch(createDeck(deck))
         }
-
-        if (code === 404) {
-            setAlert('Ошибка!')
-        }
-
-        close()
-
-        navigate(`${RouterPaths.DECK}/${deck.id}`)
     }
 
     return (
@@ -68,11 +62,11 @@ export const DeckCreatingModal = ({ closeModal }: DeckCreatingModalProps) => {
                 isCloseAnimation={isCloseAnimation}
                 setIsCloseAnimation={setIsCloseAnimation}
                 closeModal={close}
-                modalClass={Modals.EMAIL}
+                modalClass={Mode.EMAIL}
             >
                 <form
                     className={cls.DeckCreatingForm}
-                    onSubmit={createDeck}
+                    onSubmit={addDeck}
                 >
                     <h1
                         className={cls.DeckCreatingHeader}
@@ -97,7 +91,7 @@ export const DeckCreatingModal = ({ closeModal }: DeckCreatingModalProps) => {
                     >
                         <ModalButton
                             text='Создать'
-                            isActive={isLoading}
+                            isActive={createDeckStatus.isPending}
                         />
                     </div>
 

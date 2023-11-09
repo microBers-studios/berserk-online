@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import ReactLoading from 'react-loading'
 import cls from "./Searchbar.module.scss"
 import APIController from "src/API/Controller";
-import { ICard, IDeck } from "src/API/utils/types";
+import { ICard } from "src/API/utils/types";
 import { SearchbarCardItem } from "./SearchbarCardItem/SearchbarCardItem";
 
 interface SearchBarProps {
-    deck: IDeck;
-    setDeck: (deck: IDeck) => void;
+    setIsSaveDisabled: (b: boolean) => void;
 }
 
-export const Searchbar = ({ deck, setDeck }: SearchBarProps) => {
+export const Searchbar = ({ setIsSaveDisabled }: SearchBarProps) => {
     const [value, setValue] = useState('')
     const [results, setResults] = useState<ICard[]>([])
     const [isLoading, setIsLoading] = useState(false)
@@ -57,8 +56,7 @@ export const Searchbar = ({ deck, setDeck }: SearchBarProps) => {
                         : results.map(res =>
                             <SearchbarCardItem
                                 key={res.id}
-                                deck={deck}
-                                setDeck={setDeck}
+                                setIsSaveDisabled={setIsSaveDisabled}
                                 card={res} />)
                     }
                 </ul>

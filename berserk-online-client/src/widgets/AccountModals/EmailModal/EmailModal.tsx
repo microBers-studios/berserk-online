@@ -1,47 +1,44 @@
-import { Modal } from "src/widgets/Modal/Modal";
-import cls from "./EmailModal.module.scss"
-import { Modals } from "src/widgets/Navbar/Navbar";
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
-import { AlertContext, AlertContextProps } from "src/app/providers/AlertProvider/lib/AlertContext";
-import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
 import { useState } from "react";
-import { UserContextProps } from "src/app/providers/UserProvider/lib/types/types";
-import { UserContext } from "src/app/providers/UserProvider";
+import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { toast } from "react-toastify";
+import cls from "./EmailModal.module.scss"
+import { Modal } from "src/widgets/Modal/Modal";
+import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { EmailInput } from "../Inputs/EmailInput";
-import APIController from "src/API/Controller";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
+import { requestPasswordChanging } from "src/app/store/slices/userSlice/userSlice";
+import { requestPasswordChangingStatusSelector } from "src/app/store/slices/userSlice/selectors";
+import { Mode, setMode } from "src/app/store/slices/modalSlice/modalSlice";
 
-interface EmailModalProps {
-    setModal: (modal: false | Modals) => void;
-}
-
-export const EmailModal = ({ setModal }: EmailModalProps) => {
+export const EmailModal = () => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
-    const { user } = useRequiredContext<UserContextProps>(UserContext)
+    const { user } = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
+    const requestPasswordChangingStatus = useAppSelector(requestPasswordChangingStatusSelector)
 
-    const { setAlert } = useRequiredContext<AlertContextProps>(AlertContext)
-
-    const [email, setEmail] = useState<string>(user.email)
+    const [email, setEmail] = useState<string>(user?.email as string)
     const [emailError, setEmailError] = useState<number>(0)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const closeModal = () => {
-        setIsCloseAnimation(true)
-        setTimeout(() => setModal(false), 300)
-        document.body.style.overflow = ''
+        if (!requestPasswordChangingStatus.isPending) {
+            setIsCloseAnimation(true)
+            setTimeout(() => dispatch(setMode({ mode: null })), 300)
+            document.body.style.overflow = ''
+        }
     }
 
     const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setIsLoading(true)
-
-        await APIController.requestPasswordChanging(email)
-
-        setIsLoading(false)
-        setAlert('Письмо отправлено.')
+        if (!requestPasswordChangingStatus.isPending) {
+            e.preventDefault()
+            setIsLoading(true)
+            dispatch(requestPasswordChanging(email))
+            setIsLoading(false)
+            toast('Письмо отправлено.')
+        }
     }
 
     return (
@@ -51,14 +48,16 @@ export const EmailModal = ({ setModal }: EmailModalProps) => {
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
-            modalClass={Modals.EMAIL}
+            modalClass={Mode.EMAIL}
         >
             <div>
                 <form
                     className={cls.EmailForm}
                     onSubmit={onFormSubmit}
                 >
-                    <h1>Сброс пароля</h1>
+                    <h1
+                        className={cls.ModalHeader}
+                    >Сброс пароля</h1>
                     <EmailInput
                         email={email}
                         setEmail={setEmail}

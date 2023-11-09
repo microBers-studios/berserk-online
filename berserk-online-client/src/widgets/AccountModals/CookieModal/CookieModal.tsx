@@ -1,28 +1,20 @@
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import cls from "./CookieModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
-import { Modals } from "src/widgets/Navbar/Navbar";
 import cookieSvg from "src/shared/assets/images/cookie.svg"
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
-import { useRequiredContext } from "src/helpers/hooks/useRequiredContext";
-import { CookieModalContext, CookieModalContextProps } from "src/app/providers/CookieModalProvider/lib/CookieModalContext";
+import { useAppDispatch } from "src/helpers/hooks/redux-hook";
+import { closeCookieModal } from "src/app/store/slices/userSlice/userSlice";
 
-interface CookieModalProps {
-    modal: false | Modals;
-    setModal: (modal: false | Modals) => void;
-}
-
-export const CookieModal = ({ modal, setModal }: CookieModalProps) => {
+export const CookieModal = () => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
-
-    const { setIsCookieModal } = useRequiredContext<CookieModalContextProps>(CookieModalContext)
+    const dispatch = useAppDispatch()
 
     const closeModal = () => {
         setIsCloseAnimation(true)
         setTimeout(() => {
-            if (modal === Modals.COOKIE) setModal(false)
-            setIsCookieModal(false)
+            dispatch(closeCookieModal())
         }, 300)
         document.body.style.overflow = ''
     }

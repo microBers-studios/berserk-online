@@ -12,16 +12,15 @@ interface AppRouterProps {
 
 export const AppRouter = ({ setPage }: AppRouterProps) => {
     return (
-        <>
-            <Routes>
-                <Route path={RouterPaths.MAIN} element={<MainPage setPage={setPage} />} />
-                <Route path={RouterPaths.ROOMS} element={<RoomsPage setPage={setPage} />} />
-                <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
-                <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
-                <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
-                <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage setPage={setPage} />} />
-                <Route path={RouterPaths.DECK} element={<Navigate to={`${RouterPaths.DECK}/1`} />} />
-            </Routes>
-        </>
+        <Routes>
+            <Route path={RouterPaths.MAIN} element={<MainPage setPage={setPage} />} />
+            <Route path={RouterPaths.ROOMS} element={<RoomsPage setPage={setPage} />} />
+            <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
+            <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
+            <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
+            <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage setPage={setPage} />} />
+            <Route path={`${RouterPaths.DECK}/:id/:creating`} element={<DeckPage setPage={setPage} />} />
+            <Route path={RouterPaths.DECK} element={<Navigate to={`${RouterPaths.DECK}/1`} />} />
+        </Routes>
     );
 }

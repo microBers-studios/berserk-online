@@ -1,52 +1,37 @@
-import { useState, useEffect } from 'react';
-import cls from "./DecksContainer.module.scss";
-import APIController from 'src/API/Controller';
-import { DeckItem } from './DeckItem/DeckItem';
-import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
-import { UserContext } from 'src/app/providers/UserProvider';
-import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import ReactLoading from 'react-loading';
-import { DecksContext } from 'src/app/providers/DecksProvider/utils/DecksContext';
-import { DeckCreatingModal } from './DeckCreatingModal/DeckCreatingModal';
+import cls from "./DecksContainer.module.scss";
+import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
+import { Mode, setMode } from 'src/app/store/slices/modalSlice/modalSlice';
+import { DeckItem } from './DeckItem/DeckItem';
+import { decksSelector, getDecksStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
+import { getDecks } from 'src/app/store/slices/decksSlice/decksSlice';
 
 // interface DecksContainerProps {
 //     setPage: (page: RouterPaths | null) => void
 // }
 
 export const DecksContainer = () => {
-    const { user, isUserLoading, isSignificant } = useRequiredContext(UserContext)
-    const { decks, setDecks } = useRequiredContext(DecksContext)
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [isDeckCreating, setIsDeckCreating] = useState(false)
+    const { user } = useAppSelector(state => state.user)
+    const getUserStatus = useAppSelector(getUserStatusSelector)
+    const loginUserStatus = useAppSelector(loginUserStatusSelector)
+    const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
+    const getDecksStatus = useAppSelector(getDecksStatusSelector)
+    const decks = useAppSelector(decksSelector)
+    const dispatch = useAppDispatch()
 
-    let userIsUnauthorized = user === defaultUser && !isUserLoading
+    let userIsUnauthorized = !user.id && getUserStatus.isRejected
 
     useEffect(() => {
-        console.log(isSignificant)
-        if (!isSignificant) {
-            return
+        if (getUserStatus.isFulfilled || loginUserStatus.isFulfilled || registrateUserStatus.isFulfilled) {
+            dispatch(getDecks())
         }
-
-        if (userIsUnauthorized) {
-            setIsLoading(false)
-            return
-        }
-
-        new Promise(async () => {
-            const decks = await APIController.getDecks()
-            setIsLoading(false)
-            setDecks(decks)
-        })
-    }, [isUserLoading])
+    }, [getUserStatus, loginUserStatus, registrateUserStatus])
 
     const openCreatingModal = () => {
-        setIsDeckCreating(true)
+        dispatch(setMode({ mode: Mode.DECK_CREATING }))
         document.body.style.overflow = 'hidden'
-    }
-
-    const closeCreatingModal = () => {
-        setIsDeckCreating(false)
-        document.body.style.overflow = ''
     }
 
     return (
@@ -59,14 +44,14 @@ export const DecksContainer = () => {
                         >
                             Колоды
                         </span>
-                        {!userIsUnauthorized && !isLoading && !isUserLoading &&
+                        {!userIsUnauthorized && getDecksStatus.isFulfilled &&
                             <span
                                 className={cls.DecksCount}
                             >
                                 {decks.length} из {decks.length}
                             </span>}
                     </div>
-                    {!userIsUnauthorized && !isUserLoading &&
+                    {!userIsUnauthorized &&
                         <button
                             className={cls.AddButton}
                             onClick={openCreatingModal}
@@ -77,7 +62,7 @@ export const DecksContainer = () => {
                 <div className={`${cls.DecksWrapper} ${(userIsUnauthorized
                     || !decks.length
                 ) && cls.NoDecks}`}>
-                    {isLoading
+                    {getDecksStatus.isPending
                         ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                         : userIsUnauthorized
                             ? <span
@@ -90,16 +75,11 @@ export const DecksContainer = () => {
                                     <DeckItem
                                         key={deck.id}
                                         deck={deck}
-                                        setDecks={setDecks}
                                     />
                                 )
                                 : <span className={cls.NoDecksContent}>Колод пока нет</span>}
                 </div>
             </div >
-            {isDeckCreating &&
-                <DeckCreatingModal
-                    closeModal={closeCreatingModal}
-                />}
         </>
     );
 }

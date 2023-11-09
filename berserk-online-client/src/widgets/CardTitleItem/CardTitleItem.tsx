@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import cls from "./CardTitleItem.module.scss"
-import { useAlert } from "src/helpers/hooks/useAlert";
 
 interface CardTitleItemProps {
     cardSrc: string;
@@ -11,11 +10,10 @@ export const CardTitleItem = ({ cardSrc, clientY }: CardTitleItemProps) => {
 
     const [isTop, setIsTop] = useState(false)
     const figureRef = useRef<HTMLElement>(null)
-    const setAlert = useAlert()
 
     useEffect(() => {
         if (!figureRef.current) {
-            setAlert('Ошибка!')
+            // setAlert('Ошибка!')
             return
         }
 

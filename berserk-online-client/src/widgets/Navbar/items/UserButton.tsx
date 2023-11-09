@@ -1,32 +1,22 @@
 import { useState } from 'react'
-import { IUser } from "src/app/providers/UserProvider/lib/types/types";
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
-import { useRequiredContext } from 'src/helpers/hooks/useRequiredContext';
-import { UserContext } from 'src/app/providers/UserProvider';
-import { Modals } from '../Navbar';
-import { defaultUser } from 'src/app/providers/UserProvider/lib/UserContextProvider';
-import APIController from 'src/API/Controller';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { logoutUser } from 'src/app/store/slices/userSlice/userSlice';
+import { Mode, setMode } from 'src/app/store/slices/modalSlice/modalSlice';
 
-interface UserButtonProps {
-    user: IUser;
-    setModal: (modal: false | Modals) => void
-}
-
-export const UserButton = ({ user, setModal }: UserButtonProps) => {
+export const UserButton = () => {
+    const dispatch = useAppDispatch()
+    const { user } = useAppSelector(state => state.user)
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
-    const { setUser, setIsUserLoading } = useRequiredContext(UserContext)
 
     const onExitClick = async () => {
-        setIsUserLoading(true)
-        await APIController.logout()
-        setUser(defaultUser)
-        setIsUserLoading(false)
+        dispatch(logoutUser())
     }
 
     const onAccountEditClick = () => {
-        setModal(Modals.EDIT)
+        dispatch(setMode({ mode: Mode.EDIT }))
         document.body.style.overflow = 'hidden';
     }
 

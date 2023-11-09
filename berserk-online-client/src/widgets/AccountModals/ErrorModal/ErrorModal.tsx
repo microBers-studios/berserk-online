@@ -4,8 +4,8 @@ import cls from "./ErrorModal.module.scss";
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import errorSvg from 'src/shared/assets/images/error.svg'
-import { Modals } from 'src/widgets/Navbar/Navbar';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
+import { Mode } from 'src/app/store/slices/modalSlice/modalSlice';
 
 // interface ErrorModalProps {
 //     className?: string;
@@ -34,7 +34,7 @@ export const ErrorModal = () => {
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
-            modalClass={Modals.EMAIL}
+            modalClass={Mode.EMAIL}
         >
             <div
                 className={cls.ErrorWrapper}

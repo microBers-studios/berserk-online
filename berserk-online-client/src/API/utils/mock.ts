@@ -1,11 +1,10 @@
 import { CardTypes, Elements, Rarities, Sets } from "./data";
 import { DecksArray } from "./types";
-import { v4 as uuid } from "uuid";
 
 export const decksObj: Record<string, DecksArray> = {
     decks: [
         {
-            "id": uuid(),
+            "id": 'c70c5820-9f0b-44f9-9707-77664e94c8a3',
             "elements": [
                 Elements.PLAINS
             ],

@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Modals } from "src/widgets/Navbar/Navbar";
+import { toast } from 'react-toastify';
 import cls from "./CloseModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
-import gmailSvg from 'src/shared/assets/images/gmail.svg'
-import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg'
-import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg'
-import APIController from 'src/API/Controller';
-import { useAlert } from 'src/helpers/hooks/useAlert';
+import gmailSvg from 'src/shared/assets/images/gmail.svg';
+import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg';
+import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { registrateUserStatusSelector, sendConfirmEmailStatusSelector } from 'src/app/store/slices/userSlice/selectors';
+import { sendConfirmEmail } from 'src/app/store/slices/userSlice/userSlice';
+import { Mode } from 'src/app/store/slices/modalSlice/modalSlice';
 
 interface CloseModalProps {
     emailObject: { email: string };
+    isAuto?: boolean;
 }
 
 const mailServices = {
@@ -44,24 +47,27 @@ const mailServices = {
     'mail.kz': ["Почта mail.kz", "http://mail.kz/"]
 } as Record<string, string[]>
 
-export const CloseModal = ({ emailObject }: CloseModalProps) => {
+export const CloseModal = ({ emailObject, isAuto = true }: CloseModalProps) => {
 
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
+    const sendConfirmEmailStatus = useAppSelector(sendConfirmEmailStatusSelector)
+    const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
+    const dispatch = useAppDispatch()
 
     const [mailService, setMailService] = useState<string[] | null>(null)
     const [isReady, setIsReady] = useState<boolean>(false)
     const [intervalID, setIntervalID] = useState<number | null>(null)
     const [time, setTime] = useState<number>(59)
 
-    const setAlert = useAlert()
-
     useEffect(() => {
         try {
             setMailService(mailServices[emailObject.email.split('@')[1]])
-        } catch (e) {
-            console.error(e)
+        } catch (e: any) {
+            toast(e.message)
         }
+
+        if (!isAuto) dispatch(sendConfirmEmail())
 
         const interval = setInterval(() => {
             setTime(t => t - 1)
@@ -78,32 +84,35 @@ export const CloseModal = ({ emailObject }: CloseModalProps) => {
         }
     }, [time])
 
-    const onButtonClick = () => {
-        APIController.sendConfirmEmail().catch(() => setAlert('Ошибка!'));
+    const onButtonClick = async () => {
+        if (!sendConfirmEmailStatus.isPending && !registrateUserStatus.isPending) {
+            dispatch(sendConfirmEmail())
 
-        setIsReady(false)
-        setTime(59)
+            setIsReady(false)
+            setTime(59)
 
-        const interval = setInterval(() => {
-            setTime(t => t - 1)
-        }, 1000)
+            const interval = setInterval(() => {
+                setTime(t => t - 1)
+            }, 1000)
 
-        setIntervalID(interval)
+            setIntervalID(interval)
+        }
     }
 
     const closeModal = () => {
-        window.close()
+        if (!sendConfirmEmailStatus.isPending && !registrateUserStatus.isPending) {
+            window.close()
+        }
     }
 
     return (
-
         <Modal
             isCloseAnimation={isCloseAnimation}
             isOpenAnimation={isOpenAnimation}
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
-            modalClass={Modals.CLOSE}
+            modalClass={Mode.CLOSE}
         >
             <div
                 className={cls.CloseModal}
@@ -147,6 +156,5 @@ export const CloseModal = ({ emailObject }: CloseModalProps) => {
                 />
             </div >
         </Modal >
-
     );
 }

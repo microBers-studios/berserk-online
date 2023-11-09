@@ -1,12 +1,13 @@
-import { Modal } from "src/widgets/Modal/Modal";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
 import cls from "./PasswordResetModal.module.scss"
+import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { PasswordInput } from "../Inputs/PasswordInput";
-import { useState } from "react";
-import APIController from "src/API/Controller";
 import { validatePassword } from "src/helpers/validatePassword";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
-import { useAlert } from "src/helpers/hooks/useAlert";
+import { changePassword } from "src/app/store/slices/userSlice/userSlice";
+import { changePasswordStatusSelector } from "src/app/store/slices/userSlice/selectors";
 
 interface PasswordResetModalProps {
     closeModal: () => void;
@@ -19,15 +20,14 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
         isCloseAnimation, setIsCloseAnimation
     }: IAnimator = useAnimate()
 
-    const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useAppDispatch()
+    const changePasswordStatus = useAppSelector(changePasswordStatusSelector)
 
     const [password, setPassword] = useState<string>('')
     const [passwordError, setPasswordError] = useState<number>(0)
 
     const [extraPassword, setExtraPassword] = useState<string>('')
     const [extraPasswordError, setExtraPasswordError] = useState<number>(0)
-
-    const setAlert = useAlert()
 
     const endChanging = () => {
         setIsCloseAnimation(true)
@@ -36,27 +36,21 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
     }
 
     const onFormSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        if (!changePasswordStatus.isPending) {
+            e.preventDefault()
 
-        if (!password || !validatePassword(password)) {
-            const error = password ? validatePassword(password) ? 0 : 2 : 1
-            setPasswordError(error)
-            if (error) return
-        }
+            if (!password || !validatePassword(password)) {
+                const error = password ? validatePassword(password) ? 0 : 2 : 1
+                setPasswordError(error)
+                if (error) return
+            }
 
-        if (password.trim() !== extraPassword.trim()) {
-            setExtraPasswordError(4)
-            return
-        }
+            if (password.trim() !== extraPassword.trim()) {
+                setExtraPasswordError(4)
+                return
+            }
 
-        setLoading(true)
-
-        const code = await APIController.changePassword(token, password)
-        setLoading(false)
-        if (code === 200) {
-            endChanging()
-        } else {
-            setAlert('Ошибка!')
+            dispatch(changePassword({ token, password, fulfilledCallback: endChanging }))
         }
     }
 
@@ -96,7 +90,7 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
                     </div>
                     <ModalButton
                         text="Сохранить"
-                        isActive={loading}
+                        isActive={changePasswordStatus.isPending}
                     />
                 </form>
             </Modal>
