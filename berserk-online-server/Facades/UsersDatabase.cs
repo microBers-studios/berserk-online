@@ -254,7 +254,8 @@ namespace berserk_online_server.Facades
                 var buildedDeck = _deckBuilder.BuildFromRequest(deck);
                 var preparedDeck = _deckBuilder.PrepareForDb(buildedDeck);
                 user.Decks.Add(preparedDeck);
-                _db.UpdateUser(user, user.Email);
+                _db._db.Update(user);
+                _db._db.SaveChanges();
             }
             private DeckDb[] getDecks(UserInfoRequest request)
             {
