@@ -17,7 +17,9 @@ export const Searchbar = ({ setIsSaveDisabled }: SearchBarProps) => {
     const findCardsStatus = useAppSelector(findCardsStatusSelector)
 
     useEffect(() => {
-        dispatch(findCards({ query: value }))
+        if (value) {
+            dispatch(findCards({ query: value }))
+        }
     }, [value])
 
     return (
@@ -41,7 +43,7 @@ export const Searchbar = ({ setIsSaveDisabled }: SearchBarProps) => {
                 <ul
                     className={cls.ResultsContainer}
                 >
-                    {findCardsStatus.isUncompleted
+                    {findCardsStatus.isUncompleted && value
                         ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                         : cards.map(res =>
                             <SearchbarCardItem

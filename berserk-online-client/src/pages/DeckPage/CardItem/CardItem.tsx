@@ -23,7 +23,6 @@ export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabl
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
 
-
     const removeCard = () => {
         setIsDeleteAnimation(true)
 

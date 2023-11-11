@@ -37,7 +37,9 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
         >
             <img
                 className={cls.DeckImage}
-                src={deck.main[0]?.image}
+                src={deck.main.filter(c => c.elite).length
+                    ? deck.main.filter(c => c.elite).sort((a, b) => b.price - a.price)[0].image
+                    : deck.main.sort((a, b) => b.price - a.price)[0].image}
             />
             <div
                 className={cls.TrashCanImageWrapper}

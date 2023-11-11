@@ -182,7 +182,7 @@ const decksSlice = createSlice({
                         : c
                 })
             } else {
-                if (newDeck.sideboard === undefined) {
+                if (!newDeck.sideboard) {
                     throw new Error('Sideboard Error')
                 }
 
@@ -227,10 +227,10 @@ const decksSlice = createSlice({
             if (isInDeck) {
                 newDeck.sideboard
                     .push({ ...card, amount: 1 })
-                newDeck.sideboard.sort((a: IDeckCard, b: IDeckCard) => b.amount - a.amount)
+                newDeck.sideboard = newDeck.sideboard.sort((a: IDeckCard, b: IDeckCard) => a.price - b.price)
             } else {
                 newDeck.main.push({ ...card, amount: 1 })
-                newDeck.main.sort((a: IDeckCard, b: IDeckCard) => b.amount - a.amount)
+                newDeck.main = newDeck.main.sort((a: IDeckCard, b: IDeckCard) => a.price - b.price)
             }
 
             state.currentDeck = newDeck
@@ -259,6 +259,7 @@ const decksSlice = createSlice({
             .addCase(deleteDeck.fulfilled, (state, action) => {
                 state.deleteDeckStatus = APIStatus.Fulfilled;
                 state.decks = action.payload
+                toast('Колода удалена')
             })
             .addCase(deleteDeck.rejected, (state, action) => {
                 state.deleteDeckStatus = APIStatus.Rejected;
