@@ -7,8 +7,7 @@ import trashCanSvg from "src/shared/assets/images/trash.svg";
 import { useNavigate } from "react-router-dom";
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import { deleteDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
-import { deleteDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
+import { useAppDispatch } from 'src/helpers/hooks/redux-hook';
 
 interface DeckItemProps {
     deck: IDeck;
@@ -20,6 +19,8 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
 
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
     // const deleteDeckStatus = useAppSelector(deleteDeckStatusSelector)
+    const mainCardsCount = deck.main.reduce((acc, curr) => acc + curr.amount, 0)
+    const sideboardCardsCount = deck.sideboard.reduce((acc, curr) => acc + curr.amount, 0)
 
     const removeDeck = async (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -58,9 +59,9 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
                     </span>
                     <span
                         className={cls.CardsCount}
-                    >{deck.main.reduce((acc, curr) => acc + curr.amount, 0)} {deck.main.reduce((acc, curr) => acc + curr.amount, 0) % 10 === 1
+                    >{mainCardsCount} {mainCardsCount % 10 === 1
                         ? 'карта'
-                        : deck.main.reduce((acc, curr) => acc + curr.amount, 0) % 10 >= 5
+                        : mainCardsCount % 10 >= 5 || !(mainCardsCount % 10)
                             ? 'карт'
                             : 'карты'}
                     </span>

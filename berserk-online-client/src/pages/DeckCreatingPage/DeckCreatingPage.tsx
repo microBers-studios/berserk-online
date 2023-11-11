@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import cls from "./DeckCreatingPage.module.scss"
-import ReactLoading from 'react-loading';
 import { CardItem } from '../DeckPage/CardItem/CardItem';
 import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
 import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import { setCurrentDeck, createDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { createDeckStatusSelector, getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
+import { createDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 
-export interface DeckCreatingPage {
-    setPage: (deck: RouterPaths | null) => void;
-}
-export const DeckCreatingPage = ({ setPage }: DeckCreatingPage) => {
+// export interface DeckCreatingPage {
+// }
+
+export const DeckCreatingPage = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
@@ -23,7 +22,6 @@ export const DeckCreatingPage = ({ setPage }: DeckCreatingPage) => {
     const [deckName, setDeckName] = useState('')
 
     useEffect(() => {
-        setPage(null)
         if (!deck) navigate(RouterPaths.MAIN)
 
         return function () {

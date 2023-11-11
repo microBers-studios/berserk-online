@@ -31,7 +31,7 @@ export const CardItem = ({ card, isSide = false, setIsSaveDisabled }: CardItemPr
     }
 
     const regCardAmount = (isIncrease: boolean) => {
-        if (card.amount === 1 && !isIncrease) {
+        if ((!isIncrease && card.amount !== 1) || isIncrease) {
             setIsSaveDisabled(false)
         }
         dispatch(changeCardAmount({ cardId: card.id, isIncrease, isSide }))

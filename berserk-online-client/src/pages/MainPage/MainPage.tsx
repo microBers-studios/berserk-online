@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { getUserStatusSelector, loginUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 
 interface MainPageProps {
-    setPage: (page: RouterPaths) => void
+    setPage: (page: RouterPaths | null) => void
 }
 
 export const MainPage = ({ setPage }: MainPageProps) => {
@@ -21,6 +21,10 @@ export const MainPage = ({ setPage }: MainPageProps) => {
 
     useEffect(() => {
         setPage(RouterPaths.MAIN)
+
+        return () => {
+            setPage(null)
+        }
     }, [])
 
     useEffect(() => {

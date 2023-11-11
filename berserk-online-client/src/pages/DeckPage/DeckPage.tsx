@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import cls from "./DeckPage.module.scss"
 import ReactLoading from 'react-loading';
 import { CardItem } from './CardItem/CardItem';
@@ -10,11 +10,10 @@ import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice'
 import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 
-interface DeckPageProps {
-    setPage: (page: RouterPaths | null) => void;
-}
+// interface DeckPageProps {
+// }
 
-export const DeckPage = ({ setPage }: DeckPageProps) => {
+export const DeckPage = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
@@ -55,6 +54,7 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
     const onSaveClick = async () => {
         if (!deck) return
         dispatch(updateDeck(deck))
+        setIsSaveDisabled(true)
     }
 
     return (<div className={cls.DeckPage}>
@@ -152,7 +152,6 @@ export const DeckPage = ({ setPage }: DeckPageProps) => {
                 />
             </>
             // : <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
-
         }
     </div >
     );

@@ -4,12 +4,16 @@ import { useEffect } from 'react'
 
 
 interface RoomsPageProps {
-    setPage: (page: RouterPaths) => void
+    setPage: (page: RouterPaths | null) => void
 }
 
 export const RoomsPage = ({ setPage }: RoomsPageProps) => {
     useEffect(() => {
         setPage(RouterPaths.ROOMS)
+
+        return () => {
+            setPage(null)
+        }
     }, [])
 
     return (
