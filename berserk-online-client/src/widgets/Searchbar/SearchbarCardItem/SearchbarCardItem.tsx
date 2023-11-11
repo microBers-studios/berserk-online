@@ -67,7 +67,11 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
                     src={getRarity(card.rarity, card.set)} />
             </div>
             {isMouseOver &&
-                <CardTitleItem cardSrc={card.image} clientY={clientY} />}
+                <CardTitleItem
+                    isSearchbar={true}
+                    cardSrc={card.image}
+                    clientY={clientY}
+                />}
         </li>
 
     );

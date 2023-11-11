@@ -9,6 +9,9 @@ import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
+import PieChart from 'src/widgets/PieChart/PieChart';
+import { IDeck } from 'src/API/utils/types';
+import { getElementsChartData } from 'src/helpers/getElementsChartData';
 
 // interface DeckPageProps {
 // }
@@ -123,7 +126,7 @@ export const DeckPage = () => {
                             </ul>
                         </div>
                     </div>
-
+                    <PieChart data={getElementsChartData(deck as IDeck)} />
                 </div>
                 <Searchbar
                     setIsSaveDisabled={setIsSaveDisabled}

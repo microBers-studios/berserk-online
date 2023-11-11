@@ -4,9 +4,10 @@ import cls from "./CardTitleItem.module.scss"
 interface CardTitleItemProps {
     cardSrc: string;
     clientY: number;
+    isSearchbar?: boolean;
 }
 
-export const CardTitleItem = ({ cardSrc, clientY }: CardTitleItemProps) => {
+export const CardTitleItem = ({ cardSrc, clientY, isSearchbar }: CardTitleItemProps) => {
 
     const [isTop, setIsTop] = useState(false)
     const figureRef = useRef<HTMLElement>(null)
@@ -33,7 +34,7 @@ export const CardTitleItem = ({ cardSrc, clientY }: CardTitleItemProps) => {
             className={`${cls.CardTitleItem} ${isTop && cls.top}`}
             ref={figureRef}
         >
-            <div className={cls.CardImageWrapper}>
+            <div className={`${cls.CardImageWrapper} ${isSearchbar && cls.Searchbar}`}>
                 <img
                     className={cls.CardImage}
                     src={cardSrc}
