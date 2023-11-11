@@ -35,6 +35,6 @@ namespace berserk_online_server.Models.Cards
         [JsonPropertyName("unique")]
         public bool Unique { get; set; }
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }
