@@ -6,27 +6,35 @@ import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getS
 import { CardTypes } from "src/API/utils/data";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { CardTitleItem } from 'src/widgets/CardTitleItem/CardTitleItem';
-import { useAppDispatch } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import { changeCardAmount, deleteCard } from 'src/app/store/slices/decksSlice/decksSlice';
 
 interface CardItemProps {
     card: IDeckCard;
+    isSaveDisabled: boolean;
     setIsSaveDisabled: (b: boolean) => void;
     isSide?: boolean;
 }
 
-export const CardItem = ({ card, isSide = false, setIsSaveDisabled }: CardItemProps) => {
+export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabled }: CardItemProps) => {
     const dispatch = useAppDispatch()
+    const deck = useAppSelector(state => state.decks.currentDeck)
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
+
 
     const removeCard = () => {
         setIsDeleteAnimation(true)
 
         setTimeout(() => {
             dispatch(deleteCard({ cardId: card.id, isSide }))
-            setIsSaveDisabled(false)
+            console.log(deck?.main.length)
+            if (deck?.main.length !== 1) {
+                setIsSaveDisabled(false)
+            } else if (!isSaveDisabled) {
+                setIsSaveDisabled(true)
+            }
         }, 250)
     }
 

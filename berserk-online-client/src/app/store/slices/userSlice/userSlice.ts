@@ -72,7 +72,7 @@ export const getUser = createAsyncThunk<IUser, undefined, { rejectValue: { code:
                 code = response.status
                 const errorObj = obj as IError
                 email = errorObj.context?.email as string
-                console.log(errorObj.context)
+
                 throw obj
             }
 
@@ -83,7 +83,6 @@ export const getUser = createAsyncThunk<IUser, undefined, { rejectValue: { code:
 
             return userObj
         } catch (e: any) {
-            console.log(e)
             return rejectWithValue({ code, email })
         }
     })
@@ -134,7 +133,7 @@ export const loginUser = createAsyncThunk<
                 code = response.status
                 const errorObj = obj as IError
                 email = errorObj.context?.email as string
-                console.log(errorObj.context)
+
                 throw obj
             }
 
@@ -536,10 +535,7 @@ const userSlice = createSlice({
     }
 })
 
-const checkCookie = () => {
-    console.log(localStorage.getItem('cookie'))
-    return localStorage.getItem('cookie')
-}
+const checkCookie = () => localStorage.getItem('cookie')
 
 const isCookieError = (action: AnyAction) => {
     return action.type.endsWith('rejected')

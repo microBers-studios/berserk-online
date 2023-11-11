@@ -24,7 +24,6 @@ export const DecksContainer = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    console.log(decks)
     let userIsUnauthorized = !user.id && getUserStatus.isRejected
 
     useEffect(() => {

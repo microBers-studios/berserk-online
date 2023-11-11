@@ -106,6 +106,7 @@ export const DeckCreatingPage = () => {
                                     <CardItem
                                         key={card.id}
                                         card={card}
+                                        isSaveDisabled={isSaveDisabled}
                                         setIsSaveDisabled={setIsSaveDisabled}
                                     />)
                                 : <span
@@ -127,6 +128,7 @@ export const DeckCreatingPage = () => {
                                     <CardItem
                                         key={card.id}
                                         card={card}
+                                        isSaveDisabled={isSaveDisabled}
                                         setIsSaveDisabled={setIsSaveDisabled}
                                     />)
                                 : <span
@@ -149,6 +151,7 @@ export const DeckCreatingPage = () => {
                                     <CardItem
                                         key={card.id}
                                         card={card}
+                                        isSaveDisabled={isSaveDisabled}
                                         setIsSaveDisabled={setIsSaveDisabled}
                                         isSide={true}
                                     />)}

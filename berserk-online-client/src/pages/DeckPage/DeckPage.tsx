@@ -31,9 +31,6 @@ export const DeckPage = () => {
     const isLoading = (!deck || deck.id !== id) && getDeckStatus.isUncompleted
         || updateDeckStatus.isPending
         || (getUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
-    console.log((!deck || deck.id !== id) && getDeckStatus.isUncompleted
-        , updateDeckStatus.isPending
-        , (getUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted))
 
     const ordinaryCards = deck?.main
         .filter(c => !c.elite)
@@ -94,6 +91,7 @@ export const DeckPage = () => {
                                         <CardItem
                                             key={card.id}
                                             card={card}
+                                            isSaveDisabled={isSaveDisabled}
                                             setIsSaveDisabled={setIsSaveDisabled}
                                         />)
                                     : <span
@@ -115,6 +113,7 @@ export const DeckPage = () => {
                                         <CardItem
                                             key={card.id}
                                             card={card}
+                                            isSaveDisabled={isSaveDisabled}
                                             setIsSaveDisabled={setIsSaveDisabled}
                                         />)
                                     : <span
@@ -137,6 +136,7 @@ export const DeckPage = () => {
                                         <CardItem
                                             key={card.id}
                                             card={card}
+                                            isSaveDisabled={isSaveDisabled}
                                             setIsSaveDisabled={setIsSaveDisabled}
                                             isSide={true}
                                         />)}

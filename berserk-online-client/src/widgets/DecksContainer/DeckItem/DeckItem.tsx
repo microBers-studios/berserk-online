@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { IDeck } from "src/API/utils/types";
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import cls from "./DeckItem.module.scss"
+import { IDeck } from "src/API/utils/types";
 import { getElement } from "src/helpers/getSymbols";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg";
 import { useNavigate } from "react-router-dom";
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import { deleteDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { useAppDispatch } from 'src/helpers/hooks/redux-hook';
+import { deleteDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 
 interface DeckItemProps {
     deck: IDeck;
@@ -18,14 +19,15 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
     const dispatch = useAppDispatch()
 
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
-    // const deleteDeckStatus = useAppSelector(deleteDeckStatusSelector)
+    const deleteDeckStatus = useAppSelector(deleteDeckStatusSelector)
     const mainCardsCount = deck.main.reduce((acc, curr) => acc + curr.amount, 0)
-    const sideboardCardsCount = deck.sideboard.reduce((acc, curr) => acc + curr.amount, 0)
 
     const removeDeck = async (e: React.MouseEvent) => {
         e.stopPropagation()
-        setIsDeleteAnimation(true)
-        dispatch(deleteDeck(deck.id))
+        if (!deleteDeckStatus.isPending) {
+            setIsDeleteAnimation(true)
+            dispatch(deleteDeck(deck.id))
+        }
     }
 
     return (
