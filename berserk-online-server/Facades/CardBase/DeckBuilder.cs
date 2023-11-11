@@ -1,10 +1,11 @@
-﻿using berserk_online_server.Models.Cards;
+﻿using berserk_online_server.Interfaces;
+using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 
 namespace berserk_online_server.Facades.CardBase
 {
-    public class DeckBuilder
+    public class DeckBuilder : IDeckBuilder
     {
         private CardProvider _cardProvider;
         public DeckBuilder(CardProvider cardProvider)
@@ -22,7 +23,7 @@ namespace berserk_online_server.Facades.CardBase
             deck.Elements = deckDb.Elements;
             return deck;
         }
-        public DeckDb PrepareForDb(Deck deck)
+        public DeckDb BuildToDb(Deck deck)
         {
             var dbDeck = new DeckDb();
             dbDeck.Id = deck.Id;

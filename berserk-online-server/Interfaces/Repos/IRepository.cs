@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Interfaces
+﻿namespace berserk_online_server.Interfaces.Repos
 {
     public interface IRepository<T>
     {

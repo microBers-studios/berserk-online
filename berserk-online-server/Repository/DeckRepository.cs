@@ -1,11 +1,11 @@
 ﻿using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
-using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 
 namespace berserk_online_server.Repository
 {
-    public class DeckRepository : IRepository<DeckDb>
+    public class DeckRepository : IDeckRepository
     {
         private readonly Databases _db;
         private readonly UserRepository _userRepo;
@@ -31,7 +31,9 @@ namespace berserk_online_server.Repository
         {
             var deck = _db.Decks.Where(d => d.Id == id).FirstOrDefault();
             checkIsNull(deck);
+#pragma warning disable CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
             return deck;
+#pragma warning restore CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
         }
         public DeckDb[] GetByUser(string email)
         {

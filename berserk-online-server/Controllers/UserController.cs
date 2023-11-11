@@ -1,5 +1,6 @@
 ﻿using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,9 +14,9 @@ namespace berserk_online_server.Controllers
     public class UserController : ControllerBase
     {
         private readonly UsersDatabase _db;
-        private readonly StaticContentService _contentService;
+        private readonly IAvatarStorage _contentService;
         public UserController(UsersDatabase db, IWebHostEnvironment environment,
-            StaticContentService contentService)
+            IAvatarStorage contentService)
         {
             _db = db;
             _contentService = contentService;

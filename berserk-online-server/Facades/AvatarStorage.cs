@@ -1,16 +1,19 @@
-﻿using berserk_online_server.Models;
+﻿using berserk_online_server.Interfaces;
+using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades
 {
-    public class StaticContentService
+    public class AvatarStorage : IAvatarStorage
     {
         private IWebHostEnvironment _env;
         private readonly string _baseUrl;
         private Dictionary<string, Avatar> _avatars = new();
-        public StaticContentService(IWebHostEnvironment environment, IConfiguration configuration)
+        public AvatarStorage(IWebHostEnvironment environment, IConfiguration configuration)
         {
             _env = environment;
+#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
             _baseUrl = configuration.GetValue<string>("StaticContentUrl");
+#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
             if (string.IsNullOrEmpty(_baseUrl))
             {
                 throw new ArgumentNullException("please provide static content url");
@@ -77,10 +80,6 @@ namespace berserk_online_server.Facades
             {
                 throw new IOException("Failed to create avatars folder.");
             }
-        }
-        private string getFilePath(string fileName)
-        {
-            return Path.Combine(AvatarsFolderPath, fileName);
         }
         private void fillAvatarsMap()
         {

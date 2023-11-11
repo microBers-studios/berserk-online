@@ -16,7 +16,9 @@ namespace berserk_online_server.Facades.CardBase
             }
             if (jsonString == "")
                 throw new ArgumentNullException("failed to read " + jsonPath);
+#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
             _cards = JsonSerializer.Deserialize<DeserealizedCard[]>(jsonString);
+#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
             if (_cards == null)
                 throw new ArgumentNullException(nameof(_cards) + " is null");
             _cards = _cards.OrderBy(x => x.Id).ToArray();

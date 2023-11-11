@@ -42,8 +42,10 @@ namespace berserk_online_server.Middleware
         private bool isTryToConfirm(HttpContext context)
         {
             var path = context.Request.Path.Value;
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
             return path.Contains("confirmEmail") || path.Contains("logout") || path.Contains("login")
                 || path.Contains("register") || path.Contains("confirmationRequest");
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
         }
     }
 }

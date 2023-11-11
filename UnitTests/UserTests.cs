@@ -1,4 +1,10 @@
+using berserk_online_server.Facades;
+using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
+using berserk_online_server.Repository;
+using Moq;
+using System.Security.Cryptography.Xml;
 
 namespace UnitTests
 {
@@ -26,6 +32,26 @@ namespace UnitTests
             Assert.Equal(_id, userInfo.Id);
             Assert.Equal(_mail, userInfo.Email);
             Assert.Equal(_expectedName, userInfo.Name);
+        }
+
+        [Fact]
+        public void TestAdd()
+        {
+            var db = createDb();
+            var user = new User() { Email = _mail, Password = _password };
+
+            db.AddUser(user);
+
+            Assert.NotEqual(user.Password, _password);
+        }
+
+        private UsersDatabase createDb()
+        {
+            var avatarStorage = new Mock<IAvatarStorage>();
+            var deckBuilder = new Mock<IDeckBuilder>();
+            var userRepo = new Mock<IUserRepository>();
+            var deckRepo = new Mock<IDeckRepository>();
+            return new UsersDatabase(avatarStorage.Object, deckBuilder.Object, userRepo.Object, deckRepo.Object);
         }
     }
 }

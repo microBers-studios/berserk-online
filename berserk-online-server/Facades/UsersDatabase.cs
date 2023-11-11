@@ -2,6 +2,8 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
@@ -15,11 +17,11 @@ namespace berserk_online_server.Facades
     public class UsersDatabase
     {
         private readonly string _avatarUrlBase;
-        private readonly StaticContentService _staticContent;
-        private readonly UserRepository _userRepo;
+        private readonly IAvatarStorage _staticContent;
+        private readonly IUserRepository _userRepo;
         public DeckDatabase Decks { get; private set; }
-        public UsersDatabase(StaticContentService staticContent, DeckBuilder deckBuilder,
-            UserRepository userRepository, DeckRepository deckRepository)
+        public UsersDatabase(IAvatarStorage staticContent, IDeckBuilder deckBuilder,
+            IUserRepository userRepository, IDeckRepository deckRepository)
         {
             _avatarUrlBase = staticContent.AvatarsUrl;
             _staticContent = staticContent;
@@ -168,9 +170,9 @@ namespace berserk_online_server.Facades
         public class DeckDatabase
         {
             private readonly UsersDatabase _db;
-            private readonly DeckBuilder _deckBuilder;
-            private readonly DeckRepository _deckRepo;
-            public DeckDatabase(UsersDatabase db, DeckBuilder deckBuilder, DeckRepository deckRepo)
+            private readonly IDeckBuilder _deckBuilder;
+            private readonly IDeckRepository _deckRepo;
+            public DeckDatabase(UsersDatabase db, IDeckBuilder deckBuilder, IDeckRepository deckRepo)
             {
                 _db = db;
                 _deckBuilder = deckBuilder;
@@ -200,7 +202,7 @@ namespace berserk_online_server.Facades
             }
             public void Update(DeckRequest deck)
             {
-                var deckDb = _deckBuilder.PrepareForDb(_deckBuilder.BuildFromRequest(deck));
+                var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
                 _deckRepo.Update(deckDb);
             }
             /// <summary>
@@ -218,7 +220,7 @@ namespace berserk_online_server.Facades
             public void Add(string email, DeckRequest deck)
             {
                 var user = _db._userRepo.Get(email);
-                var deckDb = _deckBuilder.PrepareForDb(_deckBuilder.BuildFromRequest(deck));
+                var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
                 deckDb.UserId = user.Id;
                 _deckRepo.Add(deckDb);
             }

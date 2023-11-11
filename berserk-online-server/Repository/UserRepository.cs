@@ -1,12 +1,12 @@
 ﻿using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
-using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 
 namespace berserk_online_server.Repository
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private Databases _db;
         public UserRepository(Databases db)
@@ -18,7 +18,9 @@ namespace berserk_online_server.Repository
         {
             var user = _db.Users.Where(u => u.Email == email).FirstOrDefault();
             checkIsNull(user);
+#pragma warning disable CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
             return user;
+#pragma warning restore CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
         }
         public bool IsUnique(UserInfoRequest user)
         {
@@ -30,7 +32,9 @@ namespace berserk_online_server.Repository
                 && (request.Email == null || request.Email == u.Email)
                 && (request.Id == null || request.Id == u.Id));
             checkIsNull(user);
+#pragma warning disable CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
             return user;
+#pragma warning restore CS8603 // Возможно, возврат ссылки, допускающей значение NULL.
         }
         public void Update(User newUser)
         {
