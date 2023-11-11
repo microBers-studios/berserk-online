@@ -21,7 +21,6 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
 
-    const isInSideDeck = deck.sideboard.findIndex(c => c.id === card.id) !== -1
     const isInDeck = deck.main.findIndex(c => c.id === card.id) !== -1
 
     const addCardToDeck = () => {
@@ -32,12 +31,12 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
     return (
         <li className={cls.SearchbarCardItem}>
             <span
-                className={`${cls.AddButton} ${(!isInDeck || !isInSideDeck) && cls.plusButton}`}
+                className={`${cls.AddButton} ${!isInDeck && cls.plusButton}`}
                 onClick={addCardToDeck}
             >
                 <img
                     className={cls.AddButtonImage}
-                    src={isInDeck && isInSideDeck ? tickImage : plusImage}
+                    src={isInDeck ? tickImage : plusImage}
                 />
             </span>
             <div

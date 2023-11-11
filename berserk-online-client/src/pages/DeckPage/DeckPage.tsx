@@ -66,8 +66,10 @@ export const DeckPage = () => {
                         <p className={cls.DeckCardsCount}>Всего карт: {Number(eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)) + Number(ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0))}</p>
                         <button
                             className={cls.SaveDeckButton}
-                            disabled={deck?.main.concat(deck.sideboard === undefined ? [] : deck.sideboard).length === 0
-                                || isSaveDisabled || updateDeckStatus.isPending || getDeckStatus.isUncompleted}
+                            disabled={!deck?.main.length
+                                || isSaveDisabled
+                                || updateDeckStatus.isPending
+                                || getDeckStatus.isUncompleted}
                             onClick={onSaveClick}
                         >
                             Сохранить
@@ -119,30 +121,6 @@ export const DeckPage = () => {
                                     : <span
                                         className={cls.NoCardsText}>Карт нет</span>}
                             </ul>
-                        </div>
-                        <div
-                            className={cls.SideboardCardsContainer}
-                        >
-                            <h2
-                                className={cls.SideboardCardsHeader}
-                            >Сайдборд ({deck?.sideboard.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
-
-                            {deck?.sideboard.length
-                                ?
-                                <ul
-                                    className={cls.CardsWrapper}
-                                >
-                                    {deck.sideboard.map(card =>
-                                        <CardItem
-                                            key={card.id}
-                                            card={card}
-                                            isSaveDisabled={isSaveDisabled}
-                                            setIsSaveDisabled={setIsSaveDisabled}
-                                            isSide={true}
-                                        />)}
-                                </ul>
-                                : <span
-                                    className={cls.NoCardsText}>Карт нет</span>}
                         </div>
                     </div>
 

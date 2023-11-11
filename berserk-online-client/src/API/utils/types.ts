@@ -40,7 +40,6 @@ export interface IDeck {
     name: string;
     elements: Elements[];
     main: IDeckCard[];
-    sideboard: IDeckCard[];
 }
 
 export type DecksArray = IDeck[]

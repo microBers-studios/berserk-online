@@ -40,8 +40,7 @@
 }
 
 .OrdinaryCardsContainer,
-.EliteCardsContainer,
-.SideboardCardsContainer {
+.EliteCardsContainer {
     display: flex;
     flex-direction: column;
     width: 31vw;
@@ -50,8 +49,7 @@
 
 
 .OrdinaryCardsHeader,
-.EliteCardsHeader,
-.SideboardCardsHeader {
+.EliteCardsHeader {
     color: var(--secondary-color)
 }
 
@@ -82,8 +80,4 @@
         background-color: gray;
         color: var(--border-color)
     }
-}
-
-.SideboardCardsContainer {
-    padding: 0 0 20px;
 }

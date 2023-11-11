@@ -218,22 +218,13 @@ const decksSlice = createSlice({
 
             let newDeck: IDeck = JSON.parse(JSON.stringify(state.currentDeck));
             const isInDeck = newDeck.main.find((c: ICard) => c.id === card.id)
-            const isInSideDeck = newDeck.sideboard.find((c: ICard) => c.id === card.id)
 
-            if (isInSideDeck && isInDeck) {
-                return
-            }
-
-            if (isInDeck) {
-                newDeck.sideboard
-                    .push({ ...card, amount: 1 })
-                newDeck.sideboard = newDeck.sideboard.sort((a: IDeckCard, b: IDeckCard) => a.price - b.price)
-            } else {
+            if (!isInDeck) {
                 newDeck.main.push({ ...card, amount: 1 })
                 newDeck.main = newDeck.main.sort((a: IDeckCard, b: IDeckCard) => a.price - b.price)
-            }
 
-            state.currentDeck = newDeck
+                state.currentDeck = newDeck
+            }
         },
         setCurrentDeck: (state, action: PayloadAction<{ deck: IDeck | null }>) => {
             state.currentDeck = action.payload.deck
