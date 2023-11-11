@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { APIStatus } from "src/app/store/const";
 import { Paths, URL } from "src/API/utils/urls";
 import { ICard, IDeck, IDeckCard } from "src/API/utils/types";
+import { RootState } from "src/app/store";
 
 export interface IDecksState {
     decks: IDeck[];
@@ -46,9 +47,9 @@ export const getDecks = createAsyncThunk<IDeck[], undefined, { rejectValue: stri
         }
     })
 
-export const deleteDeck = createAsyncThunk<{ decksObj: IDeck[], fulfilledCallback: (state: IDecksState, decks: IDeck[]) => void }, [string, (state: IDecksState, decks: IDeck[]) => void], { rejectValue: string }>(
+export const deleteDeck = createAsyncThunk<IDeck[], string, { rejectValue: string }>(
     'decks/deleteDeck',
-    async function ([id, fulfilledCallback], { rejectWithValue }) {
+    async function (id, { rejectWithValue }) {
         try {
             const path = URL + Paths.DELETE_DECK + `?id=${id}`
 
@@ -63,7 +64,7 @@ export const deleteDeck = createAsyncThunk<{ decksObj: IDeck[], fulfilledCallbac
                 throw obj
             }
 
-            return { decksObj: obj, fulfilledCallback }
+            return obj
         } catch (e: any) {
             return rejectWithValue(e.message)
         }
@@ -96,10 +97,9 @@ export const createDeck = createAsyncThunk<IDeck, IDeck, { rejectValue: string }
     }
 )
 
-export const getDeck = createAsyncThunk<IDeck, [string, (code: number) => void], { rejectValue: string }>(
+export const getDeck = createAsyncThunk<IDeck, string, { rejectValue: string }>(
     'decks/getDeck',
-    async ([id, rejectedCallback], { rejectWithValue }) => {
-        let code: number = 0;
+    async (id, { rejectWithValue }) => {
         try {
             const path = URL + Paths.GET_DECKS + `/${id}`
 
@@ -110,13 +110,11 @@ export const getDeck = createAsyncThunk<IDeck, [string, (code: number) => void],
             const obj = await response.json()
 
             if (response.status !== 200) {
-                code = response.status
                 throw obj
             }
 
             return obj
         } catch (e: any) {
-            rejectedCallback(code)
             return rejectWithValue(e.message)
         }
     })
@@ -125,10 +123,10 @@ export const updateDeck = createAsyncThunk<undefined, IDeck, { rejectValue: stri
     'decks/updateDeck',
     async function (_, { rejectWithValue, getState }) {
         try {
-            const state = getState() as IDecksState
+            const state = getState() as RootState
             const path = URL + Paths.UPDATE_DECK
 
-            if (!state.currentDeck) {
+            if (!state.decks.currentDeck) {
                 throw new Error('Deck Updating Error')
             }
 
@@ -138,7 +136,7 @@ export const updateDeck = createAsyncThunk<undefined, IDeck, { rejectValue: stri
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(state.currentDeck)
+                body: JSON.stringify(state.decks.currentDeck)
             })
 
             if (response.status !== 200) {
@@ -152,14 +150,12 @@ export const updateDeck = createAsyncThunk<undefined, IDeck, { rejectValue: stri
     }
 )
 
-
-
 const decksSlice = createSlice({
     name: 'decks',
     initialState,
     reducers: {
-        changeCardAmount: (state, action: PayloadAction<{ cardId: number, isIncrease: boolean, isSide: boolean, callback: () => void }>) => {
-            const { cardId, isIncrease, isSide, callback } = action.payload
+        changeCardAmount: (state, action: PayloadAction<{ cardId: number, isIncrease: boolean, isSide: boolean }>) => {
+            const { cardId, isIncrease, isSide } = action.payload
 
             const newDeck = JSON.parse(JSON.stringify(state.currentDeck))
             const cardsList = isSide
@@ -171,14 +167,11 @@ const decksSlice = createSlice({
 
             if (isIncrease) {
                 amount = card.amount + 1
-                callback()
             } else {
                 if (card.amount - 1 < 1) {
                     amount = 1
-
                 } else {
                     amount = card.amount - 1
-                    callback()
                 }
             }
 
@@ -224,8 +217,8 @@ const decksSlice = createSlice({
             const { card } = action.payload
 
             let newDeck: IDeck = JSON.parse(JSON.stringify(state.currentDeck));
-            const isInDeck = newDeck.main.findIndex((c: ICard) => c.id === card.id)
-            const isInSideDeck = newDeck.sideboard.findIndex((c: ICard) => c.id === card.id)
+            const isInDeck = newDeck.main.find((c: ICard) => c.id === card.id)
+            const isInSideDeck = newDeck.sideboard.find((c: ICard) => c.id === card.id)
 
             if (isInSideDeck && isInDeck) {
                 return
@@ -241,6 +234,9 @@ const decksSlice = createSlice({
             }
 
             state.currentDeck = newDeck
+        },
+        setCurrentDeck: (state, action: PayloadAction<{ deck: IDeck | null }>) => {
+            state.currentDeck = action.payload.deck
         }
     },
 
@@ -262,9 +258,7 @@ const decksSlice = createSlice({
             })
             .addCase(deleteDeck.fulfilled, (state, action) => {
                 state.deleteDeckStatus = APIStatus.Fulfilled;
-                const { decksObj, fulfilledCallback } = action.payload
-
-                fulfilledCallback(state, decksObj)
+                state.decks = action.payload
             })
             .addCase(deleteDeck.rejected, (state, action) => {
                 state.deleteDeckStatus = APIStatus.Rejected;
@@ -275,6 +269,7 @@ const decksSlice = createSlice({
             })
             .addCase(createDeck.fulfilled, (state, action) => {
                 state.decks.push(action.payload)
+                state.currentDeck = action.payload
                 state.createDeckStatus = APIStatus.Fulfilled;
             })
             .addCase(createDeck.rejected, (state, action) => {
@@ -285,8 +280,8 @@ const decksSlice = createSlice({
                 state.getDeckStatus = APIStatus.Pending;
             })
             .addCase(getDeck.fulfilled, (state, action) => {
-                state.getDeckStatus = APIStatus.Fulfilled;
                 state.currentDeck = action.payload
+                state.getDeckStatus = APIStatus.Fulfilled;
             })
             .addCase(getDeck.rejected, (state, action) => {
                 state.getDeckStatus = APIStatus.Rejected;
@@ -305,5 +300,5 @@ const decksSlice = createSlice({
     }
 })
 
-export const { changeCardAmount, deleteCard, addCard } = decksSlice.actions
+export const { changeCardAmount, deleteCard, addCard, setCurrentDeck } = decksSlice.actions
 export default decksSlice

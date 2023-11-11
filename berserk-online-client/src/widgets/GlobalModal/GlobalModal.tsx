@@ -5,7 +5,6 @@ import { LoginModal } from "../AccountModals/LoginModal/LoginModal"
 import { AccountEditModal } from "../AccountModals/AccountEditModal/AccountEditModal"
 import { EmailModal } from "../AccountModals/EmailModal/EmailModal"
 import { CloseModal } from "../AccountModals/CloseModal/CloseModal"
-import { DeckCreatingModal } from "../DecksContainer/DeckCreatingModal/DeckCreatingModal"
 import { modalSelector } from "src/app/store/slices/modalSlice/selectors"
 
 export const GlobalModal = () => {
@@ -40,10 +39,6 @@ export const GlobalModal = () => {
 
     if (mode === Mode.CLOSE) {
         return <CloseModal emailObject={extra} />
-    }
-
-    if (mode === Mode.DECK_CREATING) {
-        return <DeckCreatingModal />
     }
 
     return <></>

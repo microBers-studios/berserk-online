@@ -17,3 +17,11 @@ export class Deck implements IDeck {
         this.sideboard = []
     }
 }
+
+export const createDeck = (name: string): IDeck => ({
+    id: v4(),
+    name,
+    elements: [],
+    main: [],
+    sideboard: []
+})

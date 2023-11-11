@@ -3,10 +3,12 @@ import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import ReactLoading from 'react-loading';
 import cls from "./DecksContainer.module.scss";
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
-import { Mode, setMode } from 'src/app/store/slices/modalSlice/modalSlice';
 import { DeckItem } from './DeckItem/DeckItem';
 import { decksSelector, getDecksStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
-import { getDecks } from 'src/app/store/slices/decksSlice/decksSlice';
+import { getDecks, setCurrentDeck } from 'src/app/store/slices/decksSlice/decksSlice';
+import { createDeck } from 'src/app/providers/Deck/Deck';
+import { useNavigate } from 'react-router-dom';
+import { RouterPaths } from 'src/app/providers/router/router-paths';
 
 // interface DecksContainerProps {
 //     setPage: (page: RouterPaths | null) => void
@@ -20,7 +22,9 @@ export const DecksContainer = () => {
     const getDecksStatus = useAppSelector(getDecksStatusSelector)
     const decks = useAppSelector(decksSelector)
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
+    console.log(decks)
     let userIsUnauthorized = !user.id && getUserStatus.isRejected
 
     useEffect(() => {
@@ -29,9 +33,9 @@ export const DecksContainer = () => {
         }
     }, [getUserStatus, loginUserStatus, registrateUserStatus])
 
-    const openCreatingModal = () => {
-        dispatch(setMode({ mode: Mode.DECK_CREATING }))
-        document.body.style.overflow = 'hidden'
+    const makeDeck = () => {
+        dispatch(setCurrentDeck({ deck: createDeck('') }))
+        navigate(RouterPaths.CREATE_DECK)
     }
 
     return (
@@ -54,9 +58,9 @@ export const DecksContainer = () => {
                     {!userIsUnauthorized &&
                         <button
                             className={cls.AddButton}
-                            onClick={openCreatingModal}
+                            onClick={makeDeck}
                         >
-                            Добавить
+                            Создать
                         </button>}
                 </div>
                 <div className={`${cls.DecksWrapper} ${(userIsUnauthorized

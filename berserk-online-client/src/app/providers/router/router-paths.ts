@@ -4,5 +4,6 @@ export enum RouterPaths {
     RESET_PASSWORD = '/password',
     CONFIRM_EMAIL = '/confirmEmail',
     ERROR = '/error',
-    DECK = '/decks'
+    DECK = '/decks',
+    CREATE_DECK = '/decks/new'
 }

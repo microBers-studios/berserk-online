@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react";
 import ReactLoading from 'react-loading'
 import cls from "./Searchbar.module.scss"
-import APIController from "src/API/Controller";
-import { ICard } from "src/API/utils/types";
 import { SearchbarCardItem } from "./SearchbarCardItem/SearchbarCardItem";
+import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { cardsSelector, findCardsStatusSelector } from "src/app/store/slices/cardsSlice/selectors";
+import { findCards } from "src/app/store/slices/cardsSlice/cardsSlice";
 
 interface SearchBarProps {
     setIsSaveDisabled: (b: boolean) => void;
 }
 
 export const Searchbar = ({ setIsSaveDisabled }: SearchBarProps) => {
+    const dispatch = useAppDispatch()
     const [value, setValue] = useState('')
-    const [results, setResults] = useState<ICard[]>([])
-    const [isLoading, setIsLoading] = useState(false)
+    const cards = useAppSelector(cardsSelector)
+    const findCardsStatus = useAppSelector(findCardsStatusSelector)
 
     useEffect(() => {
-        if (!value) {
-            setResults([])
-            return
-        }
-
-        new Promise(async () => {
-            setIsLoading(true)
-            const cards = await APIController.findCards(value)
-            setResults(cards)
-            setIsLoading(false)
-        })
-
+        dispatch(findCards({ query: value }))
     }, [value])
-
 
     return (
         <div className={cls.Searchbar} >
@@ -51,9 +41,9 @@ export const Searchbar = ({ setIsSaveDisabled }: SearchBarProps) => {
                 <ul
                     className={cls.ResultsContainer}
                 >
-                    {isLoading
+                    {findCardsStatus.isUncompleted
                         ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
-                        : results.map(res =>
+                        : cards.map(res =>
                             <SearchbarCardItem
                                 key={res.id}
                                 setIsSaveDisabled={setIsSaveDisabled}

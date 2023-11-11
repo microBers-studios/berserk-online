@@ -30,8 +30,12 @@ export const CardItem = ({ card, isSide = false, setIsSaveDisabled }: CardItemPr
         }, 250)
     }
 
-    const callback = () => setIsSaveDisabled(false)
-    const regCardAmount = (isIncrease: boolean) => dispatch(changeCardAmount({ cardId: card.id, isIncrease, isSide, callback }))
+    const regCardAmount = (isIncrease: boolean) => {
+        if (card.amount === 1 && !isIncrease) {
+            setIsSaveDisabled(false)
+        }
+        dispatch(changeCardAmount({ cardId: card.id, isIncrease, isSide }))
+    }
 
     return (
         <li

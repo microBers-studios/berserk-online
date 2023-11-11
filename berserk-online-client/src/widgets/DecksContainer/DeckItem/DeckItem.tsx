@@ -6,8 +6,9 @@ import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg";
 import { useNavigate } from "react-router-dom";
 import { RouterPaths } from "src/app/providers/router/router-paths";
-import { IDecksState, deleteDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { useAppDispatch } from 'src/helpers/hooks/redux-hook';
+import { deleteDeck } from 'src/app/store/slices/decksSlice/decksSlice';
+import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { deleteDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 
 interface DeckItemProps {
     deck: IDeck;
@@ -18,17 +19,12 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
     const dispatch = useAppDispatch()
 
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
+    // const deleteDeckStatus = useAppSelector(deleteDeckStatusSelector)
 
     const removeDeck = async (e: React.MouseEvent) => {
         e.stopPropagation()
-        dispatch(deleteDeck([deck.id, deleteFulfilledCallback]))
-    }
-
-    const deleteFulfilledCallback = (state: IDecksState, decks: IDeck[]) => {
         setIsDeleteAnimation(true)
-        setTimeout(() => {
-            state.decks = decks
-        }, 350)
+        dispatch(deleteDeck(deck.id))
     }
 
     return (
