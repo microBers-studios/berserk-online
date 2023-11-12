@@ -66,7 +66,8 @@ namespace berserk_online_server.Controllers
             catch (InvalidOperationException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
-            } catch (InvalidDataException)
+            }
+            catch (InvalidDataException)
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.DeckAlreadyExists, request.Id));
             }

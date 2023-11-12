@@ -1,15 +1,11 @@
 ﻿using BCrypt.Net;
-using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
-using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using berserk_online_server.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace berserk_online_server.Facades
 {
@@ -83,11 +79,7 @@ namespace berserk_online_server.Facades
         /// <exception cref="NotFoundException"></exception>
         public UserInfo ConfirmEmail(string email)
         {
-            var user = _userRepo.GetByInfo(new UserInfoRequest() { Email = email });
-            if (user == null)
-            {
-                throw new InvalidOperationException();
-            }
+            var user = _userRepo.Get(email);
             user.IsEmailConfirmed = true;
             _userRepo.Update(user);
             return new UserInfo(formatUser(user));
@@ -101,11 +93,7 @@ namespace berserk_online_server.Facades
         /// <exception cref="NotFoundException"></exception>
         public UserInfo RemoveAvatar(string email)
         {
-            var user = _userRepo.GetByInfo(new UserInfoRequest() { Email = email });
-            if (user == null)
-            {
-                throw new InvalidOperationException();
-            }
+            var user = _userRepo.Get(email);
             user.AvatarUrl = null;
             _userRepo.Update(user);
             return new UserInfo(formatUser(user));

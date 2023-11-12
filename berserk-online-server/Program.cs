@@ -6,7 +6,6 @@ using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Middleware;
-using berserk_online_server.Models.Db;
 using berserk_online_server.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;

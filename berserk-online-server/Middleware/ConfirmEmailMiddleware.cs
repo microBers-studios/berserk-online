@@ -1,5 +1,4 @@
-﻿using berserk_online_server.Exceptions;
-using berserk_online_server.Facades;
+﻿using berserk_online_server.Facades;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -37,7 +36,7 @@ namespace berserk_online_server.Middleware
         private void writeBadRequest(HttpContext context, string email)
         {
             context.Response.StatusCode = 403;
-            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new {email}));
+            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new { email }));
         }
         private bool isTryToConfirm(HttpContext context)
         {
