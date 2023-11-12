@@ -1,5 +1,6 @@
 ﻿using berserk_online_server.Contexts;
 using berserk_online_server.Exceptions;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 
 namespace berserk_online_server.Repository
@@ -7,8 +8,8 @@ namespace berserk_online_server.Repository
     public class DeckRepository : IDeckRepository
     {
         private readonly Databases _db;
-        private readonly UserRepository _userRepo;
-        public DeckRepository(Databases db, UserRepository userRepository)
+        private readonly IUserRepository _userRepo;
+        public DeckRepository(Databases db, IUserRepository userRepository)
         {
             _db = db;
             _userRepo = userRepository;

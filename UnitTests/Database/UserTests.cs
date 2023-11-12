@@ -3,7 +3,6 @@ using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using berserk_online_server.Repository;
 using Moq;
 
 namespace UnitTests.Database
