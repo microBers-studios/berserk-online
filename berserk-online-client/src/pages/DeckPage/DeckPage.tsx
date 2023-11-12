@@ -2,17 +2,15 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import cls from "./DeckPage.module.scss"
 import ReactLoading from 'react-loading';
-import { CardItem } from './CardItem/CardItem';
 import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
 import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
-import PieChart from 'src/widgets/PieChart/PieChart';
 import { IDeck } from 'src/API/utils/types';
-import { getElementsChartData, getPricesChartData } from 'src/helpers/getChartData';
-import BarChart from 'src/widgets/BarChart/BarChart';
+import { DeckConstructor } from 'src/widgets/DeckConstructor/DeckConstructor';
+import { DeckStatistics } from 'src/widgets/DeckStatistics/DeckStatistics';
 
 // interface DeckPageProps {
 // }
@@ -36,12 +34,6 @@ export const DeckPage = () => {
         || updateDeckStatus.isPending
         || (getUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
 
-    const ordinaryCards = deck?.main
-        .filter(c => !c.elite)
-
-    const eliteCards = deck?.main
-        .filter(c => c.elite)
-
     useEffect(() => {
         if (user.id) {
             if (!id) {
@@ -62,12 +54,10 @@ export const DeckPage = () => {
         {isLoading
             ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
             : <>
-                <div className={cls.DeckContainer}>
-                    <div
-                        className={cls.DeckHeaderWrapper}
-                    >
+                <div className={cls.DeckPageWrapper}>
+                    <div className={cls.DeckHeaderWrapper}>
                         <h1 className={cls.DeckPageHeader}>{deck?.name}</h1>
-                        <p className={cls.DeckCardsCount}>Всего карт: {Number(eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)) + Number(ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0))}</p>
+                        <p className={cls.DeckCardsCount}>Всего карт: {deck?.main.reduce((acc, curr) => acc + curr.amount, 0)}</p>
                         <button
                             className={cls.SaveDeckButton}
                             disabled={!deck?.main.length
@@ -79,69 +69,15 @@ export const DeckPage = () => {
                             Сохранить
                         </button>
                     </div>
-                    <div
-                        className={cls.CardsContainer}
-                    >
-                        <div
-                            className={cls.EliteCardsContainer}
-                        >
-                            <h2
-                                className={cls.EliteCardsHeader}
-                            >Элитные карты ({eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
-
-                            <ul
-                                className={cls.CardsWrapper}
-                            >
-                                {eliteCards && eliteCards.length
-                                    ? eliteCards.map(card =>
-                                        <CardItem
-                                            key={card.id}
-                                            card={card}
-                                            isSaveDisabled={isSaveDisabled}
-                                            setIsSaveDisabled={setIsSaveDisabled}
-                                        />)
-                                    : <span
-                                        className={cls.NoCardsText}>Карт нет</span>}
-                            </ul>
-                        </div>
-                        <div
-                            className={cls.OrdinaryCardsContainer}
-                        >
-                            <h2
-                                className={cls.OrdinaryCardsHeader}
-                            >Рядовые карты ({ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
-
-                            <ul
-                                className={cls.CardsWrapper}
-                            >
-                                {ordinaryCards && ordinaryCards.length
-                                    ? ordinaryCards.map(card =>
-                                        <CardItem
-                                            key={card.id}
-                                            card={card}
-                                            isSaveDisabled={isSaveDisabled}
-                                            setIsSaveDisabled={setIsSaveDisabled}
-                                        />)
-                                    : <span
-                                        className={cls.NoCardsText}>Карт нет</span>}
-                            </ul>
-                        </div>
-                    </div>
-                    <div className={cls.DeckStatistics}>
-                        <h2
-                            className={cls.DeckStatisticsHeader}
-                        >Статистика</h2>
-                        <div className={cls.ChartsWrapper}>
-                            <PieChart data={getElementsChartData(deck as IDeck)} />
-                            <BarChart data={getPricesChartData(deck as IDeck)} />
-                        </div>
-                    </div>
+                    <DeckConstructor
+                        deck={deck}
+                        isSaveDisabled={isSaveDisabled}
+                        setIsSaveDisabled={setIsSaveDisabled}
+                    />
+                    <DeckStatistics deck={deck as IDeck} />
                 </div>
-                <Searchbar
-                    setIsSaveDisabled={setIsSaveDisabled}
-                />
+                <Searchbar setIsSaveDisabled={setIsSaveDisabled} />
             </>
-            // : <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
         }
     </div >
     );

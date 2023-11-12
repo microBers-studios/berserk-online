@@ -1,0 +1,33 @@
+.CardsContainer {
+    width: 73vw;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    color: white;
+}
+
+.OrdinaryCardsContainer,
+.EliteCardsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 31vw;
+    align-items: center;
+}
+
+
+.OrdinaryCardsHeader,
+.EliteCardsHeader {
+    color: var(--secondary-color)
+}
+
+.CardsWrapper {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.NoCardsText {
+    font-size: 20px;
+    color: var(--border-color);
+}

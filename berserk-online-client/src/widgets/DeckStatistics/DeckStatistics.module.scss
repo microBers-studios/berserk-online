@@ -1,0 +1,15 @@
+.DeckStatistics {
+    width: 60vw;
+    padding: 50px;
+}
+
+.DeckStatisticsHeader {
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+.ChartsWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
