@@ -12,7 +12,7 @@ namespace berserk_online_server.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, IUsersDatabase db, FrontendURLCreator urlCreator)
+        public async Task Invoke(HttpContext context, IUsersDatabase db)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
                 || isTryToConfirm(context))
