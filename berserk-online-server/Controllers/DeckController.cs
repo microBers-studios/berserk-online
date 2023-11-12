@@ -64,17 +64,17 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException)
+            catch (NotFoundException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
             }
-            catch (InvalidDataException)
+            catch (InvalidOperationException)
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.DeckAlreadyExists, request.Id));
             }
         }
         [HttpPut("update")]
-        public IResult Put(DeckRequest request)
+        public IResult Update(DeckRequest request)
         {
             try
             {
@@ -85,11 +85,7 @@ namespace berserk_online_server.Controllers
             {
                 return Results.Unauthorized();
             }
-            catch (InvalidOperationException)
-            {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, "user not found."));
-            }
-            catch (InvalidDataException)
+            catch (NotFoundException)
             {
                 return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, "deck with this id not found."));
             }

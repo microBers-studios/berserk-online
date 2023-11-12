@@ -5,8 +5,9 @@ using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
+using Microsoft.Extensions.Caching.Memory;
 
-namespace berserk_online_server.Facades
+namespace berserk_online_server.Facades.Database
 {
 
     public class UsersDatabase : IUsersDatabase
@@ -14,23 +15,27 @@ namespace berserk_online_server.Facades
         private readonly string _avatarUrlBase;
         private readonly IAvatarStorage _staticContent;
         private readonly IUserRepository _userRepo;
+        private readonly ICache<string, User> _memoryCache;
         public IDeckDatabase Decks { get; private set; }
-        public UsersDatabase(IAvatarStorage staticContent, IDeckBuilder deckBuilder,
-            IUserRepository userRepository, IDeckRepository deckRepository)
+        public UsersDatabase(IAvatarStorage staticContent,
+            IUserRepository userRepository, ICache<string, User> cache, IDeckDatabase deckDatabase)
         {
+            _memoryCache = cache;
             _avatarUrlBase = staticContent.AvatarsUrl;
             _staticContent = staticContent;
             _userRepo = userRepository;
-            Decks = new DeckDatabase(this, deckBuilder, deckRepository);
+            Decks = deckDatabase;
         }
         public void AddUser(User user)
         {
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _userRepo.Add(user);
+            _memoryCache.Set(user.Email, user);
         }
         public void RemoveUser(string email)
         {
             _userRepo.Delete(email);
+            _memoryCache.Remove(email);
         }
         /// <summary>
         /// 
@@ -49,6 +54,7 @@ namespace berserk_online_server.Facades
                 user.AvatarUrl = avatarName;
             }
             _userRepo.Update(user);
+            _memoryCache.Remove(oldMail);
             return new UserInfo(formatUser(user));
         }
         /// <summary>
@@ -67,6 +73,7 @@ namespace berserk_online_server.Facades
                 : user.Password;
             user.Name = newUser.Name != null ? newUser.Name : user.Name;
             _userRepo.Update(user);
+            _memoryCache.Remove(oldmail);
             return new UserInfo(formatUser(user));
         }
         /// <summary>
@@ -95,6 +102,7 @@ namespace berserk_online_server.Facades
             var user = _userRepo.Get(email);
             user.AvatarUrl = null;
             _userRepo.Update(user);
+            _memoryCache.Remove(email);
             return new UserInfo(formatUser(user));
         }
         public bool IsUnique(UserInfoRequest user)
@@ -109,7 +117,13 @@ namespace berserk_online_server.Facades
         /// <returns></returns>
         public User GetUser(UserInfoRequest userRequest)
         {
-            var foundedUser = _userRepo.GetByInfo(userRequest);
+            if (_memoryCache.TryGet(userRequest.Email, out User foundedUser))
+            { }
+            else
+            {
+                foundedUser = _userRepo.GetByInfo(userRequest);
+                _memoryCache.Set(foundedUser.Email, foundedUser);
+            }
             return formatUser(foundedUser);
         }
         /// <summary>
@@ -153,78 +167,6 @@ namespace berserk_online_server.Facades
         {
             u1.Name = request.Name ?? u1.Name;
             u1.Email = request.Email ?? u1.Email;
-        }
-        public class DeckDatabase : IDeckDatabase
-        {
-            private readonly UsersDatabase _db;
-            private readonly IDeckBuilder _deckBuilder;
-            private readonly IDeckRepository _deckRepo;
-            public DeckDatabase(UsersDatabase db, IDeckBuilder deckBuilder, IDeckRepository deckRepo)
-            {
-                _db = db;
-                _deckBuilder = deckBuilder;
-                _deckRepo = deckRepo;
-            }
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="email"></param>
-            /// <returns></returns>
-            /// <exception cref="NotFoundException"></exception>
-            public Deck[] GetAll(string email)
-            {
-                var decks = getDecks(new UserInfoRequest() { Email = email });
-                return decks.Select(_deckBuilder.BuildFromDb).ToArray();
-            }
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="id"></param>
-            /// <returns></returns>
-            /// <exception cref="NotFoundException"></exception>
-            public Deck Get(string id)
-            {
-                var deck = _deckRepo.Get(id);
-                return _deckBuilder.BuildFromDb(deck);
-            }
-            public void Update(DeckRequest deck)
-            {
-                var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
-                _deckRepo.Update(deckDb);
-            }
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="email"></param>
-            /// <param name="id"></param>
-            /// <returns></returns>
-            /// <exception cref="NotFoundException"></exception>
-            public Deck[] Delete(string email, string id)
-            {
-                _deckRepo.Delete(id);
-                return _deckRepo.GetByUser(email).Select(_deckBuilder.BuildFromDb).ToArray();
-            }
-            public void Add(string email, DeckRequest deck)
-            {
-                var user = _db._userRepo.Get(email);
-                var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
-                deckDb.UserId = user.Id;
-                _deckRepo.Add(deckDb);
-            }
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="request"></param>
-            /// <returns></returns>
-            /// <exception cref="ArgumentNullException"></exception>
-            /// <exception cref="NotFoundException"></exception>
-            private DeckDb[] getDecks(UserInfoRequest request)
-            {
-                if (request.Email == null)
-                    throw new ArgumentNullException(nameof(request.Email));
-                var decks = _deckRepo.GetByUser(request.Email).ToArray();
-                return decks;
-            }
         }
     }
 }

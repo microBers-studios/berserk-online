@@ -41,10 +41,14 @@ namespace berserk_online_server.Repository
             return _db.Decks.Where(d => d.UserId == user.Id).ToArray();
         }
 
+        public bool IsUnique(string id)
+        {
+            return !_db.Decks.Any(d => d.Id == id);
+        }
+
         public void Update(DeckDb entity)
         {
             var oldDeck = Get(entity.Id);
-            oldDeck.UserId = entity.UserId;
             oldDeck.Main = entity.Main;
             oldDeck.Elements = entity.Elements;
             oldDeck.Name = entity.Name;

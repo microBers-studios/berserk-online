@@ -38,13 +38,13 @@ namespace berserk_online_server.Repository
         }
         public void Update(User newUser)
         {
-            var oldUser = Get(newUser.Email);
+            var oldUser = _db.Users.Where(u => u.Id == newUser.Id).FirstOrDefault();
+            checkIsNull(oldUser);
             oldUser.Email = newUser.Email;
             oldUser.Password = newUser.Password;
             oldUser.AvatarUrl = newUser.AvatarUrl;
             oldUser.Name = newUser.Name;
             oldUser.IsEmailConfirmed = newUser.IsEmailConfirmed;
-            oldUser.Id = newUser.Id;
             _db.Update(oldUser);
             _db.SaveChanges();
         }

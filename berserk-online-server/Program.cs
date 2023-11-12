@@ -1,11 +1,13 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Facades.Database;
 using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Middleware;
+using berserk_online_server.Models.Db;
 using berserk_online_server.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -33,9 +35,14 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
+builder.Services.AddMemoryCache();
+
+builder.Services.AddTransient<ICache<string, User>, Cache<string, User>>();
+builder.Services.AddTransient<ICache<int, DeckDb[]>, Cache<int, DeckDb[]>>();
 builder.Services.AddTransient<IUrlCreator, FrontendURLCreator>();
 
 builder.Services.AddTransient<IUsersDatabase, UsersDatabase>();
+builder.Services.AddTransient<IDeckDatabase, DeckDatabase>();
 
 builder.Services.AddTransient<RecoveryMailSender>();
 builder.Services.AddTransient<ConfirmEmailSender>();

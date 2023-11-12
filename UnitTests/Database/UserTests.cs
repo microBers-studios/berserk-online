@@ -1,8 +1,9 @@
-using berserk_online_server.Facades;
+using berserk_online_server.Facades.Database;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 
 namespace UnitTests.Database
@@ -142,8 +143,13 @@ namespace UnitTests.Database
             var avatarStorage = new Mock<IAvatarStorage>();
             var deckBuilder = new Mock<IDeckBuilder>();
             var userRepo = new Mock<IUserRepository>();
-            var deckRepo = new Mock<IDeckRepository>();
-            return new(userRepo, new UsersDatabase(avatarStorage.Object, deckBuilder.Object, userRepo.Object, deckRepo.Object));
+            var cache = new Mock<ICache<string, User>>();
+            User? outVal = null;
+            cache.Setup(c => c.Set(It.IsAny<string>(), It.IsAny<User>()));
+            cache.Setup(c => c.TryGet(It.IsAny<string>(), out outVal))
+                .Returns(false);
+            var deckDb = new Mock<IDeckDatabase>();
+            return new(userRepo, new UsersDatabase(avatarStorage.Object, userRepo.Object, cache.Object, deckDb.Object));
         }
         private void setupUserRepo(Mock<IUserRepository> repo)
         {

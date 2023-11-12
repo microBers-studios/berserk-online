@@ -1,5 +1,5 @@
-﻿using berserk_online_server.Facades;
-using berserk_online_server.Facades.CardBase;
+﻿using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Facades.Database;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
@@ -25,6 +25,11 @@ namespace UnitTests.Database
             {
                 deckDb = deck;
             });
+            repo.Setup(r => r.Get(It.Is((string id) => id == _id)))
+                .Returns(new DeckDb()
+                {
+                    Id = _id,
+                });
             var deckReq = new DeckRequest()
             {
                 Main = new[]
@@ -35,19 +40,24 @@ namespace UnitTests.Database
                 Id = _id,
             };
 
-            db.Decks.Update(deckReq);
+            db.Update(deckReq);
 
             Assert.NotNull(deckDb);
             Assert.Equal("0-1", deckDb.Main[0]);
         }
-        private Tuple<Mock<IDeckRepository>, UsersDatabase> createDb()
+        private Tuple<Mock<IDeckRepository>, IDeckDatabase> createDb()
         {
-            var avatarStorage = new Mock<IAvatarStorage>();
-            var deckBuilder = new DeckBuilder(_cardProvider);
+            var cache = new Mock<ICache<int, DeckDb[]>>();
+            DeckDb[]? outVal = null;
+            cache.Setup(c => c.TryGet(It.IsAny<int>(), out outVal))
+                .Returns(false);
+            cache.Setup(c => c.Set(It.IsAny<int>(), It.IsAny<DeckDb[]>()));
             var userRepo = new Mock<IUserRepository>();
-            var deckRepo = new Mock<IDeckRepository>();
             setupUserRepo(userRepo);
-            return new(deckRepo, new UsersDatabase(avatarStorage.Object, deckBuilder, userRepo.Object, deckRepo.Object));
+            var deckBuilder = new DeckBuilder(_cardProvider);
+            var deckRepo = new Mock<IDeckRepository>();
+            var db = new DeckDatabase(userRepo.Object, deckBuilder, deckRepo.Object, cache.Object);
+            return new(deckRepo, db);
         }
         private void setupUserRepo(Mock<IUserRepository> repo)
         {
