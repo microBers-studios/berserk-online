@@ -13,9 +13,9 @@ namespace berserk_online_server.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly UsersDatabase _db;
+        private readonly IUsersDatabase _db;
         private readonly IAvatarStorage _contentService;
-        public UserController(UsersDatabase db, IWebHostEnvironment environment,
+        public UserController(IUsersDatabase db, IWebHostEnvironment environment,
             IAvatarStorage contentService)
         {
             _db = db;

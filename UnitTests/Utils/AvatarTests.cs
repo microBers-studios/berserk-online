@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Models;
 
-namespace UnitTests
+namespace UnitTests.Utils
 {
     public class AvatarTests
     {

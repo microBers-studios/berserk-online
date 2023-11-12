@@ -35,7 +35,7 @@ builder.Services.AddDbContext<Databases>(options =>
 });
 builder.Services.AddTransient<IUrlCreator, FrontendURLCreator>();
 
-builder.Services.AddTransient<UsersDatabase>();
+builder.Services.AddTransient<IUsersDatabase, UsersDatabase>();
 
 builder.Services.AddTransient<RecoveryMailSender>();
 builder.Services.AddTransient<ConfirmEmailSender>();

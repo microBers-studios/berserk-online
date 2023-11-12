@@ -10,12 +10,12 @@ using berserk_online_server.Repository;
 namespace berserk_online_server.Facades
 {
 
-    public class UsersDatabase
+    public class UsersDatabase : IUsersDatabase
     {
         private readonly string _avatarUrlBase;
         private readonly IAvatarStorage _staticContent;
         private readonly IUserRepository _userRepo;
-        public DeckDatabase Decks { get; private set; }
+        public IDeckDatabase Decks { get; private set; }
         public UsersDatabase(IAvatarStorage staticContent, IDeckBuilder deckBuilder,
             IUserRepository userRepository, IDeckRepository deckRepository)
         {
@@ -155,7 +155,7 @@ namespace berserk_online_server.Facades
             u1.Name = request.Name ?? u1.Name;
             u1.Email = request.Email ?? u1.Email;
         }
-        public class DeckDatabase
+        public class DeckDatabase : IDeckDatabase
         {
             private readonly UsersDatabase _db;
             private readonly IDeckBuilder _deckBuilder;

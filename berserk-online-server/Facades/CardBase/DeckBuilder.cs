@@ -17,8 +17,6 @@ namespace berserk_online_server.Facades.CardBase
             var deck = new Deck();
             deck.Id = deckDb.Id;
             deck.Name = deckDb.Name;
-            if (deckDb.Sideboard != null)
-                deck.Sideboard = deckDb.Main.Select(convertFromCardCode).ToArray();
             deck.Main = deckDb.Main.Select(convertFromCardCode).ToArray();
             deck.Elements = deckDb.Elements;
             return deck;
@@ -30,28 +28,18 @@ namespace berserk_online_server.Facades.CardBase
             dbDeck.Name = deck.Name;
             dbDeck.Elements = deck.Elements;
             dbDeck.Main = deck.Main.Select(convertToCardCode).ToArray();
-            if (deck.Sideboard != null)
-            {
-                dbDeck.Sideboard = deck.Sideboard.Select(convertToCardCode).ToArray();
-            }
             return dbDeck;
         }
         public Deck BuildFromRequest(DeckRequest request)
         {
             var deck = new Deck();
             deck.Main = request.Main;
-            deck.Sideboard = request.Sideboard;
             deck.Name = request.Name;
-            var allCards = request.Main;
-            if (request.Sideboard != null)
-            {
-                allCards = allCards.Concat(request.Sideboard).ToArray();
-            }
             if (request.Id != null)
             {
                 deck.Id = request.Id;
             }
-            deck.Elements = getElements(allCards);
+            deck.Elements = getElements(request.Main);
             return deck;
         }
         private string[] getElements(DeserealizedCard[] cards)

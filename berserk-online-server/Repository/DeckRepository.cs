@@ -43,7 +43,6 @@ namespace berserk_online_server.Repository
         public void Update(DeckDb entity)
         {
             var oldDeck = Get(entity.Id);
-            oldDeck.Sideboard = entity.Sideboard;
             oldDeck.UserId = entity.UserId;
             oldDeck.Main = entity.Main;
             oldDeck.Elements = entity.Elements;

@@ -1,4 +1,5 @@
 ﻿using berserk_online_server.Facades;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -11,7 +12,7 @@ namespace berserk_online_server.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, UsersDatabase db, FrontendURLCreator urlCreator)
+        public async Task Invoke(HttpContext context, IUsersDatabase db, FrontendURLCreator urlCreator)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
                 || isTryToConfirm(context))
