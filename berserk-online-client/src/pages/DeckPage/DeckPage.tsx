@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
-import { IDeck } from 'src/API/utils/types';
+import { IDeck } from 'src/app/store/utils/types';
 import { DeckConstructor } from 'src/widgets/DeckConstructor/DeckConstructor';
 import { DeckStatistics } from 'src/widgets/DeckStatistics/DeckStatistics';
 

@@ -1,5 +1,5 @@
-import { Elements } from "src/API/utils/data";
-import { IDeck } from "src/API/utils/types";
+import { Elements } from "src/app/store/utils/enums";
+import { IDeck } from "src/app/store/utils/types";
 
 interface IElementsItem {
     element: Elements;

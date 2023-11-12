@@ -1,4 +1,4 @@
-import { CardTypes, Elements, Rarities, Sets } from "src/API/utils/data";
+import { CardTypes, Elements, Rarities, Sets } from "src/app/store/utils/enums";
 
 export interface IError {
     id: number;
@@ -6,6 +6,14 @@ export interface IError {
     context?: {
         email?: string;
     }
+}
+
+export interface IUser {
+    id: number;
+    avatarUrl: string;
+    email: string;
+    name: string;
+    password: string;
 }
 
 export interface ICard {

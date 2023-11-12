@@ -1,5 +1,5 @@
 import { RootState } from "src/app/store";
-import { createStatusObjectSelector } from "../../const";
+import { createStatusObjectSelector } from "../../utils/const";
 
 export const decksSelector = (state: RootState) => state.decks.decks
 export const getDecksStatusSelector = createStatusObjectSelector(state => state.decks.getDecksStatus)

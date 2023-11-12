@@ -1,4 +1,4 @@
-import { IDeck } from "src/API/utils/types";
+import { IDeck } from "src/app/store/utils/types";
 import cls from "./DeckConstructor.module.scss"
 import { CardItem } from "src/pages/DeckPage/CardItem/CardItem";
 

@@ -1,5 +1,5 @@
 import { RootState } from "src/app/store";
-import { createStatusObjectSelector } from "src/app/store/const";
+import { createStatusObjectSelector } from "src/app/store/utils/const";
 
 
 export const cardsSelector = (state: RootState) => state.cards.cards

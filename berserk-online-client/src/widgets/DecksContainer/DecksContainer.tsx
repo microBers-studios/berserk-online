@@ -6,7 +6,7 @@ import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSel
 import { DeckItem } from './DeckItem/DeckItem';
 import { decksSelector, getDecksStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getDecks, setCurrentDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { createDeck } from 'src/app/providers/Deck/Deck';
+import { createDeck } from 'src/helpers/createDeck';
 import { useNavigate } from 'react-router-dom';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
 

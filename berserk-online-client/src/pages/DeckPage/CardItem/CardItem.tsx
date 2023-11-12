@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { IDeckCard } from "src/API/utils/types";
+import { IDeckCard } from "src/app/store/utils/types";
 import cls from "./CardItem.module.scss"
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
 import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getSymbols";
-import { CardTypes } from "src/API/utils/data";
+import { CardTypes } from "src/app/store/utils/enums";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { CardTitleItem } from 'src/widgets/CardTitleItem/CardTitleItem';
 import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';

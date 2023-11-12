@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { APIStatus } from "src/app/store/const";
-import { Paths, URL } from "src/API/utils/urls";
-import { ICard, IDeck, IDeckCard } from "src/API/utils/types";
+import { APIStatus } from "src/app/store/utils/const";
+import { Paths, URL } from "src/app/store/utils/urls";
+import { ICard, IDeck, IDeckCard } from "src/app/store/utils/types";
 import { RootState } from "src/app/store";
 
 export interface IDecksState {

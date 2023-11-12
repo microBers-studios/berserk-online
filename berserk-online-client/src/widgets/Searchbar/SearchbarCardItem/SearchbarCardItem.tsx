@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
 import cls from "./SearchbarCardItem.module.scss"
-import { ICard, IDeck } from "src/API/utils/types";
+import { ICard, IDeck } from "src/app/store/utils/types";
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
 import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getSymbols";
-import { CardTypes } from "src/API/utils/data";
+import { CardTypes } from "src/app/store/utils/enums";
 import { CardTitleItem } from "src/widgets/CardTitleItem/CardTitleItem";
 import tickImage from "src/shared/assets/images/green-tick.png";
 import plusImage from "src/shared/assets/images/red-plus.png";

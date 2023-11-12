@@ -1,4 +1,4 @@
-import { createStatusObjectSelector } from "../../const"
+import { createStatusObjectSelector } from "../../utils/const"
 
 export const getUserStatusSelector = createStatusObjectSelector(state => state.user.getUserStatus)
 export const logoutUserStatusSelector = createStatusObjectSelector(state => state.user.logoutUserStatus)

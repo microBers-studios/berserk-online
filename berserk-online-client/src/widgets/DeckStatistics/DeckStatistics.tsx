@@ -1,4 +1,4 @@
-import { IDeck } from "src/API/utils/types";
+import { IDeck } from "src/app/store/utils/types";
 import cls from "./DeckStatistics.module.scss"
 import PieChart from "../PieChart/PieChart";
 import BarChart from "../BarChart/BarChart";

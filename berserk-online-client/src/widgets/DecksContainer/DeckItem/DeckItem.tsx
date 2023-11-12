@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
 import cls from "./DeckItem.module.scss"
-import { IDeck } from "src/API/utils/types";
+import { IDeck } from "src/app/store/utils/types";
 import { getElement } from "src/helpers/getSymbols";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg";

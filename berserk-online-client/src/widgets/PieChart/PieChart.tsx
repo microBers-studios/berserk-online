@@ -1,5 +1,5 @@
 import { Pie } from "react-chartjs-2";
-import { Elements } from "src/API/utils/data";
+import { Elements } from "src/app/store/utils/enums";
 import { Chart, ArcElement, Tooltip, Legend, Title } from 'chart.js'
 import { TooltipItem } from 'chart.js/auto';
 Chart.register(ArcElement, Tooltip, Legend, Title);

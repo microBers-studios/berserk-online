@@ -1,4 +1,4 @@
-import { CardTypes, Elements, Rarities, Sets } from "src/API/utils/data"
+import { CardTypes, Elements, Rarities, Sets } from "src/app/store/utils/enums"
 import mountainsImage from "src/shared/assets/images/mountains.png"
 import plainsImage from "src/shared/assets/images/plains.png"
 import forestsImage from "src/shared/assets/images/forests.png"
