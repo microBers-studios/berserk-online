@@ -1,6 +1,7 @@
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.MailSenders;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,11 +13,11 @@ namespace berserk_online_server.Controllers
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UsersDatabase _db;
+        private readonly IUsersDatabase _db;
         private readonly TempRequestsManager<RecoveryMailSender> _recoveryManager;
         private readonly TempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
 
-        public AuthenticationController(UsersDatabase databases,
+        public AuthenticationController(IUsersDatabase databases,
             TempRequestsManager<RecoveryMailSender> recoveryManager,
             TempRequestsManager<ConfirmEmailSender> confirmEmailManager)
         {
@@ -33,7 +34,7 @@ namespace berserk_online_server.Controllers
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }
-            catch (ArgumentException)
+            catch (NotFoundException)
             {
                 return userEmailNotFound(authRequest);
             }
@@ -137,12 +138,12 @@ namespace berserk_online_server.Controllers
         [HttpGet("logout")]
         public IResult LogOut()
         {
-            new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
+            new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
             return Results.NoContent();
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
             await manager.Authenticate(user, rememberMe);
         }
         private User createUser(UserAuthenticationRequest request)

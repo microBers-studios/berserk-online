@@ -1,15 +1,19 @@
-﻿namespace berserk_online_server.Facades.MailSenders
+﻿using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Mail;
+
+namespace berserk_online_server.Facades.MailSenders
 {
     public class RecoveryMailSender : MailSender
     {
-        public RecoveryMailSender(MailClient client, FrontendURLCreator urlCreator) : base(client, urlCreator)
+        private IUrlCreator _urlCreator;
+        public RecoveryMailSender(IMailClient client, IUrlCreator urlCreator) : base(client)
         {
-            CreateUrl = urlCreator.GetRecoveryUrl;
+            _urlCreator = urlCreator;
         }
 
         public override void Send(string to, string token)
         {
-            var message = CreateUrl(token);
+            var message = _urlCreator.Create(token, FrontendUrlType.Recovery);
             Client.Send(to, message, "Password recover");
         }
     }
