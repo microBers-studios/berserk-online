@@ -50,7 +50,7 @@ namespace berserk_online_server.Models.Cards
         public bool Unique { get; set; }
         [JsonPropertyName("description")]
 #pragma warning disable CS8618 // Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающее значения NULL.
-        public string Description { get; set; }
+        public string? Description { get; set; }
 #pragma warning restore CS8618 // Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающее значения NULL.
     }
 }
