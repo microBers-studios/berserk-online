@@ -1,8 +1,8 @@
 import { Pie } from "react-chartjs-2";
 import { Elements } from "src/API/utils/data";
-import { Chart, ArcElement } from 'chart.js'
+import { Chart, ArcElement, Tooltip, Legend, Title } from 'chart.js'
 import { TooltipItem } from 'chart.js/auto';
-Chart.register(ArcElement);
+Chart.register(ArcElement, Tooltip, Legend, Title);
 
 interface PieChartProps {
     data: {
@@ -19,11 +19,19 @@ const PieChart = ({ data }: PieChartProps) => {
         plugins: {
             title: {
                 display: true,
-                text: 'My Awesome Pie Chart'
+                text: 'Стихии',
+                color: '#ffffff',
+                font: {
+                    size: 25,
+                },
             },
             legend: {
                 display: true,
                 position: 'bottom' as const,
+                backgroundColor: '#ffffff',
+                labels: {
+                    color: '#ffffff'
+                }
             },
             tooltip: {
                 callbacks: {
@@ -31,7 +39,7 @@ const PieChart = ({ data }: PieChartProps) => {
                         let label = context.label || '';
 
                         if (context.parsed.y !== null) {
-                            label += ': ' + context.parsed.y;
+                            label += ': ' + context.parsed;
                         }
 
                         return label;
@@ -44,7 +52,7 @@ const PieChart = ({ data }: PieChartProps) => {
         <Pie
             data={data}
             options={options}
-        />;
+        />
     </div>
 
 };

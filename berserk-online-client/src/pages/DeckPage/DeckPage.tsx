@@ -11,7 +11,8 @@ import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 import PieChart from 'src/widgets/PieChart/PieChart';
 import { IDeck } from 'src/API/utils/types';
-import { getElementsChartData } from 'src/helpers/getElementsChartData';
+import { getElementsChartData, getPricesChartData } from 'src/helpers/getChartData';
+import BarChart from 'src/widgets/BarChart/BarChart';
 
 // interface DeckPageProps {
 // }
@@ -126,7 +127,15 @@ export const DeckPage = () => {
                             </ul>
                         </div>
                     </div>
-                    <PieChart data={getElementsChartData(deck as IDeck)} />
+                    <div className={cls.DeckStatistics}>
+                        <h2
+                            className={cls.DeckStatisticsHeader}
+                        >Статистика</h2>
+                        <div className={cls.ChartsWrapper}>
+                            <PieChart data={getElementsChartData(deck as IDeck)} />
+                            <BarChart data={getPricesChartData(deck as IDeck)} />
+                        </div>
+                    </div>
                 </div>
                 <Searchbar
                     setIsSaveDisabled={setIsSaveDisabled}
