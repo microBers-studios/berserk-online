@@ -1,4 +1,4 @@
-import { createStatusObjectSelector } from "../../utils/const"
+import { createStatusObjectSelector } from "src/shared/lib"
 
 export const getUserStatusSelector = createStatusObjectSelector(state => state.user.getUserStatus)
 export const logoutUserStatusSelector = createStatusObjectSelector(state => state.user.logoutUserStatus)

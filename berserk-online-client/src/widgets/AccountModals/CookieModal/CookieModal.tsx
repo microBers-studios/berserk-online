@@ -3,7 +3,7 @@ import cls from "./CookieModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import cookieSvg from "src/shared/assets/images/cookie.svg"
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
-import { useAppDispatch } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch } from "src/shared/lib/redux/redux-hook";
 import { closeCookieModal } from "src/app/store/slices/userSlice/userSlice";
 
 export const CookieModal = () => {

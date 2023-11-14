@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { toast } from 'react-toastify';
 import ReactLoading from 'react-loading';
 import cls from "./ImageInput.module.scss"

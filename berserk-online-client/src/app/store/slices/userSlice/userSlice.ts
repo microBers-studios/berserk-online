@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk, AnyAction, PayloadAction } from "@reduxjs/toolkit"
-import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { IError } from "src/app/store/utils/types";
-import { Paths, URL } from "src/app/store/utils/urls";
-import { IUser } from "src/app/store/utils/types";
 import { toast } from 'react-toastify';
-import { APIStatus } from "../../utils/const";
+import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
+import { IError, IUser } from "src/app/store/utils/types";
+import { Paths, URL, APIStatus } from "src/shared/lib";
 
 interface IUserState {
     user: IUser;

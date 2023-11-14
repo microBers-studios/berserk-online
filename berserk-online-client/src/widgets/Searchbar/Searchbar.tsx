@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ReactLoading from 'react-loading'
 import cls from "./Searchbar.module.scss"
 import { SearchbarCardItem } from "./SearchbarCardItem/SearchbarCardItem";
-import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import { cardsSelector, findCardsStatusSelector } from "src/app/store/slices/cardsSlice/selectors";
 import { findCards } from "src/app/store/slices/cardsSlice/cardsSlice";
 

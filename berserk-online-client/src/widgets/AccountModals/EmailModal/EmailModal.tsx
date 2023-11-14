@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import { toast } from "react-toastify";
 import cls from "./EmailModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";

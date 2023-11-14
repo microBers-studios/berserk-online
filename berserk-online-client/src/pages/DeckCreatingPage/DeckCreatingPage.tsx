@@ -5,7 +5,7 @@ import cls from "./DeckCreatingPage.module.scss"
 import { CardItem } from '../DeckPage/CardItem/CardItem';
 import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { setCurrentDeck, createDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { createDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 

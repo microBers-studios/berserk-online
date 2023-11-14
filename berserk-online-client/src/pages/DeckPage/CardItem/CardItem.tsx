@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { IDeckCard } from "src/app/store/utils/types";
 import cls from "./CardItem.module.scss"
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
-import { getElement, getElite, getRarity, getTypeSymbol } from "src/helpers/getSymbols";
+import { getElement, getElite, getRarity, getTypeSymbol } from "src/shared/lib";
 import { CardTypes } from "src/app/store/utils/enums";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { CardTitleItem } from 'src/widgets/CardTitleItem/CardTitleItem';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { changeCardAmount, deleteCard } from 'src/app/store/slices/decksSlice/decksSlice';
 
 interface CardItemProps {

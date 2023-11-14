@@ -1,4 +1,4 @@
-import { useAppSelector } from "src/helpers/hooks/redux-hook"
+import { useAppSelector } from "src/shared/lib/redux/redux-hook"
 import { CookieModal } from "../AccountModals/CookieModal/CookieModal"
 import { Mode } from "src/app/store/slices/modalSlice/modalSlice"
 import { LoginModal } from "../AccountModals/LoginModal/LoginModal"

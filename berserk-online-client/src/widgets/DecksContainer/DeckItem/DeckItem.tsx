@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib';
 import cls from "./DeckItem.module.scss"
 import { IDeck } from "src/app/store/utils/types";
-import { getElement } from "src/helpers/getSymbols";
+import { getElement } from "src/shared/lib";
 import { SymbolIcon } from "../../SymbolIcon/SymbolIcon";
 import trashCanSvg from "src/shared/assets/images/trash.svg";
 import { useNavigate } from "react-router-dom";

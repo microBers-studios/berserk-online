@@ -4,7 +4,7 @@ import cls from "./MainPage.module.scss"
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import { DecksContainer } from 'src/widgets/DecksContainer/DecksContainer';
 import { NotificationComponent } from 'src/widgets/NotificationComponent/NotificationComponent';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { setCurrentDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { useNavigate } from 'react-router-dom';
 import { getUserStatusSelector, loginUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';

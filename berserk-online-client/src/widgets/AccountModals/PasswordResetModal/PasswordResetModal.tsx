@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import cls from "./PasswordResetModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import { PasswordInput } from "../Inputs/PasswordInput";
-import { validatePassword } from "src/helpers/validatePassword";
+import { validatePassword } from "src/shared/lib/password/validate-password";
 import { ModalButton } from "src/widgets/ModalButton/ModalButton";
 import { changePassword } from "src/app/store/slices/userSlice/userSlice";
 import { changePasswordStatusSelector } from "src/app/store/slices/userSlice/selectors";

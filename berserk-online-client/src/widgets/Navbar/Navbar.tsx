@@ -5,7 +5,7 @@ import cls from "./Navbar.module.scss";
 import { Burger } from "./items/Burger";
 import { RouterPaths } from "src/app/providers/router/router-paths";
 import { UserButton } from "./items/UserButton";
-import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import { deleteAvatarStatusSelector, getUserStatusSelector, loadAvatarStatusSelector, loginUserStatusSelector, registrateUserStatusSelector, updateUserStatusSelector } from "src/app/store/slices/userSlice/selectors";
 import { Mode, setMode } from "src/app/store/slices/modalSlice/modalSlice";
 

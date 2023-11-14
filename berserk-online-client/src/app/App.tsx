@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAppDispatch } from 'src/helpers/hooks/redux-hook'
+import { useAppDispatch } from 'src/shared/lib/redux/redux-hook'
 import { Navbar } from 'src/widgets/Navbar/Navbar'
 import { AppRouter } from 'src/app/providers/router/AppRouter'
 import './styles/index.scss'

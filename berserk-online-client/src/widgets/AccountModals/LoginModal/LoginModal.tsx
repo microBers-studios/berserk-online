@@ -7,9 +7,9 @@ import { EmailInput } from '../Inputs/EmailInput';
 import cls from "./LoginModal.module.scss"
 import { Modal } from 'src/widgets/Modal/Modal';
 import { Mode, setMode } from "src/app/store/slices/modalSlice/modalSlice"
-import { validatePassword } from 'src/helpers/validatePassword';
+import { validatePassword } from 'src/shared/lib/password/validate-password';
 import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { loginUser, registrateUser } from 'src/app/store/slices/userSlice/userSlice';
 import { loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 import { toast } from 'react-toastify';

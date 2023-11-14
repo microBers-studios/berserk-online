@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ICard } from "src/app/store/utils/types";
-import { APIStatus } from "../../utils/const";
-import { URL, Paths } from "src/app/store/utils/urls";
-
+import { URL, Paths, APIStatus } from "src/shared/lib";
 
 interface ICardsState {
     cards: ICard[];

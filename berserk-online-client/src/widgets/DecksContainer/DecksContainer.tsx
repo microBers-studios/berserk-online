@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import ReactLoading from 'react-loading';
 import cls from "./DecksContainer.module.scss";
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 import { DeckItem } from './DeckItem/DeckItem';
 import { decksSelector, getDecksStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getDecks, setCurrentDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { createDeck } from 'src/helpers/createDeck';
+import { createDeck } from 'src/shared/lib/deck/create-deck';
 import { useNavigate } from 'react-router-dom';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
 
@@ -65,7 +65,7 @@ export const DecksContainer = () => {
                 <div className={`${cls.DecksWrapper} ${(userIsUnauthorized
                     || !decks.length
                 ) && cls.NoDecks}`}>
-                    {getDecksStatus.isPending
+                    {getDecksStatus.isPending || (getUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
                         ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                         : userIsUnauthorized
                             ? <span

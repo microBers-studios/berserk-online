@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useAppDispatch } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch } from 'src/shared/lib/redux/redux-hook';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
 import { confirmUserEmail } from 'src/app/store/slices/userSlice/userSlice';
 import { setMode } from 'src/app/store/slices/modalSlice/modalSlice';

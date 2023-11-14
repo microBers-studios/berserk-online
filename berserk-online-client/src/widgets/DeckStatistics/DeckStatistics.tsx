@@ -2,7 +2,7 @@ import { IDeck } from "src/app/store/utils/types";
 import cls from "./DeckStatistics.module.scss"
 import PieChart from "../PieChart/PieChart";
 import BarChart from "../BarChart/BarChart";
-import { getElementsChartData, getPricesChartData } from "src/helpers/getChartData";
+import { getElementsChartData, getPricesChartData } from "src/shared/lib";
 
 interface DeckStatisticsProps {
     deck: IDeck;

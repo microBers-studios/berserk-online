@@ -2,7 +2,7 @@ import { useState } from 'react'
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import cls from "../Navbar.module.scss"
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { logoutUser } from 'src/app/store/slices/userSlice/userSlice';
 import { Mode, setMode } from 'src/app/store/slices/modalSlice/modalSlice';
 

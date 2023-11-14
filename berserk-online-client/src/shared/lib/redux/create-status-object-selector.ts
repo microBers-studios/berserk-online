@@ -1,12 +1,6 @@
-import { createSelector } from "@reduxjs/toolkit"
-import { RootState } from "..";
-
-export enum APIStatus {
-    Idle = 'idle',
-    Pending = 'pending',
-    Fulfilled = 'fulfilled',
-    Rejected = 'rejected'
-}
+import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "src/app/store";
+import { APIStatus } from "src/shared/lib/api/const";
 
 export const createStatusObjectSelector = (getStatusSelector: (state: RootState) => APIStatus) => createSelector(
     [getStatusSelector],

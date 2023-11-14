@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/helpers/hooks/redux-hook";
+import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import cls from "./AccountEditModal.module.scss"
 import { Modal } from "src/widgets/Modal/Modal";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";

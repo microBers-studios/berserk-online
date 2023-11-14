@@ -7,7 +7,7 @@ import { ModalButton } from 'src/widgets/ModalButton/ModalButton';
 import gmailSvg from 'src/shared/assets/images/gmail.svg';
 import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg';
 import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { registrateUserStatusSelector, sendConfirmEmailStatusSelector } from 'src/app/store/slices/userSlice/selectors';
 import { sendConfirmEmail } from 'src/app/store/slices/userSlice/userSlice';
 import { Mode } from 'src/app/store/slices/modalSlice/modalSlice';

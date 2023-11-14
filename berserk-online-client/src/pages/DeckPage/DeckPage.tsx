@@ -4,7 +4,7 @@ import cls from "./DeckPage.module.scss"
 import ReactLoading from 'react-loading';
 import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
 import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { useAppDispatch, useAppSelector } from 'src/helpers/hooks/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
 import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice';
 import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
 import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
