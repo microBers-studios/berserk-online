@@ -34,7 +34,7 @@ namespace berserk_online_server.Controllers
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }
-            catch (ArgumentException)
+            catch (NotFoundException)
             {
                 return userEmailNotFound(authRequest);
             }
@@ -138,12 +138,12 @@ namespace berserk_online_server.Controllers
         [HttpGet("logout")]
         public IResult LogOut()
         {
-            new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
+            new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
             return Results.NoContent();
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var manager = new Facades.AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
+            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
             await manager.Authenticate(user, rememberMe);
         }
         private User createUser(UserAuthenticationRequest request)

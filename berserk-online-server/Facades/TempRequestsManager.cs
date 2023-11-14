@@ -19,7 +19,7 @@ namespace berserk_online_server.Facades
         {
             var tempRequest = new TempRequest(mail);
             _requests[tempRequest.Token] = tempRequest;
-            sendRecoveryMail(mail, tempRequest.Token);
+            sendMessage(mail, tempRequest.Token);
         }
         public bool IsValid(string token)
         {
@@ -49,7 +49,7 @@ namespace berserk_online_server.Facades
         {
             _requests.Remove(token);
         }
-        private void sendRecoveryMail(string mail, string token)
+        private void sendMessage(string mail, string token)
         {
             _mailSender.Send(mail, token);
         }

@@ -1,15 +1,19 @@
-﻿namespace berserk_online_server.Facades.MailSenders
+﻿using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Mail;
+
+namespace berserk_online_server.Facades.MailSenders
 {
     public class ConfirmEmailSender : MailSender
     {
-        public ConfirmEmailSender(MailClient client, FrontendURLCreator urlCreator) : base(client, urlCreator)
+        private readonly IUrlCreator _urlCreator;
+        public ConfirmEmailSender(IMailClient client, IUrlCreator urlCreator) : base(client)
         {
-            CreateUrl = urlCreator.GetEmailConfirmationUrl;
+            _urlCreator = urlCreator;
         }
 
         public override void Send(string to, string token)
         {
-            var message = CreateUrl(token);
+            var message = _urlCreator.Create(token, FrontendUrlType.EmailConfirmation);
             Client.Send(to, message, "Email confirmation");
         }
     }

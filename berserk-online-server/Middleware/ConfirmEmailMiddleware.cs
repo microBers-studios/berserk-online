@@ -1,5 +1,5 @@
-﻿using berserk_online_server.Exceptions;
-using berserk_online_server.Facades;
+﻿using berserk_online_server.Facades;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -12,7 +12,7 @@ namespace berserk_online_server.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, UsersDatabase db, FrontendURLCreator urlCreator)
+        public async Task Invoke(HttpContext context, IUsersDatabase db)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
                 || isTryToConfirm(context))
@@ -37,13 +37,15 @@ namespace berserk_online_server.Middleware
         private void writeBadRequest(HttpContext context, string email)
         {
             context.Response.StatusCode = 403;
-            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new {email}));
+            context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new { email }));
         }
         private bool isTryToConfirm(HttpContext context)
         {
             var path = context.Request.Path.Value;
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
             return path.Contains("confirmEmail") || path.Contains("logout") || path.Contains("login")
                 || path.Contains("register") || path.Contains("confirmationRequest");
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
         }
     }
 }

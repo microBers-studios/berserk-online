@@ -1,5 +1,6 @@
 ﻿using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,10 +13,10 @@ namespace berserk_online_server.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly UsersDatabase _db;
-        private readonly StaticContentService _contentService;
-        public UserController(UsersDatabase db, IWebHostEnvironment environment,
-            StaticContentService contentService)
+        private readonly IUsersDatabase _db;
+        private readonly IAvatarStorage _contentService;
+        public UserController(IUsersDatabase db, IWebHostEnvironment environment,
+            IAvatarStorage contentService)
         {
             _db = db;
             _contentService = contentService;
@@ -99,7 +100,15 @@ namespace berserk_online_server.Controllers
                 var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
                     HttpContext);
                 string email = authManager.GetMail();
-                _contentService.DeleteAvatar(email);
+                try
+                {
+                    _contentService.DeleteAvatar(email);
+                }
+                catch (InvalidOperationException)
+                {
+                    _db.RemoveAvatar(email);
+                    throw;
+                }
                 var updatedUser = _db.RemoveAvatar(email);
                 return Results.Ok(updatedUser);
             }
@@ -110,6 +119,11 @@ namespace berserk_online_server.Controllers
             catch (NotFoundException)
             {
                 return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
+            }
+            catch (InvalidOperationException)
+            {
+                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
+                    "Avatar not found."));
             }
         }
         [HttpPatch("updateMe")]

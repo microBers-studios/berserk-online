@@ -1,4 +1,6 @@
-﻿namespace berserk_online_server.Interfaces
+﻿using berserk_online_server.Interfaces.Mail;
+
+namespace berserk_online_server.Interfaces
 {
     public interface ITempRequestsManager<T> where T : IMailSender
     {
