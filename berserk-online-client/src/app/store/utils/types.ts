@@ -1,4 +1,4 @@
-import { CardTypes, Elements, Rarities, Sets } from "src/app/store/utils/enums";
+import { CardTypes, Elements, Rarities, Sets } from "src/shared/lib";
 
 export interface IError {
     id: number;

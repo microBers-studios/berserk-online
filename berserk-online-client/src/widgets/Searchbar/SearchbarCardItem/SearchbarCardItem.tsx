@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from "src/shared/lib";
 import cls from "./SearchbarCardItem.module.scss"
 import { ICard, IDeck } from "src/app/store/utils/types";
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
-import { getElement, getElite, getRarity, getTypeSymbol } from "src/shared/lib";
-import { CardTypes } from "src/app/store/utils/enums";
+import { getElement, getElite, getRarity, getTypeSymbol, CardTypes } from "src/shared/lib";
 import { CardTitleItem } from "src/widgets/CardTitleItem/CardTitleItem";
 import tickImage from "src/shared/assets/images/green-tick.png";
 import plusImage from "src/shared/assets/images/red-plus.png";

@@ -1,4 +1,4 @@
-import { Elements } from "src/app/store/utils/enums";
+import { Elements } from "src/shared/lib/cards";
 import { IDeck } from "src/app/store/utils/types";
 
 interface IElementsItem {

@@ -3,7 +3,7 @@ import { IDeckCard } from "src/app/store/utils/types";
 import cls from "./CardItem.module.scss"
 import { SymbolIcon } from "src/widgets/SymbolIcon/SymbolIcon";
 import { getElement, getElite, getRarity, getTypeSymbol } from "src/shared/lib";
-import { CardTypes } from "src/app/store/utils/enums";
+import { CardTypes } from "src/shared/lib";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { CardTitleItem } from 'src/widgets/CardTitleItem/CardTitleItem';
 import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';

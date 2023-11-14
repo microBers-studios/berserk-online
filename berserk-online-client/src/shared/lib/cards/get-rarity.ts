@@ -6,7 +6,7 @@ import darknessInvasionCommon from "src/shared/assets/images/elements-war-common
 import darknessInvasionUncommon from "src/shared/assets/images/elements-war-uncommon.png"
 import darknessInvasionRare from "src/shared/assets/images/elements-war-rare.png"
 import darknessInvasionUltrarare from "src/shared/assets/images/elements-war-ultrarare.png"
-import { Rarities, Sets } from "src/app/store/utils/enums"
+import { Rarities, Sets } from "./const"
 
 export const getRarity = (rarity: Rarities, set: Sets): string => {
     let rarityStr: string;

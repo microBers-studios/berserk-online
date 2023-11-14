@@ -4,7 +4,7 @@ import forestsImage from "src/shared/assets/images/forests.png"
 import swampsImage from "src/shared/assets/images/swamps.png"
 import darknessImage from "src/shared/assets/images/darkness.png"
 import neutralImage from "src/shared/assets/images/neutral.png"
-import { Elements } from "src/app/store/utils/enums";
+import { Elements } from "./const";
 
 export const getElement = (element: Elements) => {
     switch (element) {
