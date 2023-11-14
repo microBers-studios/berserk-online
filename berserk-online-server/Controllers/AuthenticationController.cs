@@ -13,11 +13,11 @@ namespace berserk_online_server.Controllers
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly UsersDatabase _db;
+        private readonly IUsersDatabase _db;
         private readonly ITempRequestsManager<RecoveryMailSender> _recoveryManager;
         private readonly ITempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
 
-        public AuthenticationController(UsersDatabase databases,
+        public AuthenticationController(IUsersDatabase databases,
             ITempRequestsManager<RecoveryMailSender> recoveryManager,
             ITempRequestsManager<ConfirmEmailSender> confirmEmailManager)
         {
