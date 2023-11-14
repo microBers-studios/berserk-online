@@ -1,6 +1,7 @@
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.MailSenders;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,12 +14,12 @@ namespace berserk_online_server.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UsersDatabase _db;
-        private readonly TempRequestsManager<RecoveryMailSender> _recoveryManager;
-        private readonly TempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
+        private readonly ITempRequestsManager<RecoveryMailSender> _recoveryManager;
+        private readonly ITempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
 
         public AuthenticationController(UsersDatabase databases,
-            TempRequestsManager<RecoveryMailSender> recoveryManager,
-            TempRequestsManager<ConfirmEmailSender> confirmEmailManager)
+            ITempRequestsManager<RecoveryMailSender> recoveryManager,
+            ITempRequestsManager<ConfirmEmailSender> confirmEmailManager)
         {
             _db = databases;
             _recoveryManager = recoveryManager;

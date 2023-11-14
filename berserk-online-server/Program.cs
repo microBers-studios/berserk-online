@@ -33,11 +33,18 @@ builder.Services.AddTransient<FrontendURLCreator>();
 builder.Services.AddTransient<UsersDatabase>();
 builder.Services.AddTransient<RecoveryMailSender>();
 builder.Services.AddTransient<ConfirmEmailSender>();
-builder.Services.AddTransient<DeckBuilder>();
-builder.Services.AddSingleton<StaticContentService>();
-builder.Services.AddSingleton<MailClient>();
-builder.Services.AddSingleton<TempRequestsManager<RecoveryMailSender>>();
-builder.Services.AddSingleton<TempRequestsManager<ConfirmEmailSender>>();
+
+builder.Services.AddTransient<IDeckBuilder, DeckBuilder>();
+
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IDeckRepository, DeckRepository>();
+
+builder.Services.AddSingleton<IAvatarStorage, AvatarStorage>();
+builder.Services.AddSingleton<IMailClient, MailClient>();
+
+builder.Services.AddSingleton<ITempRequestsManager<RecoveryMailSender>, TempRequestsManager<RecoveryMailSender>>();
+builder.Services.AddSingleton<ITempRequestsManager<ConfirmEmailSender>, TempRequestsManager<ConfirmEmailSender>>();
+
 builder.Services.AddSingleton<CardProvider>();
 builder.Services.AddCors(options =>
 {
