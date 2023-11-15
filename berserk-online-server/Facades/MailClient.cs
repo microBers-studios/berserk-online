@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using berserk_online_server.Interfaces.Mail;
+using System.Net;
 using System.Net.Mail;
 
 namespace berserk_online_server.Facades
 {
-    public class MailClient
+    public class MailClient : IMailClient
     {
         private readonly SmtpClient _smtpClient;
         private readonly MailAddress _senderAddress;

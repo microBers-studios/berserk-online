@@ -1,12 +1,11 @@
-﻿using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces.Mail;
 
 namespace berserk_online_server.Facades.MailSenders
 {
     public abstract class MailSender : IMailSender
     {
-        public MailClient Client { get; protected set; }
-        public Func<string, string> CreateUrl { get; protected set; }
-        public MailSender(MailClient client, FrontendURLCreator urlCreator)
+        public IMailClient Client { get; protected set; }
+        public MailSender(IMailClient client)
         {
             Client = client;
         }
