@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import userSlice from './slices/userSlice/userSlice'
-import modalSlice from './slices/modalSlice/modalSlice'
-import decksSlice from './slices/decksSlice/decksSlice'
-import cardsSlice from './slices/cardsSlice/cardsSlice'
+import { userSlice } from 'src/entities/user'
+import { modalSlice } from 'src/entities/modal'
+import { decksSlice } from 'src/entities/decks'
+import { cardsSlice } from 'src/entities/cards'
 
 export const rootReducer = combineReducers({
     [userSlice.name]: userSlice.reducer,

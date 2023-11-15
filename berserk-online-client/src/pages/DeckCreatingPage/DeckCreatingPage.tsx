@@ -2,15 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import cls from "./DeckCreatingPage.module.scss"
-import { CardItem } from '../DeckPage/CardItem/CardItem';
-import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
-import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
-import { setCurrentDeck, createDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { createDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
-
-// export interface DeckCreatingPage {
-// }
+import { CardItem } from '../../features/decks/ui/cardItem/CardItem';
+import { CardsSearchbar } from 'src/widgets/cardsSearchbar';
+import { useAppDispatch, useAppSelector, RouterPaths } from 'src/shared/lib';
+import { setCurrentDeck, createDeck, createDeckStatusSelector } from 'src/entities/decks';
 
 export const DeckCreatingPage = () => {
     const navigate = useNavigate()
@@ -82,7 +77,7 @@ export const DeckCreatingPage = () => {
                     <p className={cls.DeckCardsCount}>Всего карт: {Number(eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)) + Number(ordinaryCards?.reduce((acc, curr) => acc + curr.amount, 0))}</p>
                     <button
                         className={cls.SaveDeckButton}
-                        disabled={deck?.main.concat(deck.sideboard === undefined ? [] : deck.sideboard).length === 0 || isSaveDisabled}
+                        disabled={!deck?.main.length || isSaveDisabled}
                         onClick={onSaveClick}
                     >
                         Сохранить
@@ -135,34 +130,10 @@ export const DeckCreatingPage = () => {
                                     className={cls.NoCardsText}>Карт нет</span>}
                         </ul>
                     </div>
-                    <div
-                        className={cls.SideboardCardsContainer}
-                    >
-                        <h2
-                            className={cls.SideboardCardsHeader}
-                        >Сайдборд ({deck?.sideboard.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
-
-                        {deck?.sideboard.length
-                            ?
-                            <ul
-                                className={cls.CardsWrapper}
-                            >
-                                {deck.sideboard.map(card =>
-                                    <CardItem
-                                        key={card.id}
-                                        card={card}
-                                        isSaveDisabled={isSaveDisabled}
-                                        setIsSaveDisabled={setIsSaveDisabled}
-                                        isSide={true}
-                                    />)}
-                            </ul>
-                            : <span
-                                className={cls.NoCardsText}>Карт нет</span>}
-                    </div>
                 </div>
 
             </div>
-            <Searchbar
+            <CardsSearchbar
                 setIsSaveDisabled={setIsSaveDisabled}
             />
         </>

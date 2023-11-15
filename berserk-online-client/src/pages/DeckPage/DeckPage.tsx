@@ -2,15 +2,20 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import cls from "./DeckPage.module.scss"
 import ReactLoading from 'react-loading';
-import { Searchbar } from 'src/widgets/Searchbar/Searchbar';
-import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
-import { getDeck, updateDeck } from 'src/app/store/slices/decksSlice/decksSlice';
-import { getDeckStatusSelector } from 'src/app/store/slices/decksSlice/selectors';
-import { getUserStatusSelector, loginUserStatusSelector, registrateUserStatusSelector } from 'src/app/store/slices/userSlice/selectors';
-import { IDeck } from 'src/app/store/utils/types';
-import { DeckConstructor } from 'src/widgets/DeckConstructor/DeckConstructor';
-import { DeckStatistics } from 'src/widgets/DeckStatistics/DeckStatistics';
+import { CardsSearchbar } from 'src/widgets/cardsSearchbar';
+import { useAppDispatch, useAppSelector, RouterPaths } from 'src/shared/lib';
+import {
+    getDeck,
+    updateDeck,
+    getDeckStatusSelector
+} from 'src/entities/decks';
+import {
+    fetchUserStatusSelector,
+    loginUserStatusSelector,
+    registrateUserStatusSelector
+} from 'src/entities/user';
+import { DeckConstructor } from 'src/widgets/deckConstructor';
+import { DeckStatistics } from 'src/widgets/deckStatistics';
 
 // interface DeckPageProps {
 // }
@@ -19,7 +24,7 @@ export const DeckPage = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
-    const getUserStatus = useAppSelector(getUserStatusSelector)
+    const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
     const getDeckStatus = useAppSelector(getDeckStatusSelector)
@@ -32,7 +37,7 @@ export const DeckPage = () => {
     const [isSaveDisabled, setIsSaveDisabled] = useState(true)
     const isLoading = (!deck || deck.id !== id) && getDeckStatus.isUncompleted
         || updateDeckStatus.isPending
-        || (getUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
+        || (fetchUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
 
     useEffect(() => {
         if (user.id) {
@@ -74,9 +79,9 @@ export const DeckPage = () => {
                         isSaveDisabled={isSaveDisabled}
                         setIsSaveDisabled={setIsSaveDisabled}
                     />
-                    <DeckStatistics deck={deck as IDeck} />
+                    <DeckStatistics deck={deck as DeckType} />
                 </div>
-                <Searchbar setIsSaveDisabled={setIsSaveDisabled} />
+                <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />
             </>
         }
     </div >

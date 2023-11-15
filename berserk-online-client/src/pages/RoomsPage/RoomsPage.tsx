@@ -1,4 +1,4 @@
-import { RouterPaths } from "src/app/providers/router/router-paths"
+import { RouterPaths } from "src/shared/lib"
 import cls from "./RoomsPage.module.scss"
 import { useEffect } from 'react'
 

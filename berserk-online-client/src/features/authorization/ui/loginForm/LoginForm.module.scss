@@ -1,0 +1,45 @@
+.Form {
+    display: grid;
+    height: 100%;
+    grid-template-areas: "header"
+        "header"
+        "inputs"
+        "inputs"
+        "remember"
+        "buttons"
+        "buttons";
+}
+
+.FormHeader {
+    grid-area: header;
+    text-align: center;
+}
+
+.inputsWrapper {
+    position: relative;
+    width: 100%;
+    padding-left: 10%;
+    justify-self: center;
+    grid-area: inputs;
+    display: flex;
+    flex-direction: column;
+    gap: 10%; // justify-self: center;
+}
+
+.buttonsWrapper {
+    margin-top: 10%;
+    grid-area: buttons;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.redAlert,
+.longRedAlert {
+    color: red;
+    position: absolute;
+    bottom: -16px;
+    font-weight: 200;
+    font-size: 14px;
+}

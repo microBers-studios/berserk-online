@@ -1,1 +1,1 @@
-export { APIStatus, URL, Paths } from "./const"
+export { APIStatus, apiUrl, Paths } from "./const"

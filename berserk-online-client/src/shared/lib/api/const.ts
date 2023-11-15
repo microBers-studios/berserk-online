@@ -1,4 +1,4 @@
-export const URL = 'https://localhost:7283'
+export const apiUrl = 'https://localhost:7283'
 
 export enum APIStatus {
     Idle = 'idle',

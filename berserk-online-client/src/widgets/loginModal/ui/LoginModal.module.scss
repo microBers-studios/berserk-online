@@ -1,0 +1,30 @@
+.FormWrapper {
+    position: absolute;
+    top: 10%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ButtonsWrapper {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin: -35px 0 30px;
+}
+
+.changeFormButton,
+.PasswordResetButton {
+    text-align: center;
+}
+
+.changeFormButton:hover,
+.PasswordResetButton:hover {
+    cursor: pointer;
+}
+
+.PasswordResetButton {
+    color: var(--secondary-color)
+}

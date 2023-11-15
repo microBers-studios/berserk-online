@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/shared/lib/redux/redux-hook";
 import { toast } from "react-toastify";
 import cls from "./EmailModal.module.scss"
-import { Modal } from "src/widgets/Modal/Modal";
+import { useAppDispatch, useAppSelector } from "src/shared/lib";
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
-import { EmailInput } from "../Inputs/EmailInput";
-import { ModalButton } from "src/widgets/ModalButton/ModalButton";
-import { requestPasswordChanging } from "src/app/store/slices/userSlice/userSlice";
-import { requestPasswordChangingStatusSelector } from "src/app/store/slices/userSlice/selectors";
-import { Mode, setMode } from "src/app/store/slices/modalSlice/modalSlice";
+import { Modal, ModalButton, EmailInput } from "src/shared/ui";
+import {
+    requestPasswordChanging,
+    requestPasswordChangingStatusSelector
+} from "src/entities/user";
+import { Mode, setMode } from "src/entities/modal";
 
 export const EmailModal = () => {
     const { isOpenAnimation, setIsOpenAnimation,

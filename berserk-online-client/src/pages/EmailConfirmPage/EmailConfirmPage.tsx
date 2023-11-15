@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAppDispatch } from 'src/shared/lib/redux/redux-hook';
-import { RouterPaths } from 'src/app/providers/router/router-paths';
-import { confirmUserEmail } from 'src/app/store/slices/userSlice/userSlice';
-import { setMode } from 'src/app/store/slices/modalSlice/modalSlice';
+import { RouterPaths } from 'src/shared/lib';
+import { confirmUserEmail } from 'src/entities/user';
+import { setMode } from 'src/entities/modal/model/modalSlice';
 
 export const EmailConfirmPage = () => {
     const [params] = useSearchParams()

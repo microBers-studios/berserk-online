@@ -1,9 +1,5 @@
-import { ErrorModal } from "src/widgets/AccountModals/ErrorModal/ErrorModal";
+import { ErrorModal } from "src/shared/ui";
 import cls from "./ErrorModalPage.module.scss"
-
-// interface ErrorModalPageProps {
-//     className?: string;
-// }
 
 export const ErrorModalPage = () => {
     return (

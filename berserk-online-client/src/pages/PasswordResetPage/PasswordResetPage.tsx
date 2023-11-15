@@ -1,7 +1,7 @@
-import { PasswordResetModal } from "src/widgets/AccountModals/PasswordResetModal/PasswordResetModal";
-import cls from "./PasswordResetPage.module.scss"
 import { useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
+import cls from "./PasswordResetPage.module.scss"
+import { PasswordResetModal } from "src/widgets/passwordResetModal";
 
 // interface PasswordResetPageProps {
 //     className?: string;
