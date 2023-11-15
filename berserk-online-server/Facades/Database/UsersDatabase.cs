@@ -117,7 +117,7 @@ namespace berserk_online_server.Facades.Database
         /// <returns></returns>
         public User GetUser(UserInfoRequest userRequest)
         {
-            if (_memoryCache.TryGet(userRequest.Email, out User foundedUser))
+            if (userRequest.Email != null && _memoryCache.TryGet(userRequest.Email, out User foundedUser))
             { }
             else
             {
