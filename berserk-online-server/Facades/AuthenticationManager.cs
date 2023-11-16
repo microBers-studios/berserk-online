@@ -65,7 +65,8 @@ namespace berserk_online_server.Facades
             _context.Response.Cookies.Append(CookieConstants.RememberMeCookieName, rememberMe.ToString(), new CookieOptions()
             {
                 SameSite = SameSiteMode.None,
-                Secure = true
+                Secure = true,
+                HttpOnly = true
             });
         }
     }
