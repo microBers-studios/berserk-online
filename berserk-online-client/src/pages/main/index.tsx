@@ -7,12 +7,16 @@ import { NotificationComponent } from 'src/shared/ui';
 import { setCurrentDeck } from 'src/entities/decks';
 import { fetchUserStatusSelector, loginUserStatusSelector } from 'src/entities/user';
 import { DecksContainer } from 'src/widgets/decksContainer';
+import { Layout } from 'src/shared/layouts';
+import { Header } from 'src/widgets/header';
+import { Footer } from 'src/widgets/footer';
 
 interface MainPageProps {
-    setPage: (page: RouterPaths | null) => void
+    setPage: (page: RouterPaths | null) => void;
+    currentPage: RouterPaths | null;
 }
 
-export const MainPage = ({ setPage }: MainPageProps) => {
+export const MainPage = ({ setPage, currentPage }: MainPageProps) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
@@ -34,7 +38,6 @@ export const MainPage = ({ setPage }: MainPageProps) => {
                 title={'Последняя созданная дека не была сохранена.Хотите продолжить работу с ней?'}
                 path={RouterPaths.CREATE_DECK}
                 onClick={() => {
-                    console.log('deck')
                     dispatch(setCurrentDeck(JSON.parse(cashedDeck)))
                     navigate(RouterPaths.DECK)
                     localStorage.removeItem('deck')
@@ -48,8 +51,17 @@ export const MainPage = ({ setPage }: MainPageProps) => {
     }, [fetchUserStatus, loginUserStatus])
 
     return (
-        <div className={cls.MainPage}>
-            <DecksContainer />
-        </div>
+        <Layout
+            header={<Header
+                currentPage={currentPage}
+            />}
+            content={
+                <div className={cls.MainPage}>
+                    <DecksContainer />
+                </div>}
+            footer={<Footer />}
+            title='Главная | Берсерк онлайн'
+        />
+
     );
 }

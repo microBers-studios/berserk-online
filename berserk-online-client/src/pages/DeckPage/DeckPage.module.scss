@@ -30,20 +30,3 @@
     flex-direction: column;
     align-items: center;
 }
-
-.SaveDeckButton {
-    padding: 10px 20px;
-    font-weight: bold;
-    border-radius: 50px;
-    border: none;
-    background-color: var(--secondary-color);
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &:disabled {
-        background-color: gray;
-        color: var(--border-color)
-    }
-}

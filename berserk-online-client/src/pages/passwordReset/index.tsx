@@ -3,10 +3,6 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import cls from "./PasswordResetPage.module.scss"
 import { PasswordResetModal } from "src/widgets/passwordResetModal";
 
-// interface PasswordResetPageProps {
-//     className?: string;
-// }
-
 export const PasswordResetPage = () => {
     const [isModal, setIsModal] = useState<boolean>(true)
     const [isNavigate, setIsNavigate] = useState<boolean>(false)
@@ -32,5 +28,4 @@ export const PasswordResetPage = () => {
                     token={token}
                 />}
         </div >
-        ;
 }

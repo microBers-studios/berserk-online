@@ -1,4 +1,4 @@
-.DeckPage {
+.DeckCreatingPage {
     width: 100%;
     min-height: 100vh;
     background-color: var(--primary-color);
@@ -81,25 +81,4 @@
 .NoCardsText {
     font-size: 20px;
     color: var(--border-color);
-}
-
-.SaveDeckButton {
-    padding: 10px 20px;
-    font-weight: bold;
-    border-radius: 50px;
-    border: none;
-    background-color: var(--secondary-color);
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &:disabled {
-        background-color: gray;
-        color: var(--border-color)
-    }
-}
-
-.SideboardCardsContainer {
-    padding: 0 0 20px;
 }

@@ -8,6 +8,7 @@ export { getDeck } from "./api/get-deck"
 
 export {
     decksSelector,
+    currentDeckSelector,
     fetchDecksStatusSelector,
     createDeckStatusSelector,
     deleteDeckStatusSelector,

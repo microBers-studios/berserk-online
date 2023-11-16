@@ -6,8 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles/index.scss'
 import AppRouter from 'src/app/AppRouter'
 import { GlobalModal } from 'src/entities/modal/ui/GlobalModal'
-import { Header } from 'src/widgets/header'
-import { Footer } from 'src/widgets/footer'
 import { fetchUser } from 'src/entities/user'
 import { withHelmet } from './providers/withHelmet';
 
@@ -21,14 +19,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header currentPage={currentPage} />
       <main>
-        <AppRouter setPage={setCurrentPage} />
+        <AppRouter
+          setPage={setCurrentPage}
+          currentPage={currentPage}
+        />
 
         <ToastContainer />
         <GlobalModal />
       </main>
-      <Footer />
     </BrowserRouter>
   )
 }

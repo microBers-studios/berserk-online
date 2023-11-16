@@ -1,26 +1,27 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { MainPage } from 'src/pages/MainPage/MainPage';
-import { RoomsPage } from 'src/pages/RoomsPage/RoomsPage';
+import { MainPage } from 'src/pages/main';
+import { RoomsPage } from 'src/pages/rooms';
 import { RouterPaths } from 'src/shared/lib';
-import { PasswordResetPage } from 'src/pages/PasswordResetPage/PasswordResetPage';
-import { EmailConfirmPage } from 'src/pages/EmailConfirmPage/EmailConfirmPage';
-import { ErrorModalPage } from 'src/pages/ErrorModalPage/ErrorModalPage';
+import { PasswordResetPage } from 'src/pages/passwordReset';
+import { EmailConfirmPage } from 'src/pages/emailConfirm';
+import { ErrorModalPage } from 'src/pages/errorModal';
 import { DeckCreatingPage } from 'src/pages/DeckCreatingPage/DeckCreatingPage';
-import { DeckPage } from 'src/pages/DeckPage/DeckPage';
+import { DeckPage } from 'src/pages/deckPage';
 interface AppRouterProps {
-    setPage: (page: RouterPaths | null) => void
+    setPage: (page: RouterPaths | null) => void;
+    currentPage: RouterPaths | null;
 }
 
-const AppRouter = ({ setPage }: AppRouterProps) => {
+const AppRouter = ({ setPage, currentPage }: AppRouterProps) => {
     return (
         <Routes>
-            <Route path={RouterPaths.MAIN} element={<MainPage setPage={setPage} />} />
-            <Route path={RouterPaths.ROOMS} element={<RoomsPage setPage={setPage} />} />
+            <Route path={RouterPaths.MAIN} element={<MainPage setPage={setPage} currentPage={currentPage} />} />
+            <Route path={RouterPaths.ROOMS} element={<RoomsPage setPage={setPage} currentPage={currentPage} />} />
             <Route path={RouterPaths.RESET_PASSWORD} element={<PasswordResetPage />} />
             <Route path={RouterPaths.CONFIRM_EMAIL} element={<EmailConfirmPage />} />
             <Route path={RouterPaths.ERROR} element={<ErrorModalPage />} />
-            <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage />} />
-            <Route path={RouterPaths.CREATE_DECK} element={<DeckCreatingPage />} />
+            <Route path={`${RouterPaths.DECK}/:id`} element={<DeckPage currentPage={currentPage} />} />
+            <Route path={RouterPaths.CREATE_DECK} element={<DeckCreatingPage currentPage={currentPage} />} />
             <Route path={RouterPaths.DECK} element={<Navigate to={`${RouterPaths.DECK}/1`} />} />
         </Routes>
     );
