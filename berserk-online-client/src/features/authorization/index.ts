@@ -1,5 +1,5 @@
-export { LoginForm } from './ui/loginForm/LoginForm'
-export { AccountEditForm } from './ui/accountEditForm/AccountEditForm'
+export { LoginModal } from './ui/loginModal/LoginModal'
+export { AccountEditModal } from './ui/accountEditModal/AccountEditModal'
 export { ChangeAvatarInput } from './ui/changeAvatarInput/ChangeAvatarInput'
 export { SendEmailConfirmModal } from './ui/sendEmailConfirmModal/SendEmailConfirmModal'
 export { CookieModal } from './ui/cookieModal/CookieModal'

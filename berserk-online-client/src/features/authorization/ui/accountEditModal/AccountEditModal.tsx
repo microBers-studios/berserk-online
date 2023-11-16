@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "src/shared/lib";
-import cls from "./AccountEditForm.module.scss"
+import cls from "./AccountEditModal.module.scss"
 import {
     deleteAvatarStatusSelector,
     loadAvatarStatusSelector,
@@ -11,18 +11,23 @@ import {
 import {
     LoginInput,
     EmailInput,
-    ModalButton
+    ModalButton,
+    Modal
 } from "src/shared/ui";
 import { EMAIL_REGULAR } from "../../const";
+import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 
-interface AccountEditFormProps {
+interface AccountEditModalProps {
     closeModal: () => void;
     ImageInput: ReactNode;
 }
 
-export const AccountEditForm = ({ closeModal, ImageInput }: AccountEditFormProps) => {
+export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalProps) => {
     const { user } = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
+
+    const { isOpenAnimation, setIsOpenAnimation,
+        isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
     const updateUserStatus = useAppSelector(updateUserStatusSelector)
     const loadAvatarStatus = useAppSelector(loadAvatarStatusSelector)
@@ -32,6 +37,12 @@ export const AccountEditForm = ({ closeModal, ImageInput }: AccountEditFormProps
     const [nameError, setNameError] = useState<boolean>(false)
     const [email, setEmail] = useState<string>(user.email)
     const [emailError, setEmailError] = useState<number>(0)
+
+    const exitModal = () => {
+        setIsCloseAnimation(true)
+        setTimeout(closeModal, 300)
+        document.body.style.overflow = ''
+    }
 
     const onFormSubmit = (e: React.MouseEvent<HTMLElement>) => {
         if (!updateUserStatus.isPending && !loadAvatarStatus.isPending && !deleteAvatarStatus.isPending) {
@@ -57,7 +68,7 @@ export const AccountEditForm = ({ closeModal, ImageInput }: AccountEditFormProps
             }
 
             if (!flag) {
-                closeModal()
+                exitModal()
                 return
             }
 
@@ -66,7 +77,7 @@ export const AccountEditForm = ({ closeModal, ImageInput }: AccountEditFormProps
     }
 
     const fulfilledCallback = () => {
-        closeModal()
+        exitModal()
         toast('Данные изменены')
     }
 
@@ -77,30 +88,41 @@ export const AccountEditForm = ({ closeModal, ImageInput }: AccountEditFormProps
     }
 
     return (
-        <form
-            className={cls.AccountEditForm}
+        <Modal
+            isCloseAnimation={isCloseAnimation}
+            isOpenAnimation={isOpenAnimation}
+            setIsCloseAnimation={setIsCloseAnimation}
+            setIsOpenAnimation={setIsOpenAnimation}
+            closeModal={() => !updateUserStatus.isPending
+                && !loadAvatarStatus.isPending
+                && !deleteAvatarStatus.isPending
+                && exitModal()}
         >
-            <h1 className={cls.FormHeader}>Аккаунт</h1>
-            {ImageInput}
-            {<LoginInput
-                name={name}
-                setName={setName}
-                nameError={nameError}
-                setNameError={setNameError}
-                isProtected={true}
-            />}
-            {<EmailInput
-                email={email}
-                setEmail={setEmail}
-                emailError={emailError}
-                setEmailError={setEmailError}
-                isProtected={true}
-            />}
-            <ModalButton
-                text="Сохранить"
-                isActive={updateUserStatus.isPending}
-                onButtonClick={onFormSubmit}
-            />
-        </form>
+            <form
+                className={cls.AccountEditForm}
+            >
+                <h1 className={cls.FormHeader}>Аккаунт</h1>
+                {ImageInput}
+                {<LoginInput
+                    name={name}
+                    setName={setName}
+                    nameError={nameError}
+                    setNameError={setNameError}
+                    isProtected={true}
+                />}
+                {<EmailInput
+                    email={email}
+                    setEmail={setEmail}
+                    emailError={emailError}
+                    setEmailError={setEmailError}
+                    isProtected={true}
+                />}
+                <ModalButton
+                    text="Сохранить"
+                    isActive={updateUserStatus.isPending}
+                    onButtonClick={onFormSubmit}
+                />
+            </form>
+        </Modal>
     );
 }

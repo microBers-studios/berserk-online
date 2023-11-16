@@ -8,9 +8,12 @@ import {
     requestPasswordChanging,
     requestPasswordChangingStatusSelector,
 } from "src/entities/user";
-import { Mode, setMode } from "src/entities/modal";
 
-export const SendPasswordResetModal = () => {
+interface SendPasswordResetModalProps {
+    closeModal: () => void;
+}
+
+export const SendPasswordResetModal = ({ closeModal }: SendPasswordResetModalProps) => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
 
@@ -42,10 +45,10 @@ export const SendPasswordResetModal = () => {
         }
     }, [time])
 
-    const closeModal = () => {
+    const exitModal = () => {
         if (!requestPasswordChangingStatus.isPending) {
             setIsCloseAnimation(true)
-            setTimeout(() => dispatch(setMode({ mode: null })), 300)
+            setTimeout(closeModal, 300)
             document.body.style.overflow = ''
         }
     }
@@ -69,8 +72,8 @@ export const SendPasswordResetModal = () => {
             isOpenAnimation={isOpenAnimation}
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
-            closeModal={closeModal}
-            modalClass={Mode.EMAIL}
+            closeModal={exitModal}
+            modalClass={cls.modal}
         >
             <form
                 className={cls.EmailForm}

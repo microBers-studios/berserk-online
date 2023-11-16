@@ -24,6 +24,11 @@
     text-align: center;
 }
 
+.modal {
+    top: 20%;
+    bottom: 20%;
+}
+
 @media (max-width: 1200px) {
     .ErrorImage {
         width: 15vw;

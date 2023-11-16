@@ -4,9 +4,11 @@ import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
 import { useAppDispatch, useAppSelector } from 'src/shared/lib';
 import { logoutUser } from 'src/entities/user';
-import { Mode, setMode } from 'src/entities/modal/model/modalSlice';
 
-export const ProfilePill = () => {
+interface ProfilePillProps {
+    openEditModal: () => void
+}
+export const ProfilePill = ({ openEditModal }: ProfilePillProps) => {
     const dispatch = useAppDispatch()
     const { user } = useAppSelector(state => state.user)
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
@@ -16,7 +18,7 @@ export const ProfilePill = () => {
     }
 
     const onAccountEditClick = () => {
-        dispatch(setMode({ mode: Mode.EDIT }))
+        openEditModal()
         document.body.style.overflow = 'hidden';
     }
 

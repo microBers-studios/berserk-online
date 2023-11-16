@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/index.scss'
 import AppRouter from 'src/app/AppRouter'
-import { GlobalModal } from 'src/entities/modal/ui/GlobalModal'
 import { fetchUser } from 'src/entities/user'
 import { withHelmet } from './providers/withHelmet';
 
@@ -26,7 +25,6 @@ function App() {
         />
 
         <ToastContainer />
-        <GlobalModal />
       </main>
     </BrowserRouter>
   )

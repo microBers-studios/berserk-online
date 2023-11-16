@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import cls from "./Header.module.scss";
 import { Burger } from "src/shared/ui";
+import { useAppSelector, RouterPaths } from "src/shared/lib";
 import {
-    useAppDispatch,
-    useAppSelector,
-    RouterPaths
-} from "src/shared/lib";
-import { ProfilePill } from "src/features/authorization";
+    ChangeAvatarInput,
+    CookieModal,
+    ProfilePill,
+    SendEmailConfirmModal,
+    SendPasswordResetModal
+} from "src/features/authorization";
 import {
     deleteAvatarStatusSelector,
     fetchUserStatusSelector,
@@ -17,14 +19,13 @@ import {
     registrateUserStatusSelector,
     updateUserStatusSelector
 } from "src/entities/user";
-import { Mode, setMode } from "src/entities/modal";
+import { LoginModal, AccountEditModal } from "src/features/authorization";
 
 interface NavbarProps {
     currentPage: RouterPaths | null;
 }
 
 export const Header = ({ currentPage }: NavbarProps) => {
-    const dispatch = useAppDispatch()
     const [isBurgerClicked, setIsBurgerClicked] = useState<boolean>(false)
     const { user } = useAppSelector(state => state.user)
 
@@ -34,6 +35,11 @@ export const Header = ({ currentPage }: NavbarProps) => {
     const deleteAvatarStatus = useAppSelector(deleteAvatarStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
+    const isEmailConfirmed = useAppSelector(state => state.user.isEmailConfirmed)
+    const isCookieModal = useAppSelector(state => state.user.isCookieModal)
+
+    const [modalMode, setModalMode] = useState<'log' | 'reg' | 'edit' | 'pas' | 'confirm' | null>(null)
+    const [confirmingEmail, setConfirmingEmail] = useState(user.email || '')
 
     const onLinkClick = () => {
         if (!getUserStatus.isPending) {
@@ -43,17 +49,19 @@ export const Header = ({ currentPage }: NavbarProps) => {
 
     const onLoginClick = () => {
         if (!getUserStatus.isPending) {
-            dispatch(setMode({ mode: Mode.LOGIN }))
+            setModalMode('log')
             document.body.style.overflow = 'hidden';
         }
     }
 
     const onRegistrationClick = () => {
         if (!getUserStatus.isPending) {
-            dispatch(setMode({ mode: Mode.REGISTRATION }))
+            setModalMode('reg')
             document.body.style.overflow = 'hidden';
         }
     }
+
+    useEffect(() => console.log(modalMode), [modalMode])
 
     return (
         <>
@@ -87,7 +95,7 @@ export const Header = ({ currentPage }: NavbarProps) => {
                     || registrateUserStatus.isPending
                     ? <ReactLoading type={'bubbles'} color={'#ffffff'} height={100} width={90} />
                     : user.id
-                        ? <ProfilePill />
+                        ? <ProfilePill openEditModal={() => setModalMode('edit')} />
                         : <div
                             className={cls.NavbarLoginButtons}
                         >
@@ -102,6 +110,21 @@ export const Header = ({ currentPage }: NavbarProps) => {
                         </div>
                 }
             </header>
+            {(modalMode === 'log' || modalMode === 'reg') && <LoginModal
+                closeModal={() => setModalMode(null)}
+                mode={modalMode}
+                setMode={setModalMode}
+                setConfirmingEmail={setConfirmingEmail}
+            />}
+            {modalMode === 'pas' && <SendPasswordResetModal
+                closeModal={() => setModalMode(null)}
+            />}
+            {modalMode === 'edit' && <AccountEditModal
+                closeModal={() => setModalMode(null)}
+                ImageInput={<ChangeAvatarInput />}
+            />}
+            {(modalMode === 'confirm' || !isEmailConfirmed) && <SendEmailConfirmModal email={confirmingEmail} />}
+            {isCookieModal && <CookieModal />}
         </>
     );
 }

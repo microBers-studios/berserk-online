@@ -5,7 +5,6 @@ import { Modal } from "src/shared/ui";
 import { RouterPaths } from 'src/shared/lib';
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import errorSvg from 'src/shared/assets/images/error.svg'
-import { Mode } from 'src/entities/modal/model/modalSlice';
 
 // interface ErrorModalProps {
 //     className?: string;
@@ -33,7 +32,7 @@ export const ErrorModal = () => {
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
-            modalClass={Mode.EMAIL}
+            modalClass={cls.modal}
         >
             <div
                 className={cls.ErrorWrapper}

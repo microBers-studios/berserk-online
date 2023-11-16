@@ -8,16 +8,15 @@ import {
     sendConfirmEmailStatusSelector,
     sendConfirmEmail
 } from 'src/entities/user';
-import { Mode } from 'src/entities/modal';
 import { Modal, ModalButton } from "src/shared/ui";
 import { mailServices } from '../../const';
 
 interface CloseModalProps {
-    emailObject: { email: string };
+    email: string;
     isAuto?: boolean;
 }
 
-export const SendEmailConfirmModal = ({ emailObject, isAuto = true }: CloseModalProps) => {
+export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps) => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
     const sendConfirmEmailStatus = useAppSelector(sendConfirmEmailStatusSelector)
@@ -31,7 +30,7 @@ export const SendEmailConfirmModal = ({ emailObject, isAuto = true }: CloseModal
 
     useEffect(() => {
         try {
-            setMailService(mailServices[emailObject.email.split('@')[1]])
+            setMailService(mailServices[email.split('@')[1]])
         } catch (e: any) {
             toast(e.message)
         }
@@ -81,7 +80,7 @@ export const SendEmailConfirmModal = ({ emailObject, isAuto = true }: CloseModal
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
-            modalClass={Mode.CLOSE}
+            modalClass={cls.modal}
         >
             <div
                 className={cls.SendEmailModal}
