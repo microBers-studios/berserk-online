@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from 'src/shared/lib';
+import { useAppDispatch, useAppSelector, useAnimate } from 'src/shared/lib';
 import cls from "./SendEmailConfirmModal.module.scss"
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import {
     registrateUserStatusSelector,
     sendConfirmEmailStatusSelector,

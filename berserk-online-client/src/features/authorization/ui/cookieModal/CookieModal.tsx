@@ -1,8 +1,7 @@
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import cls from "./CookieModal.module.scss"
 import cookieSvg from "src/shared/assets/images/cookie.svg"
 import { Modal, ModalButton } from "src/shared/ui";
-import { useAppDispatch } from "src/shared/lib";
+import { useAppDispatch, useAnimate } from "src/shared/lib";
 import { closeCookieModal } from "src/entities/user";
 
 export const CookieModal = () => {

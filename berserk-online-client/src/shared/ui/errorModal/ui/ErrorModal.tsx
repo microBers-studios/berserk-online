@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cls from "./ErrorModal.module.scss";
 import { Modal } from "src/shared/ui";
-import { RouterPaths } from 'src/shared/lib';
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
+import { RouterPaths, useAnimate } from 'src/shared/lib';
 import errorSvg from 'src/shared/assets/images/error.svg'
 
 // interface ErrorModalProps {

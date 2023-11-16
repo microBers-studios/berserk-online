@@ -1,4 +1,4 @@
-export interface IError {
+interface IError {
     id: number;
     message: string;
     context?: {

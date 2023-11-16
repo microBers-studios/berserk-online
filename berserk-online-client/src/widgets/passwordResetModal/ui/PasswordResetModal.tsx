@@ -1,5 +1,5 @@
 import { Modal } from "src/shared/ui";
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
+import { useAnimate } from "src/shared/lib";
 import { PasswordResetForm } from "src/features/authorization";
 
 interface PasswordResetModalProps {

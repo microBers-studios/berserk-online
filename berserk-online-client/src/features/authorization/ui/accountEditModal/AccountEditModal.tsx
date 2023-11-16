@@ -15,7 +15,7 @@ import {
     Modal
 } from "src/shared/ui";
 import { EMAIL_REGULAR } from "../../const";
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
+import { useAnimate } from "src/shared/lib/react/hooks/useAnimate";
 
 interface AccountEditModalProps {
     closeModal: () => void;

@@ -17,11 +17,11 @@ import {
 } from "src/shared/ui";
 import {
     useAppDispatch,
-    useAppSelector
+    useAppSelector,
+    useAnimate
 } from "src/shared/lib";
 import { validatePassword } from "../../lib/validate-password";
 import { EMAIL_REGULAR } from "../../const";
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 
 interface LoginModalProps {
     mode: 'reg' | 'log' | 'pas' | 'edit' | 'confirm'

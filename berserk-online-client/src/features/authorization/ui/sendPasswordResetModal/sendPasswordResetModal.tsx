@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import cls from "./SendPasswordResetModal.module.scss"
-import { useAppDispatch, useAppSelector } from "src/shared/lib";
-import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
+import { useAppDispatch, useAppSelector, useAnimate } from "src/shared/lib";
 import { Modal, ModalButton, EmailInput } from "src/shared/ui";
 import {
     requestPasswordChanging,
