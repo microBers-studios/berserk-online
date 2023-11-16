@@ -8,7 +8,7 @@ import {
     useAppSelector,
     RouterPaths
 } from "src/shared/lib";
-import { ProfilePill } from "src/entities/user";
+import { ProfilePill } from "src/features/authorization";
 import {
     deleteAvatarStatusSelector,
     fetchUserStatusSelector,

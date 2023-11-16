@@ -3,7 +3,7 @@ import cls from "./ModalButton.module.scss"
 interface ModalButtonProps {
     text: string;
     isActive?: boolean;
-    onButtonClick?: (e: React.MouseEvent<HTMLElement>) => void | Promise<void>;
+    onButtonClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
 }
 
 export const ModalButton = ({ text, isActive = false, onButtonClick }: ModalButtonProps) => {

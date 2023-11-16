@@ -5,7 +5,7 @@ import { RouterPaths } from 'src/shared/lib';
 import { PasswordResetPage } from 'src/pages/passwordReset';
 import { EmailConfirmPage } from 'src/pages/emailConfirm';
 import { ErrorModalPage } from 'src/pages/errorModal';
-import { DeckCreatingPage } from 'src/pages/DeckCreatingPage/DeckCreatingPage';
+import { DeckCreatingPage } from 'src/pages/deckCreating';
 import { DeckPage } from 'src/pages/deckPage';
 interface AppRouterProps {
     setPage: (page: RouterPaths | null) => void;

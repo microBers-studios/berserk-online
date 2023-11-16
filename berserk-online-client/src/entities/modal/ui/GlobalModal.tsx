@@ -1,10 +1,8 @@
 import { useAppSelector } from "src/shared/lib"
-import { CookieModal } from "src/features/authorization/ui/cookieModal/CookieModal"
 import { Mode, modalSelector } from "src/entities/modal"
+import { SendPasswordResetModal, CookieModal, SendEmailConfirmModal } from "src/features/authorization"
 import { LoginModal } from "src/widgets/loginModal"
 import { AccountEditModal } from "src/widgets/accountEditModal"
-import { EmailModal } from "src/widgets/AccountModals/EmailModal/EmailModal"
-import { SendEmailModal } from "src/features/authorization"
 
 export const GlobalModal = () => {
     const isCookieModal = useAppSelector(state => state.user.isCookieModal)
@@ -17,7 +15,7 @@ export const GlobalModal = () => {
     }
 
     if (!isEmailConfirmed) {
-        return <SendEmailModal
+        return <SendEmailConfirmModal
             emailObject={{ email: user.email }}
             isAuto={false}
         />
@@ -33,11 +31,11 @@ export const GlobalModal = () => {
     }
 
     if (mode === Mode.EMAIL) {
-        return <EmailModal />
+        return <SendPasswordResetModal />
     }
 
     if (mode === Mode.CLOSE) {
-        return <SendEmailModal emailObject={extra} />
+        return <SendEmailConfirmModal emailObject={extra} />
     }
 
     return <></>

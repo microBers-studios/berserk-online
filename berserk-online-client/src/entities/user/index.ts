@@ -26,5 +26,3 @@ export { loadAvatar } from './api/load-avatar'
 export { deleteAvatar } from './api/delete-avatar'
 export { requestPasswordChanging } from './api/request-password-changing'
 export { changePassword } from './api/change-password'
-
-export { ProfilePill } from './ui/ProfilePill'

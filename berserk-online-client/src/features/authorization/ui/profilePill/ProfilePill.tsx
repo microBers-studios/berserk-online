@@ -2,7 +2,7 @@ import { useState } from 'react'
 import cls from "./ProfilePill.module.scss"
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
-import { useAppDispatch, useAppSelector } from 'src/shared/lib/redux/redux-hook';
+import { useAppDispatch, useAppSelector } from 'src/shared/lib';
 import { logoutUser } from 'src/entities/user';
 import { Mode, setMode } from 'src/entities/modal/model/modalSlice';
 

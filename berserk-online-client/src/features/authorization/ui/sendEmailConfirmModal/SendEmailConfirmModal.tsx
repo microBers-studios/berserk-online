@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from 'src/shared/lib';
-import cls from "./SendEmailModal.module.scss"
+import cls from "./SendEmailConfirmModal.module.scss"
 import { IAnimator, useAnimate } from "src/helpers/hooks/useAnimate";
 import {
     registrateUserStatusSelector,
@@ -17,7 +17,7 @@ interface CloseModalProps {
     isAuto?: boolean;
 }
 
-export const SendEmailModal = ({ emailObject, isAuto = true }: CloseModalProps) => {
+export const SendEmailConfirmModal = ({ emailObject, isAuto = true }: CloseModalProps) => {
     const { isOpenAnimation, setIsOpenAnimation,
         isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
     const sendConfirmEmailStatus = useAppSelector(sendConfirmEmailStatusSelector)
