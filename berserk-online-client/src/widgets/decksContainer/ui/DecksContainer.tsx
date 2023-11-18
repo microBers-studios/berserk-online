@@ -63,7 +63,9 @@ export const DecksContainer = () => {
                                 {decks.length} из {decks.length}
                             </span>}
                     </div>
-                    {!userIsUnauthorized &&
+                    {!userIsUnauthorized && !(fetchUserStatus.isUncompleted
+                        && loginUserStatus.isUncompleted
+                        && registrateUserStatus.isUncompleted) &&
                         <button
                             className={cls.AddButton}
                             onClick={makeDeck}

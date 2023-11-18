@@ -44,6 +44,10 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
         || (fetchUserStatus.isUncompleted && loginUserStatus.isUncompleted && registrateUserStatus.isUncompleted)
 
     useEffect(() => {
+        if (fetchUserStatus.isRejected) {
+            navigate(RouterPaths.ERROR)
+        }
+
         if (user.id) {
             if (!id) {
                 navigate(RouterPaths.ERROR)
@@ -51,7 +55,7 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
             }
             if (!deck || deck.id !== id) dispatch(getDeck(id))
         }
-    }, [user, deck, dispatch, id, navigate])
+    }, [user, deck, dispatch, id, navigate, fetchUserStatus])
 
     return (
         <Layout
@@ -82,7 +86,7 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
                     }
                 </div>}
             footer={<Footer />}
-            title={`Колода ${deck?.name} | Берсерк онлайн`}
+            title={deck ? `Колода ${deck?.name} | Берсерк онлайн` : 'Берсерк онлайн'}
         />
 
     );

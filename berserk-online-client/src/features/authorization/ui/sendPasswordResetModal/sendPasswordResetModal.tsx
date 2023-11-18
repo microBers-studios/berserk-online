@@ -7,6 +7,7 @@ import {
     requestPasswordChanging,
     requestPasswordChangingStatusSelector,
 } from "src/entities/user";
+import { EMAIL_REGULAR } from "../../const";
 
 interface SendPasswordResetModalProps {
     closeModal: () => void;
@@ -23,18 +24,18 @@ export const SendPasswordResetModal = ({ closeModal }: SendPasswordResetModalPro
     const [email, setEmail] = useState<string>(user?.email as string)
     const [emailError, setEmailError] = useState<number>(0)
 
-    const [isReady, setIsReady] = useState<boolean>(false)
+    const [isReady, setIsReady] = useState<boolean>(true)
     const [intervalID, setIntervalID] = useState<number | null>(null)
     const [time, setTime] = useState<number>(59)
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const interval = setInterval(() => {
-            setTime(t => t - 1)
-        }, 1000)
+    //     const interval = setInterval(() => {
+    //         setTime(t => t - 1)
+    //     }, 1000)
 
-        setIntervalID(interval)
-    }, [dispatch])
+    //     setIntervalID(interval)
+    // }, [dispatch])
 
     useEffect(() => {
         if (time <= 0) {
@@ -55,7 +56,17 @@ export const SendPasswordResetModal = ({ closeModal }: SendPasswordResetModalPro
     const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!requestPasswordChangingStatus.isPending) {
             e.preventDefault()
+            if (!email) {
+                setEmailError(1)
+                return
+            }
+            if (!EMAIL_REGULAR.test(email)) {
+                setEmailError(2)
+                return
+            }
             dispatch(requestPasswordChanging(email))
+
+            setIsReady(false)
             const interval = setInterval(() => {
                 setTime(t => t - 1)
             }, 1000)

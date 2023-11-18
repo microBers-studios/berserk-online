@@ -127,7 +127,7 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
                 </div >
             }
             footer={<Footer />}
-            title='Создание колоды | Берсерк онлайн'
+            title={'Создание колоды | Берсерк онлайн'}
         />
 
     );
