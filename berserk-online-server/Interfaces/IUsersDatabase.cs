@@ -14,7 +14,7 @@ namespace berserk_online_server.Interfaces
         UserInfo RemoveAvatar(string email);
         bool IsUnique(UserInfoRequest user);
         User GetUser(UserInfoRequest userRequest);
-        UserInfo VerifyUser(User user);
+        UserInfo VerifyUser(UserAuthenticationRequest user);
 
     }
 }
