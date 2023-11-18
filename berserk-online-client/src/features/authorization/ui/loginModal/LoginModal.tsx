@@ -123,7 +123,7 @@ export const LoginModal = ({
     }
 
     const loginFulfilledCallback = () => {
-        closeModal()
+        exitModal()
         toast('Вы вошли в аккаунт')
     }
 

@@ -134,7 +134,6 @@ export const userSlice = createSlice({
                 if (state.fetchUserStatus === APIStatus.Rejected) state.fetchUserStatus = APIStatus.Fulfilled
                 if (state.loginUserStatus === APIStatus.Rejected) state.loginUserStatus = APIStatus.Fulfilled
                 if (state.registrateUserStatus === APIStatus.Rejected) state.registrateUserStatus = APIStatus.Fulfilled
-                console.log('confirmed')
             })
             .addCase(confirmUserEmail.rejected, (state) => {
                 state.confirmUserEmailStatus = APIStatus.Rejected
