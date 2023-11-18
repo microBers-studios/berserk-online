@@ -18,7 +18,7 @@ export const RoomsPage = ({ setPage, currentPage }: RoomsPageProps) => {
         return () => {
             setPage(null)
         }
-    }, [])
+    }, [setPage])
 
     return (
         <Layout

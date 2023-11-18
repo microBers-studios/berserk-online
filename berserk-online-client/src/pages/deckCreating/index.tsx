@@ -26,7 +26,7 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
         return function () {
             setCurrentDeck({ deck: null })
         }
-    }, [])
+    }, [deck, navigate])
 
     useEffect(() => {
         if (deck?.main.length) {

@@ -34,7 +34,8 @@ export const loadAvatar = createAsyncThunk<UserType, HTMLInputElement, { rejectV
                 : defaultAvatar
 
             return userObj
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })

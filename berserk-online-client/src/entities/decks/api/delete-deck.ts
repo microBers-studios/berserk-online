@@ -19,8 +19,9 @@ export const deleteDeck = createAsyncThunk<DeckType[], string, { rejectValue: st
             }
 
             return obj
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     }
 )

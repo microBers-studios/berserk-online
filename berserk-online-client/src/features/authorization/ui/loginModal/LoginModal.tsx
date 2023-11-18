@@ -60,9 +60,9 @@ export const LoginModal = ({
     const onFormChangeClick = () => {
         setIsAnimation(true)
         setMode(isRegistration ? 'log' : 'reg')
-        // setNameError(false)
-        // setEmailError(0)
-        // setPasswordError(0)
+        setNameError(false)
+        setEmailError(0)
+        setPasswordError(0)
     }
 
     const exitModal = async (isOverflowHidden = true) => {

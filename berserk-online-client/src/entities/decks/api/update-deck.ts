@@ -28,8 +28,9 @@ export const updateDeck = createAsyncThunk<undefined, DeckType, { rejectValue: s
             }
 
             toast('Изменения сохранены')
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     }
 )

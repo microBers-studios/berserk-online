@@ -1,5 +1,8 @@
+import { RootState } from "src/app/store"
 import { createStatusObjectSelector } from "src/shared/lib"
 
+export const userSelector = (state: RootState) => state.user.user
+export const isEmailConfirmedSelector = (state: RootState) => state.user.isEmailConfirmed
 export const fetchUserStatusSelector = createStatusObjectSelector(state => state.user.fetchUserStatus)
 export const logoutUserStatusSelector = createStatusObjectSelector(state => state.user.logoutUserStatus)
 export const loginUserStatusSelector = createStatusObjectSelector(state => state.user.loginUserStatus)

@@ -34,7 +34,7 @@ export const SendPasswordResetModal = ({ closeModal }: SendPasswordResetModalPro
         }, 1000)
 
         setIntervalID(interval)
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (time <= 0) {

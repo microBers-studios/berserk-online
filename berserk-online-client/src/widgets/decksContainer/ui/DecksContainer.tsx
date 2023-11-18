@@ -20,6 +20,7 @@ import {
     fetchDecks,
     setCurrentDeck
 } from 'src/entities/decks';
+import { isEmailConfirmedSelector } from 'src/entities/user/model/selectors';
 
 export const DecksContainer = () => {
     const { user } = useAppSelector(state => state.user)
@@ -27,17 +28,18 @@ export const DecksContainer = () => {
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
     const fetchDecksStatus = useAppSelector(fetchDecksStatusSelector)
+    const isEmailConfirmed = useAppSelector(isEmailConfirmedSelector)
     const decks = useAppSelector(decksSelector)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    let userIsUnauthorized = !user.id && fetchUserStatus.isRejected
+    const userIsUnauthorized = !user.id && !fetchUserStatus.isUncompleted
 
     useEffect(() => {
-        if (fetchUserStatus.isFulfilled || loginUserStatus.isFulfilled || registrateUserStatus.isFulfilled) {
+        if ((fetchUserStatus.isFulfilled || loginUserStatus.isFulfilled || registrateUserStatus.isFulfilled) && isEmailConfirmed) {
             dispatch(fetchDecks())
         }
-    }, [fetchUserStatus, loginUserStatus, registrateUserStatus])
+    }, [fetchUserStatus, loginUserStatus, registrateUserStatus, isEmailConfirmed, dispatch])
 
     const makeDeck = () => {
         dispatch(setCurrentDeck({ deck: createDeck('') }))

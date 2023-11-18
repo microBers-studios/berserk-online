@@ -51,7 +51,7 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
             }
             if (!deck || deck.id !== id) dispatch(getDeck(id))
         }
-    }, [user])
+    }, [user, deck, dispatch, id, navigate])
 
     return (
         <Layout

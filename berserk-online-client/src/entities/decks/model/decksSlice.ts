@@ -93,7 +93,7 @@ export const decksSlice = createSlice({
             if (!state.currentDeck) return
             const { card } = action.payload
 
-            let newDeck: DeckType = JSON.parse(JSON.stringify(state.currentDeck));
+            const newDeck: DeckType = JSON.parse(JSON.stringify(state.currentDeck));
             const isInDeck = newDeck.main.find((c: CardType) => c.id === card.id)
 
             if (!isInDeck) {
@@ -117,9 +117,8 @@ export const decksSlice = createSlice({
                 state.fetchDecksStatus = APIStatus.Fulfilled;
                 state.decks = action.payload
             })
-            .addCase(fetchDecks.rejected, (state, action) => {
+            .addCase(fetchDecks.rejected, (state) => {
                 state.fetchDecksStatus = APIStatus.Rejected;
-                toast(action.payload)
             })
             .addCase(deleteDeck.pending, (state) => {
                 state.deleteDeckStatus = APIStatus.Pending;

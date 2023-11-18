@@ -22,8 +22,9 @@ export const requestPasswordChanging = createAsyncThunk<void, string, { rejectVa
                 throw new Error('Password Changing Error')
             }
 
-        } catch (e: any) {
-            rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     }
 )

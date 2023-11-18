@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReactLoading from "react-loading";
 import cls from "./Header.module.scss";
@@ -9,9 +9,12 @@ import {
     CookieModal,
     ProfilePill,
     SendEmailConfirmModal,
-    SendPasswordResetModal
+    SendPasswordResetModal,
+    LoginModal,
+    AccountEditModal
 } from "src/features/authorization";
 import {
+    confirmUserEmailStatusSelector,
     deleteAvatarStatusSelector,
     fetchUserStatusSelector,
     loadAvatarStatusSelector,
@@ -19,7 +22,6 @@ import {
     registrateUserStatusSelector,
     updateUserStatusSelector
 } from "src/entities/user";
-import { LoginModal, AccountEditModal } from "src/features/authorization";
 
 interface NavbarProps {
     currentPage: RouterPaths | null;
@@ -37,6 +39,7 @@ export const Header = ({ currentPage }: NavbarProps) => {
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
     const isEmailConfirmed = useAppSelector(state => state.user.isEmailConfirmed)
     const isCookieModal = useAppSelector(state => state.user.isCookieModal)
+    const confirmUserEmailStatus = useAppSelector(confirmUserEmailStatusSelector)
 
     const [modalMode, setModalMode] = useState<'log' | 'reg' | 'edit' | 'pas' | 'confirm' | null>(null)
     const [confirmingEmail, setConfirmingEmail] = useState(user.email || '')
@@ -60,8 +63,6 @@ export const Header = ({ currentPage }: NavbarProps) => {
             document.body.style.overflow = 'hidden';
         }
     }
-
-    useEffect(() => console.log(modalMode), [modalMode])
 
     return (
         <>
@@ -123,7 +124,11 @@ export const Header = ({ currentPage }: NavbarProps) => {
                 closeModal={() => setModalMode(null)}
                 ImageInput={<ChangeAvatarInput />}
             />}
-            {(modalMode === 'confirm' || !isEmailConfirmed) && <SendEmailConfirmModal email={confirmingEmail} />}
+            {modalMode === 'confirm' && <SendEmailConfirmModal email={confirmingEmail || user.email} />}
+            {!isEmailConfirmed && !confirmUserEmailStatus.isPending && <SendEmailConfirmModal
+                email={confirmingEmail || user.email}
+                isAuto={false}
+            />}
             {isCookieModal && <CookieModal />}
         </>
     );

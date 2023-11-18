@@ -19,7 +19,7 @@ export const CardsSearchbar = ({ setIsSaveDisabled }: CardsSearchbarProps) => {
         if (value) {
             dispatch(findCards({ query: value }))
         }
-    }, [value])
+    }, [value, dispatch])
 
     return (
         <div className={cls.CardsSearchbar} >

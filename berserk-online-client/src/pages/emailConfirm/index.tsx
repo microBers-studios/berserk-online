@@ -16,7 +16,7 @@ export const EmailConfirmPage = () => {
         dispatch(confirmUserEmail([token, () => navigate(RouterPaths.MAIN), () => {
             navigate(RouterPaths.ERROR)
         }]))
-    }, [])
+    }, [dispatch, navigate, token])
 
     return <></>
 }

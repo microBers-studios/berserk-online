@@ -36,7 +36,8 @@ export const registrateUser = createAsyncThunk<UserType, [Omit<UserType, 'id' | 
             fulfilledCallback()
 
             return userObj
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })

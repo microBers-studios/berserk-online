@@ -30,8 +30,9 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
     useEffect(() => {
         try {
             setMailService(mailServices[email.split('@')[1]])
-        } catch (e: any) {
-            toast(e.message)
+        } catch (e) {
+            const error = e as Error
+            toast(error.message)
         }
 
         if (!isAuto) dispatch(sendConfirmEmail())
@@ -41,7 +42,7 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
         }, 1000)
 
         setIntervalID(interval)
-    }, [])
+    }, [dispatch, email, isAuto])
 
     useEffect(() => {
         if (time <= 0) {

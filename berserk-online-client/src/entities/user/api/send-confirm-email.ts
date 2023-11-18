@@ -15,7 +15,8 @@ export const sendConfirmEmail = createAsyncThunk<void, undefined, { rejectValue:
             if (response.status !== 200) {
                 throw new Error('Error')
             }
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })

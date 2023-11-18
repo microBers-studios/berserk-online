@@ -47,8 +47,9 @@ export const loginUser = createAsyncThunk<
 
             fulfilledCallback()
             return userObj
-        } catch (e: any) {
-            rejectedCallback(code, e.id)
+        } catch (e) {
+            const error = e as IError
+            rejectedCallback(code, error.id)
             return rejectWithValue({ code, email })
         }
     })

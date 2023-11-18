@@ -24,7 +24,7 @@ export const CardTitleItem = ({ cardSrc, clientY, isSearchbar }: CardTitleItemPr
         if (window.innerHeight - clientY < height) {
             setIsTop(true)
         }
-    })
+    }, [setIsTop, figureRef, clientY])
 
     return (
         <figure

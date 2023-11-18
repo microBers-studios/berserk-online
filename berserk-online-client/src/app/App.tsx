@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchUser())
-  }, [])
+  }, [dispatch])
 
   return (
     <BrowserRouter>

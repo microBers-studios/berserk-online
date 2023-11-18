@@ -41,10 +41,10 @@ export const ElementsPieChart = ({ data }: PieChartProps) => {
             },
             tooltip: {
                 callbacks: {
-                    label: function (context: TooltipItem<any>) {
+                    label: function (context: TooltipItem<'pie'>) {
                         let label = context.label || '';
 
-                        if (context.parsed.y !== null) {
+                        if (context.parsed !== null) {
                             label += ': ' + context.parsed;
                         }
 

@@ -18,7 +18,8 @@ export const findCards = createAsyncThunk<{ cards: CardType[] }, { query: string
             const arr = await response.json()
 
             return { cards: arr }
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })

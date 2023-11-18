@@ -23,7 +23,7 @@ export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) =>
             localStorage.removeItem('deck')
         }
 
-    }, [createDeckStatus])
+    }, [createDeckStatus, deck, navigate])
 
     const onSaveClick = async () => {
         if (!deck) return

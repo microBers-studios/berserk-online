@@ -28,7 +28,7 @@ export const MainPage = ({ setPage, currentPage }: MainPageProps) => {
         return () => {
             setPage(null)
         }
-    }, [])
+    }, [setPage])
 
     useEffect(() => {
         const cashedDeck = localStorage.getItem('deck')
@@ -48,7 +48,7 @@ export const MainPage = ({ setPage, currentPage }: MainPageProps) => {
                 }
             });
         }
-    }, [fetchUserStatus, loginUserStatus])
+    }, [fetchUserStatus, loginUserStatus, dispatch, navigate])
 
     return (
         <Layout

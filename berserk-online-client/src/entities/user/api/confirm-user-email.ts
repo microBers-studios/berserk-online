@@ -28,8 +28,9 @@ export const confirmUserEmail = createAsyncThunk<UserType, [string, () => void, 
                 : defaultAvatar
             fulfilledCallback()
             return userObj
-        } catch (e: any) {
+        } catch (e) {
             rejectedCallback()
-            return rejectWithValue(e.message)
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })

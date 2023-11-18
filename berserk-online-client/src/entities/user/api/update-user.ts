@@ -34,7 +34,7 @@ export const updateUser = createAsyncThunk<UserType, [Partial<UserType>, () => v
 
             fulfilledCallback()
             return userObj
-        } catch (e: any) {
+        } catch (e) {
             return rejectWithValue({ code, rejectedCallback })
         }
     })

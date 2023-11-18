@@ -37,7 +37,7 @@ export const fetchUser = createAsyncThunk<UserType, undefined, { rejectValue: { 
                 : defaultAvatar
 
             return userObj
-        } catch (e: any) {
+        } catch (e) {
             return rejectWithValue({ code, email })
         }
     })

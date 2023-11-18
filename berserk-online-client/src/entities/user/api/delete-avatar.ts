@@ -29,7 +29,8 @@ export const deleteAvatar = createAsyncThunk<UserType, undefined, { rejectValue:
 
             return userObj
 
-        } catch (e: any) {
-            return rejectWithValue(e.message)
+        } catch (e) {
+            const error = e as IError
+            return rejectWithValue(error.message)
         }
     })
