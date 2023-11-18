@@ -30,7 +30,7 @@ namespace berserk_online_server.Controllers
         {
             try
             {
-                UserInfo matchingUser = _db.VerifyUser(createUser(authRequest));
+                UserInfo matchingUser = _db.VerifyUser(authRequest);
                 await authenticate(matchingUser, authRequest.RememberMe);
                 return Results.Ok(matchingUser);
             }

@@ -134,22 +134,22 @@ namespace berserk_online_server.Facades.Database
         /// <returns></returns>
         /// <exception cref="UserPasswordException"></exception>
         /// <exception cref="NotFoundException"></exception>
-        public UserInfo VerifyUser(User user)
+        public UserInfo VerifyUser(UserAuthenticationRequest user)
         {
-            var matchingUser = GetUser(new UserInfoRequest() { Email = user.Email, Name = user.Name});
-            if (!tryVerifyPassword(user, matchingUser))
+            var matchingUser = GetUser(new UserInfoRequest() { Email = user.Email });
+            if (!tryVerifyPassword(user.Password, matchingUser.Password))
                 throw new UserPasswordException($"User with password: {user.Password} not found!");
             return new UserInfo(matchingUser);
         }
-        private bool tryVerifyPassword(User providedUser, User dbUser)
+        private bool tryVerifyPassword(string provided, string hash)
         {
             try
             {
-                return BCrypt.Net.BCrypt.Verify(providedUser.Password, dbUser.Password);
+                return BCrypt.Net.BCrypt.Verify(provided, hash);
             }
             catch (SaltParseException)
             {
-                throw new SaltParseException($"provided password: {providedUser.Password}, hash: {dbUser.Password}");
+                throw new SaltParseException($"provided password: {provided}, hash: {hash}");
             }
         }
         private User formatUser(User user)
