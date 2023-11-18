@@ -88,6 +88,7 @@ namespace berserk_online_server.Facades.Database
             var user = _userRepo.Get(email);
             user.IsEmailConfirmed = true;
             _userRepo.Update(user);
+            _memoryCache.Set(email, user);
             return new UserInfo(formatUser(user));
         }
         /// <summary>
@@ -102,7 +103,7 @@ namespace berserk_online_server.Facades.Database
             var user = _userRepo.Get(email);
             user.AvatarUrl = null;
             _userRepo.Update(user);
-            _memoryCache.Remove(email);
+            _memoryCache.Set(email, user);
             return new UserInfo(formatUser(user));
         }
         public bool IsUnique(UserInfoRequest user)
@@ -135,10 +136,10 @@ namespace berserk_online_server.Facades.Database
         /// <exception cref="NotFoundException"></exception>
         public UserInfo VerifyUser(User user)
         {
-            var matchingUser = _userRepo.Get(user.Email);
+            var matchingUser = GetUser(new UserInfoRequest() { Email = user.Email, Name = user.Name});
             if (!tryVerifyPassword(user, matchingUser))
                 throw new UserPasswordException($"User with password: {user.Password} not found!");
-            return new UserInfo(formatUser(matchingUser));
+            return new UserInfo(matchingUser);
         }
         private bool tryVerifyPassword(User providedUser, User dbUser)
         {
