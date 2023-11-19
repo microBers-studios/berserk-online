@@ -15,8 +15,14 @@
     background-color: rgb(169, 165, 165);
 }
 
+@media (max-width: 600px) {
+    .ModalButton {
+        width: 250px;
+    }
+}
+
 @media (max-width: 400px) {
     .ModalButton {
-        width: 300px;
+        width: 200px;
     }
 }

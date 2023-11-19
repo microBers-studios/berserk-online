@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import cls from "./Modal.module.scss"
 import crossImage from "src/shared/assets/images/cross.svg"
+import whiteCrossImage from "src/shared/assets/images/white-cross.svg"
 
 interface ModalProps {
     children: ReactNode;
@@ -12,9 +13,10 @@ interface ModalProps {
     setIsAnimation?: (b: boolean) => void;
     closeModal: () => void;
     modalClass?: string;
+    theme?: 'light' | 'dark'
 }
 
-export const Modal = (props: ModalProps) => {
+export const Modal = ({ theme = 'light', ...props }: ModalProps) => {
     const endAnimation = () => {
         if (props.isOpenAnimation) {
             props.setIsOpenAnimation(false)
@@ -33,7 +35,9 @@ export const Modal = (props: ModalProps) => {
                 className={`${cls.Modal} ${props.isOpenAnimation && cls.opened} ${props.isAnimation && cls.animated} ${props.isCloseAnimation && cls.closed} ${props.modalClass}`}
                 onAnimationEnd={endAnimation}>
                 <img
-                    src={crossImage}
+                    src={theme === 'dark'
+                        ? whiteCrossImage
+                        : crossImage}
                     className={cls.crossImage}
                     onClick={props.closeModal}
                 />

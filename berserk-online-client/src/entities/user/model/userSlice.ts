@@ -74,7 +74,7 @@ export const userSlice = createSlice({
             })
             .addCase(fetchUser.rejected, (state, action) => {
                 state.fetchUserStatus = APIStatus.Rejected
-                if (action.payload && action.payload.code === 403) {
+                if (action.payload && typeof action.payload !== 'string' && action.payload.code === 403) {
                     state.isEmailConfirmed = false
                     state.user.email = action.payload.email
                 }
@@ -105,9 +105,9 @@ export const userSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loginUserStatus = APIStatus.Rejected
-                if (action.payload && action.payload.code === 403) {
+                if (action.payload && typeof action.payload !== 'string' && action.payload.code === 403) {
                     state.isEmailConfirmed = false
-                    state.user.email = action.payload.email
+                    state.user.email = action.payload?.email
                 }
             })
             .addCase(updateUser.pending, (state) => {

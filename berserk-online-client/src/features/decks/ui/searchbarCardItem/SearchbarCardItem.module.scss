@@ -6,7 +6,6 @@
     border-radius: 20px;
     width: 93.7%;
     display: flex;
-    // overflow: hidden;
     gap: 5px;
 
     &:hover {
@@ -20,13 +19,13 @@
     gap: 10px;
 }
 
-.CardName,
+.CardNameWrapper,
 .CardPrice {
     color: white;
     display: flex;
 }
 
-.CardName {
+.CardNameWrapper {
     gap: 12px;
     width: 200px;
 }
@@ -37,14 +36,106 @@
     padding: 10px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .AddButtonImage {
-    width: 80%;
+    height: 25px;
+    width: auto;
 }
 
 .plusButton:hover {
     cursor: pointer;
     height: 100%;
     background-color: var(--border-shadow-color);
+}
+
+.symbolsWrapper {
+    display: flex;
+    gap: 6px;
+}
+
+@media (max-width: 1400px) {
+    .SearchbarCardItem {
+        width: 95%;
+        gap: 0;
+    }
+
+    .AddButton {
+        height: 20px;
+        padding: 10px;
+        width: 20px;
+    }
+
+    .CardNameWrapper {
+        width: 150px;
+        word-wrap: normal;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .CardName {
+        max-width: 110px;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 1200px) {
+    .SearchbarCardItem {
+        width: 95%;
+    }
+}
+
+@media (max-width: 900px) {
+    .AddButtonImage {
+        height: 20px;
+    }
+
+    .SearchbarCardItem {
+        width: 95%;
+        gap: 0;
+    }
+
+    .CardNameWrapper {
+        width: 100px;
+    }
+
+    .CardName {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        max-width: 90px;
+    }
+
+    .CardInfo {
+        justify-content: center;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 700px) {
+    .SearchbarCardItem {
+        justify-content: space-around;
+        width: 60vw;
+        z-index: 29;
+        border-radius: 0;
+    }
+
+    .CardName {
+        max-width: none;
+        width: auto;
+    }
+
+    .CardNameWrapper {
+        width: auto;
+    }
+
+    .CardInfo {
+        width: 90%;
+        justify-content: space-between;
+    }
+
+    .symbolsWrapper {
+        justify-self: flex-end;
+    }
 }

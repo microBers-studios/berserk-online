@@ -10,7 +10,7 @@ export const loginUser = createAsyncThunk<
         () => void,
         (code: number, id: number) => void
     ],
-    { rejectValue: { code: number, email: string } }
+    { rejectValue: { code: number, email: string } | string }
 >(
     'user/loginUser',
     async function ([userObject, fulfilledCallback, rejectedCallback], { rejectWithValue }) {
@@ -50,6 +50,9 @@ export const loginUser = createAsyncThunk<
         } catch (e) {
             const error = e as IError
             rejectedCallback(code, error.id)
+            if (error.message === 'Cookie Error') {
+                return rejectWithValue('Cookie Error')
+            }
             return rejectWithValue({ code, email })
         }
     })

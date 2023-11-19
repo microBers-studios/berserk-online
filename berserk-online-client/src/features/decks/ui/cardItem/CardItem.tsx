@@ -8,7 +8,8 @@ import {
     getElite,
     getRarity,
     getTypeSymbol,
-    CardTypes
+    CardTypes,
+    useResize
 } from "src/shared/lib";
 import trashcanImage from "src/shared/assets/images/trash.svg"
 import { changeCardAmount, deleteCard } from 'src/entities/decks';
@@ -17,21 +18,22 @@ interface CardItemProps {
     card: IDeckCard;
     isSaveDisabled: boolean;
     setIsSaveDisabled: (b: boolean) => void;
-    isSide?: boolean;
+    setModalCard: (id: number) => void;
 }
 
-export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabled }: CardItemProps) => {
+export const CardItem = ({ card, isSaveDisabled, setIsSaveDisabled, setModalCard }: CardItemProps) => {
     const dispatch = useAppDispatch()
     const deck = useAppSelector(state => state.decks.currentDeck)
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
+    const { width } = useResize()
 
     const removeCard = () => {
         setIsDeleteAnimation(true)
 
         setTimeout(() => {
-            dispatch(deleteCard({ cardId: card.id, isSide }))
+            dispatch(deleteCard({ cardId: card.id }))
             console.log(deck?.main.length)
             if (deck?.main.length !== 1) {
                 setIsSaveDisabled(false)
@@ -45,14 +47,17 @@ export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabl
         if ((!isIncrease && card.amount !== 1) || isIncrease) {
             setIsSaveDisabled(false)
         }
-        dispatch(changeCardAmount({ cardId: card.id, isIncrease, isSide }))
+        dispatch(changeCardAmount({ cardId: card.id, isIncrease }))
     }
 
     return (
         <li
             className={`${cls.CardItem} ${isDeleteAnimation && cls.deleting}`}
+            onClick={width <= 768
+                ? () => setModalCard(card.id)
+                : () => { }}
         >
-            <div className={cls.CardAmountButtons}>
+            {width > 768 && <div className={cls.CardAmountButtons}>
                 <span
                     className={cls.plus}
                     onClick={() => regCardAmount(true)}>+</span>
@@ -60,6 +65,7 @@ export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabl
                     className={cls.minus}
                     onClick={() => regCardAmount(false)}>-</span>
             </div>
+            }
             <div
                 className={cls.CardContentWrapper}
                 onMouseOver={() => setIsMouseOver(true)}
@@ -68,9 +74,11 @@ export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabl
             >
                 <span className={cls.CardAmount}>{card.amount}</span>
                 <span
-                    className={cls.CardName}
-                >{card.name} {card.type !== CardTypes.CREATURE &&
-                    <SymbolIcon src={getTypeSymbol(card.type)} />}
+                    className={cls.CardNameWrapper}
+                >
+                    <span className={cls.CardName}>{card.name}</span>
+                    {card.type !== CardTypes.CREATURE &&
+                        <SymbolIcon src={getTypeSymbol(card.type)} />}
                 </span>
                 <span
                     className={cls.CardPrice}>
@@ -88,15 +96,16 @@ export const CardItem = ({ card, isSide = false, isSaveDisabled, setIsSaveDisabl
                 <SymbolIcon
                     src={getRarity(card.rarity, card.set)} />
             </div>
-            <div className={cls.DeleteCardButton}>
+            {width > 768 && <div className={cls.DeleteCardButton}>
                 <img
                     src={trashcanImage}
                     className={cls.trashcanImage}
                     onClick={removeCard}
                 />
             </div>
+            }
 
-            {isMouseOver &&
+            {isMouseOver && width > 768 &&
                 <CardTitleItem cardSrc={card.image} clientY={clientY} />}
         </li>
     );

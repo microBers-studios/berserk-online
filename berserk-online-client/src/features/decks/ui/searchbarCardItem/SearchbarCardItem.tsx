@@ -6,7 +6,8 @@ import {
     getElite,
     getRarity,
     getTypeSymbol,
-    CardTypes
+    CardTypes,
+    useResize
 } from "src/shared/lib";
 import cls from "./SearchbarCardItem.module.scss"
 import { SymbolIcon, CardTitleItem } from "src/shared/ui";
@@ -17,14 +18,16 @@ import { addCard } from "src/entities/decks";
 interface SearchbarCardItemProps {
     card: CardType;
     setIsSaveDisabled: (b: boolean) => void;
+    setModalCard: (card: CardType) => void;
 }
 
-export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItemProps) => {
+export const SearchbarCardItem = ({ card, setIsSaveDisabled, setModalCard }: SearchbarCardItemProps) => {
     const deck = useAppSelector(state => state.decks.currentDeck) as DeckType
     const dispatch = useAppDispatch()
     const [isMouseOver, setIsMouseOver] = useState(false)
     const [clientY, setClientY] = useState(0)
 
+    const { width } = useResize()
     const isInDeck = deck.main.findIndex(c => c.id === card.id) !== -1
 
     const addCardToDeck = () => {
@@ -33,8 +36,12 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
     }
 
     return (
-        <li className={cls.SearchbarCardItem}>
-            <span
+        <li className={cls.SearchbarCardItem}
+            onClick={width <= 768
+                ? () => setModalCard(card)
+                : () => { }}
+        >
+            {width > 768 && <span
                 className={`${cls.AddButton} ${!isInDeck && cls.plusButton}`}
                 onClick={addCardToDeck}
             >
@@ -43,6 +50,7 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
                     src={isInDeck ? tickImage : plusImage}
                 />
             </span>
+            }
             <div
                 className={cls.CardInfo}
                 onMouseOver={() => setIsMouseOver(true)}
@@ -50,27 +58,31 @@ export const SearchbarCardItem = ({ card, setIsSaveDisabled }: SearchbarCardItem
                 onMouseMove={(e: React.MouseEvent) => setClientY(e.clientY)}
             >
                 <span
-                    className={cls.CardName}
-                >{card.name} {card.type !== CardTypes.CREATURE &&
-                    <SymbolIcon src={getTypeSymbol(card.type)} />}
+                    className={cls.CardNameWrapper}
+                >
+                    <span className={cls.CardName}>{card.name}</span>
+                    {card.type !== CardTypes.CREATURE &&
+                        <SymbolIcon src={getTypeSymbol(card.type)} />}
                 </span>
-                <span
-                    className={cls.CardPrice}>
-                    {card.price}
-                    <SymbolIcon
-                        src={getElite(card.elite, card.unique)} />
-                </span>
-                <span>{card.elements
-                    .map((element, i) =>
+                <div className={cls.symbolsWrapper}>
+                    <span
+                        className={cls.CardPrice}>
+                        {card.price}
                         <SymbolIcon
-                            key={i}
-                            src={getElement(element)} />)
-                }
-                </span>
-                <SymbolIcon
-                    src={getRarity(card.rarity, card.set)} />
+                            src={getElite(card.elite, card.unique)} />
+                    </span>
+                    <span>{card.elements
+                        .map((element, i) =>
+                            <SymbolIcon
+                                key={i}
+                                src={getElement(element)} />)
+                    }
+                    </span>
+                    <SymbolIcon
+                        src={getRarity(card.rarity, card.set)} />
+                </div>
             </div>
-            {isMouseOver &&
+            {isMouseOver && width > 768 &&
                 <CardTitleItem
                     isSearchbar={true}
                     cardSrc={card.image}

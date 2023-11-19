@@ -3,7 +3,7 @@ import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
 import { apiUrl, Paths, checkCookie } from "src/shared/lib";
 
 
-export const fetchUser = createAsyncThunk<UserType, undefined, { rejectValue: { code: number, email: string } }>(
+export const fetchUser = createAsyncThunk<UserType, undefined, { rejectValue: { code: number, email: string } | string }>(
     'user/getUser',
     async function (_, { rejectWithValue }) {
         let code: number = 0;
@@ -38,6 +38,10 @@ export const fetchUser = createAsyncThunk<UserType, undefined, { rejectValue: { 
 
             return userObj
         } catch (e) {
+            const error = e as Error
+            if (error.message === 'Cookie Error') {
+                return rejectWithValue('Cookie Error')
+            }
             return rejectWithValue({ code, email })
         }
     })

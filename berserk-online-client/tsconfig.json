@@ -29,7 +29,8 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "src/shared/lib/cards/.ts"
   ],
   "references": [
     {

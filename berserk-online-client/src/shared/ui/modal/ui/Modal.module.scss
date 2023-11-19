@@ -5,6 +5,7 @@
     position: absolute;
     top: 0;
     right: 0;
+    bottom: 0;
     user-select: none;
     z-index: 900;
 }
@@ -108,15 +109,17 @@
 
 @media(max-width: 600px) {
     .Modal {
-        left: 15%;
-        right: 15%;
+        left: 20%;
+        right: 20%;
+        // bottom: 30%;
     }
 }
 
 @media(max-width: 500px) {
     .Modal {
-        left: 5%;
-        right: 5%;
+        left: 20%;
+        right: 20%;
+        // bottom: 45%;
     }
 }
 

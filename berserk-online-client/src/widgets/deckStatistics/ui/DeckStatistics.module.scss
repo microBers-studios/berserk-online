@@ -13,3 +13,15 @@
     align-items: center;
     justify-content: space-around;
 }
+
+@media (max-width: 1200px) {
+    .DeckStatistics {
+        width: 50vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .ChartsWrapper {
+        flex-direction: column;
+    }
+}

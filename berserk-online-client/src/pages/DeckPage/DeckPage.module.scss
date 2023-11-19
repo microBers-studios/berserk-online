@@ -1,9 +1,11 @@
 .DeckPage {
+    padding: 0;
+    margin: 0;
     width: 100%;
     min-height: 100vh;
     background-color: var(--primary-color);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .DeckHeaderWrapper {
@@ -26,7 +28,40 @@
 }
 
 .DeckPageWrapper {
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+@media (max-width: 1000px) {
+    .DeckPageWrapper {
+        width: 65vw;
+    }
+}
+
+@media (max-width: 810px) {
+    .DeckCardsCount {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .DeckPageHeader {
+        // font-size: 27px;
+        margin-left: 20px;
+    }
+
+    .DeckCardsCount {
+        font-size: 18px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .DeckPageWrapper {
+        width: 100vw;
+        height: 100vh;
+    }
 }

@@ -14,3 +14,9 @@
         color: var(--border-color)
     }
 }
+
+@media (max-width: 768px) {
+    .SaveDeckButton {
+        padding: 8px 15px;
+    }
+}

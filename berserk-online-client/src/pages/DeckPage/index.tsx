@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import cls from "./DeckPage.module.scss"
 import ReactLoading from 'react-loading';
 import { CardsSearchbar } from 'src/widgets/cardsSearchbar';
-import { useAppDispatch, useAppSelector, RouterPaths } from 'src/shared/lib';
+import { useAppDispatch, useAppSelector, RouterPaths, useResize } from 'src/shared/lib';
 import {
     getDeck,
     getDeckStatusSelector
@@ -27,6 +27,7 @@ interface DeckPageProps {
 export const DeckPage = ({ currentPage }: DeckPageProps) => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const { width } = useResize()
 
     const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
@@ -74,6 +75,7 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
                                         setIsSaveDisabled={setIsSaveDisabled}
                                     />
                                 </div>
+                                {width <= 700 && <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />}
                                 <DeckConstructor
                                     deck={deck}
                                     isSaveDisabled={isSaveDisabled}
@@ -81,7 +83,7 @@ export const DeckPage = ({ currentPage }: DeckPageProps) => {
                                 />
                                 <DeckStatistics deck={deck as DeckType} />
                             </div>
-                            <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />
+                            {width > 700 && <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />}
                         </>
                     }
                 </div>}

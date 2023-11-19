@@ -31,15 +31,12 @@ export const decksSlice = createSlice({
     name: 'decks',
     initialState,
     reducers: {
-        changeCardAmount: (state, action: PayloadAction<{ cardId: number, isIncrease: boolean, isSide: boolean }>) => {
-            const { cardId, isIncrease, isSide } = action.payload
+        changeCardAmount: (state, action: PayloadAction<{ cardId: number, isIncrease: boolean }>) => {
+            const { cardId, isIncrease } = action.payload
 
             const newDeck = JSON.parse(JSON.stringify(state.currentDeck))
-            const cardsList = isSide
-                ? newDeck.sideboard
-                : newDeck.main
 
-            const card = cardsList.find((c: IDeckCard) => c.id === cardId)
+            const card = newDeck.main.find((c: IDeckCard) => c.id === cardId)
             let amount: number;
 
             if (isIncrease) {
@@ -52,40 +49,19 @@ export const decksSlice = createSlice({
                 }
             }
 
-            if (!isSide) {
-                newDeck.main = cardsList.map((c: IDeckCard) => {
-                    return c.id === cardId
-                        ? { ...c, amount }
-                        : c
-                })
-            } else {
-                if (!newDeck.sideboard) {
-                    throw new Error('Sideboard Error')
-                }
-
-                newDeck.sideboard = cardsList.map((c: IDeckCard) => {
-                    return c.id === cardId
-                        ? { ...c, amount }
-                        : c
-                })
-            }
+            newDeck.main = newDeck.main.map((c: IDeckCard) => {
+                return c.id === cardId
+                    ? { ...c, amount }
+                    : c
+            })
 
             state.currentDeck = newDeck
         },
-        deleteCard: (state, action: PayloadAction<{ cardId: number, isSide: boolean }>) => {
-            const { cardId, isSide } = action.payload
+        deleteCard: (state, action: PayloadAction<{ cardId: number }>) => {
+            const { cardId } = action.payload
 
             const newDeck = JSON.parse(JSON.stringify(state.currentDeck))
-
-            const cardsList = isSide
-                ? newDeck.sideboard
-                : newDeck.main
-
-            if (isSide) {
-                newDeck.sideboard = cardsList.filter((c: CardType) => c.id !== cardId)
-            } else {
-                newDeck.main = cardsList.filter((c: CardType) => c.id !== cardId)
-            }
+            newDeck.main = newDeck.main.filter((c: CardType) => c.id !== cardId)
 
             state.currentDeck = newDeck
         },

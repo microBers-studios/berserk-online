@@ -58,3 +58,43 @@
     gap: 5px;
     align-items: center;
 }
+
+.visible {
+    display: block;
+}
+
+@media (max-width: 1200px) {
+    .CardsSearchbar {
+        width: 35vw;
+    }
+}
+
+@media (max-width: 700px) {
+    .ResultsContainerWrapper {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 80px;
+    }
+
+    .CardsSearchbar {
+        position: relative;
+        width: 100vw;
+        height: 150px;
+    }
+
+    .CardsSearchbarInput {
+        width: 60vw;
+    }
+
+    .ResultsContainer {
+        padding: 0;
+        gap: 0;
+        border: 2px solid var(--border-color);
+        width: 60vw;
+        margin: 0 auto;
+        background-color: var(--primary-color);
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
+    }
+}
