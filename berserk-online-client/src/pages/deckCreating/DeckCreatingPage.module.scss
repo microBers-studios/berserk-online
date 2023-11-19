@@ -22,17 +22,11 @@
     box-sizing: border-box;
     background-color: transparent;
     height: 30px;
-    // width: 20%;
     border-radius: 4px;
     border: none;
     border-bottom: 2px solid var(--border-color);
     font-size: 20px;
     color: var(--border-color);
-
-    &:focus {
-        outline: none;
-        transition: border-bottom 0.07s ease-in;
-    }
 }
 
 .DeckCardsCount {
@@ -81,4 +75,70 @@
 .NoCardsText {
     font-size: 20px;
     color: var(--border-color);
+}
+
+@media (max-width: 1200px) {
+    .CardsContainer {
+        width: 55vw;
+    }
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 25vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    .DeckPageWrapper {
+        width: 65vw;
+    }
+
+    .CardsContainer {
+        width: 65vw;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .EliteCardsHeader,
+    .OrdinaryCardsHeader {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 810px) {
+    .DeckCardsCount {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 50vw;
+    }
+
+    .DeckPageHeader {
+        margin-left: 20px;
+    }
+
+    .DeckCardsCount {
+        font-size: 18px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .CardsContainer {
+        width: 100vw;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 70vw;
+    }
 }
