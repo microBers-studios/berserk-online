@@ -1,9 +1,8 @@
-﻿using berserk_online_server.Interfaces.Repos;
-using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace berserk_online_server.Facades.Database
 {
@@ -32,7 +31,7 @@ namespace berserk_online_server.Facades.Database
             var decks = getDecks(new UserInfoRequest() { Email = email });
             if (decks.Length > 0 && decks[0].UserId != null)
             {
-                _cache.Set((int) decks[0].UserId, decks);
+                _cache.Set((int)decks[0].UserId, decks);
             }
             return decks.Select(_deckBuilder.BuildFromDb).ToArray();
         }
@@ -47,13 +46,15 @@ namespace berserk_online_server.Facades.Database
             var deck = _deckRepo.Get(id);
             return _deckBuilder.BuildFromDb(deck);
         }
-        public void Update(DeckRequest deck)
+        public void Update(DeckRequest deck, string email)
         {
+            if (!isUserOwnDeck(deck, email))
+                throw new InvalidOperationException("No permission to update this deck.");
             var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
             _deckRepo.Update(deckDb);
             var updatedDeck = _deckRepo.Get(deck.Id);
             if (updatedDeck.UserId != null)
-                _cache.Remove((int) updatedDeck.UserId);
+                _cache.Remove((int)updatedDeck.UserId);
         }
         /// <summary>
         /// 
@@ -64,10 +65,12 @@ namespace berserk_online_server.Facades.Database
         /// <exception cref="NotFoundException"></exception>
         public Deck[] Delete(string email, string id)
         {
+            if (!isUserOwnDeck(new DeckRequest() { Id = id }, email))
+                throw new InvalidOperationException();
             _deckRepo.Delete(id);
             var decks = _deckRepo.GetByUser(email);
             if (decks.Length > 0 && decks[0].UserId != null)
-                _cache.Remove((int) decks[0].UserId);
+                _cache.Remove((int)decks[0].UserId);
             return decks.Select(_deckBuilder.BuildFromDb).ToArray();
         }
         public void Add(string email, DeckRequest deck)
@@ -95,6 +98,11 @@ namespace berserk_online_server.Facades.Database
                 throw new ArgumentNullException(nameof(request.Email));
             var decks = _deckRepo.GetByUser(request.Email).ToArray();
             return decks;
+        }
+        private bool isUserOwnDeck(DeckRequest deck, string email)
+        {
+            var userDecks = _deckRepo.GetByUser(email);
+            return userDecks.Any(d => d.Id == deck.Id);
         }
     }
 }

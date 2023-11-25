@@ -1,7 +1,6 @@
 ﻿using berserk_online_server.Facades;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Requests;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace berserk_online_server.Middleware
 {
@@ -12,7 +11,8 @@ namespace berserk_online_server.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, IUsersDatabase db)
+        public async Task Invoke(HttpContext context, IUsersDatabase db,
+            IAuthenticationManager authenticationManager)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
                 || isTryToConfirm(context))
@@ -22,9 +22,7 @@ namespace berserk_online_server.Middleware
             }
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                context);
-                var user = db.GetUser(new UserInfoRequest() { Email = authManager.GetMail() });
+                var user = db.GetUser(new UserInfoRequest() { Email = authenticationManager.GetMail() });
                 if (!user.IsEmailConfirmed)
                 {
                     writeBadRequest(context, user.Email);

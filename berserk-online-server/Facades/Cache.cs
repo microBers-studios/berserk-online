@@ -1,6 +1,5 @@
 ﻿using berserk_online_server.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections;
 
 namespace berserk_online_server.Facades
 {
@@ -13,7 +12,7 @@ namespace berserk_online_server.Facades
         }
         public TValue Get(TKey key)
         {
-            var value = (TValue) _memoryCache.Get(key);
+            var value = (TValue)_memoryCache.Get(key);
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
@@ -33,7 +32,7 @@ namespace berserk_online_server.Facades
 
         public bool TryGet(TKey key, out TValue value)
         {
-            value = (TValue) _memoryCache.Get(key);
+            value = (TValue)_memoryCache.Get(key);
             return value != null;
         }
     }

@@ -4,7 +4,6 @@ using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace berserk_online_server.Controllers
@@ -16,23 +15,26 @@ namespace berserk_online_server.Controllers
         private readonly IUsersDatabase _db;
         private readonly ITempRequestsManager<RecoveryMailSender> _recoveryManager;
         private readonly ITempRequestsManager<ConfirmEmailSender> _confirmEmailManager;
+        private readonly IAuthenticationManager _authenticationManager;
 
         public AuthenticationController(IUsersDatabase databases,
             ITempRequestsManager<RecoveryMailSender> recoveryManager,
-            ITempRequestsManager<ConfirmEmailSender> confirmEmailManager)
+            ITempRequestsManager<ConfirmEmailSender> confirmEmailManager,
+            IAuthenticationManager authenticationManager)
         {
             _db = databases;
             _recoveryManager = recoveryManager;
             _confirmEmailManager = confirmEmailManager;
+            _authenticationManager = authenticationManager;
         }
         [HttpPost("login")]
-        public async Task<IResult> Login(UserAuthenticationRequest authRequest)
+        public async Task<ActionResult<UserInfo>> Login(UserAuthenticationRequest authRequest)
         {
             try
             {
                 UserInfo matchingUser = _db.VerifyUser(authRequest);
                 await authenticate(matchingUser, authRequest.RememberMe);
-                return Results.Ok(matchingUser);
+                return matchingUser;
             }
             catch (NotFoundException)
             {
@@ -44,35 +46,35 @@ namespace berserk_online_server.Controllers
             }
         }
         [HttpPost("register")]
-        public async Task<IResult> Register(UserAuthenticationRequest user)
+        public async Task<ActionResult<UserInfo>> Register(UserAuthenticationRequest user)
         {
             if (_db.IsUnique(new UserInfoRequest() { Email = user.Email, Name = user.Email }))
             {
                 _db.AddUser(createUser(user));
                 await authenticate(new UserInfo(createUser(user)), user.RememberMe);
                 _confirmEmailManager.Push(user.Email);
-                return Results.Ok(new UserInfo(createUser(user)));
+                return Ok(new UserInfo(createUser(user)));
             }
             else return userAlreadyExists(user);
         }
         [HttpPost("requestRecover")]
-        public IResult RequestRecover(UserInfoRequest request)
+        public IActionResult RequestRecover(UserInfoRequest request)
         {
             if (request.Email == null)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.ArgumentsMissing, new
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.ArgumentsMissing, new
                 {
                     Request = request,
                     Message = "'Email' required."
                 }));
             }
             if (_db.IsUnique(request))
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, request));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, request));
             _recoveryManager.Push(request.Email);
-            return Results.Ok();
+            return Ok();
         }
         [HttpPatch("changePassword")]
-        public IResult ChangePassword(RecoveryRequestModel request)
+        public IActionResult ChangePassword(RecoveryRequestModel request)
         {
             try
             {
@@ -82,69 +84,67 @@ namespace berserk_online_server.Controllers
             }
             catch (InvalidOperationException)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, request));
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, request));
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new
                 {
                     Request = request,
                     Message = "An incorrect email address is stored under this token."
                 }));
             }
 
-            return Results.Ok();
+            return Ok();
         }
         [HttpPost("confirmEmail")]
-        public IResult ConfirmEmail(string token)
+        public ActionResult<UserInfo> ConfirmEmail(string token)
         {
             try
             {
                 if (!_confirmEmailManager.IsValid(token))
                 {
-                    return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
+                    return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
                 }
                 var email = _confirmEmailManager.GetEmail(token);
                 var user = _db.ConfirmEmail(email);
                 _confirmEmailManager.Remove(token);
-                return Results.Ok(user);
+                return Ok(user);
             }
             catch (InvalidOperationException)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidToken, token));
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
             }
 
         }
         [HttpGet("confirmationRequest")]
-        public IResult requestNewConfirmation()
+        public IActionResult RequestNewConfirmation()
         {
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                    HttpContext);
-                var mail = authManager.GetMail();
+                var mail = _authenticationManager.GetMail();
                 _confirmEmailManager.Push(mail);
-                return Results.Ok();
+                return Ok();
             }
             catch (ArgumentNullException)
             {
-                return Results.Unauthorized();
+                return Unauthorized();
             }
         }
         [HttpGet("logout")]
-        public IResult LogOut()
+        public IActionResult LogOut()
         {
-            new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext).LogOut();
-            return Results.NoContent();
+            _authenticationManager.LogOut();
+            return NoContent();
         }
         private async Task authenticate(UserInfo user, bool rememberMe)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, HttpContext);
-            await manager.Authenticate(user, rememberMe);
+            ;
+            await _authenticationManager.Authenticate(user, rememberMe);
         }
         private User createUser(UserAuthenticationRequest request)
         {
@@ -156,11 +156,11 @@ namespace berserk_online_server.Controllers
                 Password = request.Password,
             };
         }
-        private IResult userPasswordNotMatching(UserAuthenticationRequest user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
-        private IResult userEmailNotFound(UserAuthenticationRequest user) => Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
-        private IResult userAlreadyExists(UserAuthenticationRequest user)
-        {
-            return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, user));
-        }
+        private ActionResult userPasswordNotMatching(UserAuthenticationRequest user) =>
+            BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidPassword, user));
+        private ActionResult userEmailNotFound(UserAuthenticationRequest user) =>
+            BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidEmail, user));
+        private ActionResult userAlreadyExists(UserAuthenticationRequest user) =>
+            BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, user));
     }
 }

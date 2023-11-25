@@ -4,7 +4,7 @@ using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades
 {
-    public class TempRequestsManager<T> : ITempRequestsManager<T> 
+    public class TempRequestsManager<T> : ITempRequestsManager<T>
         where T : IMailSender
     {
         //Key is token

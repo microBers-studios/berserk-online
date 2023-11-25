@@ -1,25 +1,27 @@
 ﻿using berserk_online_server.Constants;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
 namespace berserk_online_server.Facades
 {
-    public class AuthenticationManager
+    public class AuthenticationManager : IAuthenticationManager
     {
-        private readonly string _authScheme;
-        private readonly HttpContext _context;
-        public AuthenticationManager(string scheme, HttpContext context)
+        public string AuthenticationScheme { get; set; }
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AuthenticationManager(IHttpContextAccessor accessor)
         {
-            _authScheme = scheme;
-            _context = context;
+            AuthenticationScheme = AuthenticationConstants.DEFAULT_SCHEME;
+            _contextAccessor = accessor;
         }
         public async Task Authenticate(UserInfo user, bool rememberMe)
         {
             var claims = createClaims(user);
             var claimsIdentity = new ClaimsIdentity(claims,
-                _authScheme);
-            await _context.SignInAsync(_authScheme, new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
+                AuthenticationScheme);
+            var context = _contextAccessor.HttpContext ?? throw new ArgumentNullException("HttpContext is null");
+            await context.SignInAsync(AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
             {
                 ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddMonths(2) : DateTimeOffset.UtcNow.AddMinutes(20)
             });
@@ -32,20 +34,22 @@ namespace berserk_online_server.Facades
         /// <exception cref="ArgumentNullException"></exception>
         public string GetMail()
         {
-            var emailClaim = _context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
+            var context = _contextAccessor.HttpContext ?? throw new ArgumentNullException("HttpContext is null");
+            var emailClaim = context.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email);
             if (emailClaim == null) throw new ArgumentNullException("claim is null");
             return emailClaim.Value;
         }
         public void LogOut()
         {
-            clearResponseCookies(CookieConstants.AuthenticationCookieName,
-                CookieConstants.RememberMeCookieName);
+            clearResponseCookies(CookieConstants.AUTHENTICATION_COOKIE_NAME,
+                CookieConstants.REMEMBER_ME_COOKIE_NAME);
         }
         private void clearResponseCookies(params string[] names)
         {
+            var context = _contextAccessor.HttpContext ?? throw new ArgumentNullException("HttpContext is null");
             foreach (var name in names)
             {
-                _context.Response.Cookies.Append(name, "", new CookieOptions()
+                context.Response.Cookies.Append(name, "", new CookieOptions()
                 {
                     SameSite = SameSiteMode.None,
                     Secure = true
@@ -62,7 +66,8 @@ namespace berserk_online_server.Facades
         }
         private void setRememberMeCookie(bool rememberMe)
         {
-            _context.Response.Cookies.Append(CookieConstants.RememberMeCookieName, rememberMe.ToString(), new CookieOptions()
+            var context = _contextAccessor.HttpContext ?? throw new ArgumentNullException("HttpContext is null");
+            context.Response.Cookies.Append(CookieConstants.REMEMBER_ME_COOKIE_NAME, rememberMe.ToString(), new CookieOptions()
             {
                 SameSite = SameSiteMode.None,
                 Secure = true,

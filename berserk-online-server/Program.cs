@@ -35,11 +35,14 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
+
 builder.Services.AddMemoryCache();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ICache<string, User>, Cache<string, User>>();
 builder.Services.AddTransient<ICache<int, DeckDb[]>, Cache<int, DeckDb[]>>();
 builder.Services.AddTransient<IUrlCreator, FrontendURLCreator>();
+builder.Services.AddTransient<IAuthenticationManager, AuthenticationManager>();
 
 builder.Services.AddTransient<IUsersDatabase, UsersDatabase>();
 builder.Services.AddTransient<IDeckDatabase, DeckDatabase>();
