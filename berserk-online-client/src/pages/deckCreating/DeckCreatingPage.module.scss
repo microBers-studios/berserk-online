@@ -3,7 +3,7 @@
     min-height: 100vh;
     background-color: var(--primary-color);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .DeckHeaderWrapper {
@@ -16,6 +16,12 @@
 .DeckPageHeader {
     width: 20%;
     color: var(--border-color)
+}
+
+.DeckContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .DeckPageHeaderInput {
@@ -82,6 +88,14 @@
         width: 55vw;
     }
 
+    .DeckContainer {
+        width: 65vw;
+    }
+
+    .DeckPageHeaderInput {
+        width: 19vw;
+    }
+
     .OrdinaryCardsContainer,
     .EliteCardsContainer {
         width: 25vw;
@@ -130,12 +144,31 @@
 }
 
 @media (max-width: 700px) {
+    .DeckCreatingPage {
+        justify-content: center;
+    }
+
+    .DeckHeaderWrapper {
+        width: 100vw;
+    }
+
+    .DeckPageHeaderInput {
+        width: 33vw;
+    }
+
     .CardsContainer {
         width: 100vw;
     }
 }
 
 @media (max-width: 600px) {
+    .DeckPageHeader {
+        margin: 0;
+    }
+
+    .DeckPageHeaderInput {
+        width: 30vw;
+    }
 
     .OrdinaryCardsContainer,
     .EliteCardsContainer {

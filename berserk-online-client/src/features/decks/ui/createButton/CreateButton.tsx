@@ -29,6 +29,7 @@ export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) =>
         if (!deck) return
         if (!deckName) {
             toast('Введите имя колоды')
+            return
         }
         dispatch(createDeck({ ...deck, name: deckName }))
     }

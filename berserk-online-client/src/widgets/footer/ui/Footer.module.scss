@@ -10,7 +10,7 @@
 .FooterContent {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 5vw;
 }
 
 .HobbyworldImage {
@@ -22,7 +22,6 @@
     width: 35px;
     height: 35px;
     border-radius: 20px;
-    // border: 3px solid white;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -49,4 +48,25 @@
 
 .year {
     color: white;
+}
+
+@media(max-width: 500px) {
+    .HobbyworldImage {
+        width: 70px;
+    }
+
+    .GithubImageWrapper {
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        border-radius: 50px;
+    }
+
+    .GithubImage {
+        width: 45px;
+    }
+
+    .GithubLink {
+        font-size: 14px;
+    }
 }

@@ -56,9 +56,7 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
                 <>
                     <div className={cls.DeckCreatingPage}>
                         <div className={cls.DeckContainer}>
-                            <div
-                                className={cls.DeckHeaderWrapper}
-                            >
+                            <div className={cls.DeckHeaderWrapper}>
                                 <span
                                     className={cls.DeckPageHeader}
                                 >
@@ -78,12 +76,8 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
                                 />
                             </div>
                             {width <= 700 && <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />}
-                            <div
-                                className={cls.CardsContainer}
-                            >
-                                <div
-                                    className={cls.EliteCardsContainer}
-                                >
+                            <div className={cls.CardsContainer} >
+                                <div className={cls.EliteCardsContainer} >
                                     <h2
                                         className={cls.EliteCardsHeader}
                                     >Элитные карты ({eliteCards?.reduce((acc, curr) => acc + curr.amount, 0)})</h2>
@@ -134,7 +128,6 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                         {width > 700 && <CardsSearchbar setIsSaveDisabled={setIsSaveDisabled} />}
                     </div >
