@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Exceptions;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Cards;
 using berserk_online_server.Models.Db;
@@ -48,6 +49,8 @@ namespace berserk_online_server.Facades.Database
         }
         public void Update(DeckRequest deck, string email)
         {
+            if (_deckRepo.IsUnique(deck.Id))
+                throw new NotFoundException();
             if (!isUserOwnDeck(deck, email))
                 throw new InvalidOperationException("No permission to update this deck.");
             var deckDb = _deckBuilder.BuildToDb(_deckBuilder.BuildFromRequest(deck));
@@ -64,7 +67,8 @@ namespace berserk_online_server.Facades.Database
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         public Deck[] Delete(string email, string id)
-        {
+        { 
+            if (_deckRepo.IsUnique(id)) throw new NotFoundException();
             if (!isUserOwnDeck(new DeckRequest() { Id = id }, email))
                 throw new InvalidOperationException();
             _deckRepo.Delete(id);
@@ -100,7 +104,7 @@ namespace berserk_online_server.Facades.Database
             return decks;
         }
         private bool isUserOwnDeck(DeckRequest deck, string email)
-        {
+        {   
             var userDecks = _deckRepo.GetByUser(email);
             return userDecks.Any(d => d.Id == deck.Id);
         }

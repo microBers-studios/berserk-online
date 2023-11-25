@@ -16,6 +16,7 @@ namespace berserk_online_server.Facades
         InvalidToken,
         EmailNotConfirmed,
         DeckAlreadyExists,
+        NoAccess
     }
     public static class ApiErrorFabric
     {
@@ -43,6 +44,8 @@ namespace berserk_online_server.Facades
                     return new EmailNotConfirmed(ctx);
                 case ApiErrorType.DeckAlreadyExists:
                     return new DeckAlreadyExists(ctx);
+                case ApiErrorType.NoAccess:
+                    return new NoAccess(ctx);
             }
             throw new NotImplementedException();
         }

@@ -197,7 +197,7 @@ namespace UnitTests.Controllers
 
             var info = controller.Update(_deckMock);
 
-            Assert.IsType<ForbidResult>(info);
+            Assert.IsType<BadRequestObjectResult>(info);
         }
         [Fact]
         public void DeleteGoodTest()
@@ -246,7 +246,7 @@ namespace UnitTests.Controllers
 
             var info = controller.Delete(_deckMock.Id);
 
-            Assert.IsType<ForbidResult>(info.Result);
+            Assert.IsType<BadRequestObjectResult>(info.Result);
         }
         private DeckController createController()
         {

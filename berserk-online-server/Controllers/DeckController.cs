@@ -93,7 +93,7 @@ namespace berserk_online_server.Controllers
             }
             catch (InvalidOperationException)
             {
-                return Forbid();
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.NoAccess, request));
             }
         }
         [HttpDelete("delete")]
@@ -119,7 +119,7 @@ namespace berserk_online_server.Controllers
             }
             catch (InvalidOperationException)
             {
-                return Forbid();
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.NoAccess, new { id }));
             }
 
         }
