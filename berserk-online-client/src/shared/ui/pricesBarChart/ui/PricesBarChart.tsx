@@ -10,6 +10,7 @@ import {
     LinearScale,
     BarElement
 } from 'chart.js'
+import cls from './PricesBarChart.module.scss'
 
 Chart.register(ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, BarElement);
 
@@ -47,7 +48,7 @@ export const PricesBarChart = ({ data }: PieChartProps) => {
         }
 
     }
-    return <div style={{ height: 'auto', width: '30vw' }}>
+    return <div className={cls.PieChartWrapper}>
         <Bar
             data={data}
             options={options}

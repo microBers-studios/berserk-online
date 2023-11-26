@@ -113,6 +113,12 @@
     }
 }
 
+@media (max-width: 768px) {
+    .SearchbarCardItem {
+        padding: 0 7px 0;
+    }
+}
+
 @media (max-width: 700px) {
     .SearchbarCardItem {
         justify-content: space-around;

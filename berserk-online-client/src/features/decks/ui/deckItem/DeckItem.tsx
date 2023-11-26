@@ -6,7 +6,8 @@ import {
     useAppDispatch,
     useAppSelector,
     getElement,
-    RouterPaths
+    RouterPaths,
+    useResize
 } from 'src/shared/lib';
 import { SymbolIcon, ConfirmModal } from "src/shared/ui";
 import { deleteDeck, deleteDeckStatusSelector } from 'src/entities/decks';
@@ -21,6 +22,7 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
 
     const [isDeleteModal, setIsDeleteModal] = useState(false)
     const [isDeleteAnimation, setIsDeleteAnimation] = useState(false)
+    const { width } = useResize()
     const deleteDeckStatus = useAppSelector(deleteDeckStatusSelector)
     const mainCardsCount = deck.main.reduce((acc, curr) => acc + curr.amount, 0)
 
@@ -49,11 +51,11 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
                         : deck.main[0].image}
                 />
                 <div
-                    className={cls.TrashCanImageWrapper}
+                    className={`${cls.TrashCanImageWrapper} ${width <= 768 && cls.visible}`}
                 >
                     <img
                         src={trashCanSvg}
-                        className={cls.TrashCanImage}
+                        className={`${cls.TrashCanImage}`}
                         onClick={onTrashCanClick}
                     />
                 </div>
@@ -83,7 +85,8 @@ export const DeckItem = ({ deck }: DeckItemProps) => {
                 text={`Вы действительно хотите удалить колоду ${deck.name}?`}
                 callback={removeDeck}
                 closeModal={() => setIsDeleteModal(false)}
-            />}
+            />
+            }
         </>
     );
 }

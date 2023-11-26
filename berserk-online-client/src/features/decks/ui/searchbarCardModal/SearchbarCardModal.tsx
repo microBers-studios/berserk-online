@@ -27,6 +27,7 @@ export const SearchbarCardModal = ({ card, closeModal, setIsSaveDisabled }: Sear
     const addCardToDeck = () => {
         dispatch(addCard({ card }))
         setIsSaveDisabled(false)
+        hideModal()
     }
 
     return (

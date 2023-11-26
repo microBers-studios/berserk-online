@@ -26,6 +26,7 @@
 }
 
 .CardHeader {
+    text-align: center;
     margin: 10px 0;
     color: white;
 }
@@ -66,6 +67,6 @@
 
 @media(max-width: 400px) {
     .CardImage {
-        width: 215px;
+        width: 200px;
     }
 }
