@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import cls from "./ProfilePill.module.scss"
 import userChangeIcon from "src/shared/assets/images/user-change.png"
 import exitIcon from "src/shared/assets/images/exit.svg"
-import { useAppDispatch, useAppSelector } from 'src/shared/lib';
+import { RouterPaths, useAppDispatch, useAppSelector } from 'src/shared/lib';
 import { logoutUser } from 'src/entities/user';
 
 interface ProfilePillProps {
@@ -10,11 +11,13 @@ interface ProfilePillProps {
 }
 export const ProfilePill = ({ openEditModal }: ProfilePillProps) => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const { user } = useAppSelector(state => state.user)
     const [isMenuShowed, setIsMenuShowed] = useState<boolean>(false)
 
     const onExitClick = async () => {
         dispatch(logoutUser())
+        navigate(RouterPaths.MAIN)
     }
 
     const onAccountEditClick = () => {

@@ -2,7 +2,7 @@
     background-color: rgb(0, 0, 0, 0.5);
     width: 100vw;
     height: 100vh;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
@@ -107,19 +107,35 @@
     }
 }
 
-@media(max-width: 600px) {
-    .Modal {
-        left: 20%;
-        right: 20%;
-        // bottom: 30%;
+// @media(max-width: 600px) {
+//     .Modal {
+//         left: 20%;
+//         right: 20%;
+//         bottom: 30%;
+//     }
+// }
+
+// @media(max-width: 500px) {
+//     .Modal {
+//         top: 15%;
+//         left: 20%;
+//         right: 20%;
+//     }
+// }
+
+@media (max-width: 600px) {
+    .modal {
+        top: 15%;
+        left: 15%;
+        right: 15%;
+        bottom: 15%;
     }
 }
 
-@media(max-width: 500px) {
-    .Modal {
-        left: 20%;
-        right: 20%;
-        // bottom: 45%;
+@media (max-width: 500px) {
+    .modal {
+        left: 10%;
+        right: 10%;
     }
 }
 

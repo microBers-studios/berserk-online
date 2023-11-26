@@ -153,6 +153,7 @@ export const LoginModal = ({
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             closeModal={closeModal}
+            modalClass={cls.modal}
         >
             <div className={cls.FormWrapper}>
                 <form
@@ -194,7 +195,7 @@ export const LoginModal = ({
                         <CheckboxInput isChecked={isChecked} setIsChecked={setIsChecked} />
                     }
 
-                    <div className={cls.buttonsWrapper}>
+                    <div className={cls.ButtonWrapper}>
                         <ModalButton
                             text={isRegistration
                                 ? 'Зарегистрироваться'

@@ -93,6 +93,7 @@ export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalPro
             isOpenAnimation={isOpenAnimation}
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
+            modalClass={cls.modal}
             closeModal={() => !updateUserStatus.isPending
                 && !loadAvatarStatus.isPending
                 && !deleteAvatarStatus.isPending

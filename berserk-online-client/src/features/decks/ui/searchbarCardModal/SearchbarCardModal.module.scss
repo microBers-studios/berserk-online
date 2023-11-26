@@ -6,7 +6,7 @@
 
 .CardModalContent {
     display: flex;
-    padding: 90px;
+    padding: 80px;
     box-sizing: border-box;
     height: 100%;
     flex-direction: column;
@@ -15,23 +15,23 @@
 }
 
 .CardImageWrapper {
-    height: 800px;
+    height: 300px;
     border: 2px solid var(--border-color);
     border-radius: 25px;
     overflow: hidden;
 }
 
 .CardImage {
-    width: 250px;
+    width: 212px;
 }
 
 .CardHeader {
-    // margin: 0 20px;
+    margin: 10px 0;
     color: white;
 }
 
 .AddButton {
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 5px;
     display: flex;
     align-items: center;
@@ -44,4 +44,28 @@
 
 .plusImage {
     width: 5vw;
+}
+
+@media(max-width: 600px) {
+    .CardImage {
+        width: 215px;
+    }
+}
+
+@media(max-width: 500px) {
+    .CardModal {
+        width: auto;
+        left: 10%;
+        right: 10%;
+    }
+
+    .CardImage {
+        width: 215px;
+    }
+}
+
+@media(max-width: 400px) {
+    .CardImage {
+        width: 215px;
+    }
 }

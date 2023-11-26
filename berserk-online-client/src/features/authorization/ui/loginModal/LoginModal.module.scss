@@ -57,7 +57,7 @@
     gap: 10%; // justify-self: center;
 }
 
-.buttonsWrapper {
+.ButtonWrapper {
     margin-top: 10%;
     grid-area: buttons;
     gap: 10px;
@@ -73,4 +73,39 @@
     bottom: -16px;
     font-weight: 200;
     font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .modal {
+        top: 15%;
+        left: 15%;
+        right: 15%;
+        bottom: 15%;
+    }
+}
+
+@media (max-width: 500px) {
+    .modal {
+        left: 10%;
+        right: 10%;
+
+        span {
+            font-size: 18px;
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .modal {
+
+        span {
+            font-size: 16px;
+        }
+    }
+}
+
+@media (max-height: 668px) {
+    .ButtonsWrapper {
+        margin-top: 10px;
+    }
 }

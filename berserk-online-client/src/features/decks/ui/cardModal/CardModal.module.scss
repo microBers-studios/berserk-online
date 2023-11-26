@@ -1,5 +1,5 @@
 .CardModal {
-    width: 60vw;
+    // width: 60vw;
     background-color: var(--primary-color);
     border: 2px solid var(--border-color);
 }
@@ -15,18 +15,19 @@
 }
 
 .CardImageWrapper {
-    height: 49vw;
+    height: 300px;
     border: 2px solid var(--border-color);
     border-radius: 25px;
     overflow: hidden;
 }
 
 .CardImage {
-    width: 35vw;
+    width: 212px;
 }
 
 .CardHeader {
-    margin: 15px 0;
+    text-align: center;
+    margin: 0 0 10px;
     color: white;
 }
 
@@ -52,4 +53,39 @@
 
 .trashCanImage {
     width: 4.5vw;
+}
+
+@media(max-width: 600px) {
+    .CardImage {
+        width: 210px;
+    }
+}
+
+@media(max-width: 500px) {
+    .CardModal {
+        left: 10%;
+        right: 10%;
+    }
+
+    .CardImage {
+        width: 215px;
+    }
+}
+
+@media(max-width: 470px) {
+    .CardImage {
+        width: 210px;
+    }
+}
+
+@media(max-width: 450px) {
+    .CardImage {
+        width: 210px;
+    }
+}
+
+@media(max-width: 400px) {
+    .CardImage {
+        width: 188px;
+    }
 }
