@@ -87,7 +87,7 @@ namespace berserk_online_server.Facades
             foreach (var avatarPath in avatarNames)
             {
                 var avatarName = Path.GetFileName(avatarPath);
-                _avatars.Add(createKeyFromFileName(avatarName), new Avatar(AvatarsFolderPath, AvatarsUrl, avatarName));
+                _avatars.Add(createKeyFromFileName(avatarName), new Avatar(AvatarsFolderPath, avatarName));
             }
         }
         private string createKeyFromFileName(string fileName)

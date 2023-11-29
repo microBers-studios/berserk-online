@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Facades
+﻿namespace berserk_online_server.Utils
 {
     public static class TokenGenerator
     {

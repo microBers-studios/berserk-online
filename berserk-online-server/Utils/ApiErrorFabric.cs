@@ -1,8 +1,9 @@
 ﻿using berserk_online_server.ApiErrors;
 using berserk_online_server.ApiErrors.Authentication;
 using berserk_online_server.ApiErrors.Decks;
+using berserk_online_server.ApiErrors.Rooms;
 
-namespace berserk_online_server.Facades
+namespace berserk_online_server.Utils
 {
     public enum ApiErrorType
     {
@@ -16,7 +17,8 @@ namespace berserk_online_server.Facades
         InvalidToken,
         EmailNotConfirmed,
         DeckAlreadyExists,
-        NoAccess
+        NoAccess,
+        RoomIsFull
     }
     public static class ApiErrorFabric
     {
@@ -46,6 +48,8 @@ namespace berserk_online_server.Facades
                     return new DeckAlreadyExists(ctx);
                 case ApiErrorType.NoAccess:
                     return new NoAccess(ctx);
+                case ApiErrorType.RoomIsFull:
+                    return new RoomIsFull(ctx);
             }
             throw new NotImplementedException();
         }

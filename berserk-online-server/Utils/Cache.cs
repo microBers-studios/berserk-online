@@ -1,7 +1,7 @@
 ﻿using berserk_online_server.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace berserk_online_server.Facades
+namespace berserk_online_server.Utils
 {
     public class Cache<TKey, TValue> : ICache<TKey, TValue>
     {

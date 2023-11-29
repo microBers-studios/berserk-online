@@ -1,6 +1,6 @@
-﻿using berserk_online_server.Facades;
-using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Requests;
+using berserk_online_server.Utils;
 
 namespace berserk_online_server.Middleware
 {
@@ -15,7 +15,7 @@ namespace berserk_online_server.Middleware
             IAuthenticationManager authenticationManager)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
-                || isTryToConfirm(context))
+                || isAllowed(context))
             {
                 await _next.Invoke(context);
                 return;
@@ -37,7 +37,7 @@ namespace berserk_online_server.Middleware
             context.Response.StatusCode = 403;
             context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new { email }));
         }
-        private bool isTryToConfirm(HttpContext context)
+        private bool isAllowed(HttpContext context)
         {
             var path = context.Request.Path.Value;
 #pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.

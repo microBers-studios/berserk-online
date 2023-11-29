@@ -67,7 +67,7 @@ namespace berserk_online_server.Facades.Database
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         public Deck[] Delete(string email, string id)
-        { 
+        {
             if (_deckRepo.IsUnique(id)) throw new NotFoundException();
             if (!isUserOwnDeck(new DeckRequest() { Id = id }, email))
                 throw new InvalidOperationException();
@@ -104,7 +104,7 @@ namespace berserk_online_server.Facades.Database
             return decks;
         }
         private bool isUserOwnDeck(DeckRequest deck, string email)
-        {   
+        {
             var userDecks = _deckRepo.GetByUser(email);
             return userDecks.Any(d => d.Id == deck.Id);
         }

@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Constants;
 
-namespace berserk_online_server.Facades
+namespace berserk_online_server.Utils
 {
     public class CookieExtender
     {
