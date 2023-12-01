@@ -1,14 +1,18 @@
 using berserk_online_server.Contexts;
+using berserk_online_server.Controllers.Hubs;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Facades.Database;
 using berserk_online_server.Facades.MailSenders;
+using berserk_online_server.Facades.Rooms;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
+using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Middleware;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Repository;
+using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +30,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
@@ -35,11 +40,14 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
+
 builder.Services.AddMemoryCache();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ICache<string, User>, Cache<string, User>>();
 builder.Services.AddTransient<ICache<int, DeckDb[]>, Cache<int, DeckDb[]>>();
 builder.Services.AddTransient<IUrlCreator, FrontendURLCreator>();
+builder.Services.AddTransient<IAuthenticationManager, AuthenticationManager>();
 
 builder.Services.AddTransient<IUsersDatabase, UsersDatabase>();
 builder.Services.AddTransient<IDeckDatabase, DeckDatabase>();
@@ -57,6 +65,10 @@ builder.Services.AddSingleton<IMailClient, MailClient>();
 
 builder.Services.AddSingleton<ITempRequestsManager<RecoveryMailSender>, TempRequestsManager<RecoveryMailSender>>();
 builder.Services.AddSingleton<ITempRequestsManager<ConfirmEmailSender>, TempRequestsManager<ConfirmEmailSender>>();
+
+builder.Services.AddSingleton<IRoomsManager, RoomsManager>();
+builder.Services.AddSingleton<IUserLocationManager, UserLocationManager>();
+builder.Services.AddTransient<IRoomUpdateDispatcher, RoomUpdateDispatcher>();
 
 builder.Services.AddSingleton<CardProvider>();
 
@@ -93,5 +105,6 @@ app.UseMiddleware<CookieUpdateMiddleware>();
 app.UseMiddleware<ConfirmEmailMiddleware>();
 
 app.MapControllers();
+app.MapHub<RoomHub>("/connect/{roomId}");
 
 app.Run();

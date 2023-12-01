@@ -1,9 +1,8 @@
 ﻿using berserk_online_server.Exceptions;
-using berserk_online_server.Facades;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -15,44 +14,46 @@ namespace berserk_online_server.Controllers
     {
         private readonly IUsersDatabase _db;
         private readonly IAvatarStorage _contentService;
-        public UserController(IUsersDatabase db, IWebHostEnvironment environment,
-            IAvatarStorage contentService)
+        private readonly IAuthenticationManager _authenticationManager;
+        public UserController(IUsersDatabase db,
+            IAvatarStorage contentService, IAuthenticationManager manager)
         {
             _db = db;
             _contentService = contentService;
+            _authenticationManager = manager;
         }
         [HttpPost("findUser")]
-        public IResult GetUserInfo(UserInfoRequest requestInfo)
+        public ActionResult<UserInfo> GetUserInfo(UserInfoRequest requestInfo)
         {
             if (requestInfo.isEmpty)
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.ArgumentsMissing, requestInfo));
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.ArgumentsMissing, requestInfo));
             }
             try
             {
                 var user = _db.GetUser(requestInfo);
-                return Results.Ok(new UserInfo(user));
+                return Ok(new UserInfo(user));
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, requestInfo));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, requestInfo));
             }
         }
         [HttpGet("getUser/{id}")]
-        public IResult GetUser(int id)
+        public ActionResult<UserInfo> GetUser(int id)
         {
             try
             {
                 var user = _db.GetUser(new UserInfoRequest { Id = id });
-                return Results.Ok(new UserInfo(user));
+                return Ok(new UserInfo(user));
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new { Id = id }));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound, new { Id = id }));
             }
         }
         [HttpGet("getMe")]
-        public IResult GetMe()
+        public ActionResult<UserInfo> GetMe()
         {
             try
             {
@@ -60,46 +61,42 @@ namespace berserk_online_server.Controllers
                 string name = User.Claims.Where(claim => claim.Type == ClaimTypes.Name).First().Value;
 
                 var user = _db.GetUser(new UserInfoRequest() { Name = name, Email = email });
-                return Results.Ok(new UserInfo(user));
+                return Ok(new UserInfo(user));
             }
             catch (InvalidOperationException)
             {
-                return Results.Unauthorized();
+                return Unauthorized();
             }
         }
         [HttpPost("loadAvatar")]
-        public async Task<IResult> LoadAvatar([FromForm] IFormFile avatar)
+        public async Task<ActionResult<UserInfo>> LoadAvatar([FromForm] IFormFile avatar)
         {
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                    HttpContext);
-                string email = authManager.GetMail();
+                string email = _authenticationManager.GetMail();
                 string fileName = await _contentService.AddAvatar(avatar, email);
                 if (!fileName.Contains('.'))
                 {
-                    return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFileName, avatar.Name));
+                    return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFileName, avatar.Name));
                 }
                 var updatedUser = _db.UpdateUser(new User() { AvatarUrl = fileName }, email);
-                return Results.Ok(updatedUser);
+                return Ok(updatedUser);
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound));
             }
             catch (ArgumentNullException)
             {
-                return Results.Unauthorized();
+                return Unauthorized();
             }
         }
         [HttpDelete("deleteAvatar")]
-        public IResult DeleteAvatar()
+        public ActionResult<UserInfo> DeleteAvatar()
         {
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                    HttpContext);
-                string email = authManager.GetMail();
+                string email = _authenticationManager.GetMail();
                 try
                 {
                     _contentService.DeleteAvatar(email);
@@ -110,56 +107,50 @@ namespace berserk_online_server.Controllers
                     throw;
                 }
                 var updatedUser = _db.RemoveAvatar(email);
-                return Results.Ok(updatedUser);
+                return Ok(updatedUser);
             }
             catch (ArgumentNullException)
             {
-                return Results.Unauthorized();
+                return Unauthorized();
             }
             catch (NotFoundException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.InvalidEmail));
             }
             catch (InvalidOperationException)
             {
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
                     "Avatar not found."));
             }
         }
         [HttpPatch("updateMe")]
-        public async Task<IResult> updateMe(UserInfoRequest request)
+        public async Task<ActionResult<UserInfo>> updateMe(UserInfoRequest request)
         {
             if (!_db.IsUnique(request))
             {
-                return Results.BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.UserAlreadyExists, request));
             }
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                    HttpContext);
-                string oldMail = authManager.GetMail();
+                string oldMail = _authenticationManager.GetMail();
                 var updatedUser = await _db.UpdateUser(request, oldMail);
                 await updateCookie(updatedUser);
-                return Results.Ok(updatedUser);
+                return Ok(updatedUser);
             }
             catch (NotFoundException)
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                    HttpContext);
-                string email = authManager.GetMail();
-                return Results.NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
+                string email = _authenticationManager.GetMail();
+                return NotFound(ApiErrorFabric.Create(ApiErrorType.NotFound,
                     new { Request = request, Mail = email }));
             }
             catch (ArgumentNullException)
             {
-                return Results.Unauthorized();
+                return Unauthorized();
             }
         }
         private async Task updateCookie(UserInfo userInfo)
         {
-            var manager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                HttpContext);
-            await manager.Authenticate(userInfo, true);
+            await _authenticationManager.Authenticate(userInfo, true);
         }
     }
 }

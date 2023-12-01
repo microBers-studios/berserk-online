@@ -9,7 +9,7 @@ namespace UnitTests.Utils
         [Fact]
         public void ConstructorTest()
         {
-            var avatar = new Avatar(Directory.GetCurrentDirectory(), _baseUrl, "test.png");
+            var avatar = new Avatar(Directory.GetCurrentDirectory(), "test.png");
 
         }
     }

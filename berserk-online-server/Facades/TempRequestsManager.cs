@@ -4,16 +4,24 @@ using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades
 {
-    public class TempRequestsManager<T> : ITempRequestsManager<T> 
+    public class TempRequestsManager<T> : ITempRequestsManager<T>
         where T : IMailSender
     {
         //Key is token
         private Dictionary<string, TempRequest> _requests;
         private IMailSender _mailSender;
+        private const int GARBAGE_REMOVE_DELAY_MS = 15 * 60 * 1000;
         public TempRequestsManager(T sender)
         {
             _requests = new Dictionary<string, TempRequest>();
             _mailSender = sender;
+            new Timer((state) =>
+            {
+                foreach (var request in _requests.Values)
+                {
+                    clearGarbage(request);
+                }
+            }, null, GARBAGE_REMOVE_DELAY_MS, GARBAGE_REMOVE_DELAY_MS);
         }
         public void Push(string mail)
         {
@@ -52,6 +60,13 @@ namespace berserk_online_server.Facades
         private void sendMessage(string mail, string token)
         {
             _mailSender.Send(mail, token);
+        }
+        private void clearGarbage(TempRequest request)
+        {
+            if (DateTime.Now > request.Expires)
+            {
+                _requests.Remove(request.Token);
+            }
         }
     }
 }

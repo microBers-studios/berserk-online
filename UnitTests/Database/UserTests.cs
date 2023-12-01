@@ -3,7 +3,6 @@ using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Models.Db;
 using berserk_online_server.Models.Requests;
-using Microsoft.Extensions.Caching.Memory;
 using Moq;
 
 namespace UnitTests.Database
@@ -129,7 +128,7 @@ namespace UnitTests.Database
             var (repo, db) = createDb();
             setupUserRepo(repo);
 
-            var info = db.VerifyUser(new User()
+            var info = db.VerifyUser(new UserAuthenticationRequest()
             {
                 Email = _mail,
                 Password = _password

@@ -15,7 +15,7 @@
             _convertedMail = _fileName.Split('.')[0];
             createFile(file);
         }
-        public Avatar(string basePath, string baseUrl, string fileName)
+        public Avatar(string basePath, string fileName)
         {
             validateFileName(fileName);
             _fileName = fileName;

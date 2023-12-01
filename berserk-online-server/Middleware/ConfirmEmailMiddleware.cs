@@ -1,7 +1,6 @@
-﻿using berserk_online_server.Facades;
-using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces;
 using berserk_online_server.Models.Requests;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using berserk_online_server.Utils;
 
 namespace berserk_online_server.Middleware
 {
@@ -12,19 +11,18 @@ namespace berserk_online_server.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context, IUsersDatabase db)
+        public async Task Invoke(HttpContext context, IUsersDatabase db,
+            IAuthenticationManager authenticationManager)
         {
             if (context.User.Identity == null || !context.User.Identity.IsAuthenticated
-                || isTryToConfirm(context))
+                || isAllowed(context))
             {
                 await _next.Invoke(context);
                 return;
             }
             try
             {
-                var authManager = new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme,
-                context);
-                var user = db.GetUser(new UserInfoRequest() { Email = authManager.GetMail() });
+                var user = db.GetUser(new UserInfoRequest() { Email = authenticationManager.GetMail() });
                 if (!user.IsEmailConfirmed)
                 {
                     writeBadRequest(context, user.Email);
@@ -39,7 +37,7 @@ namespace berserk_online_server.Middleware
             context.Response.StatusCode = 403;
             context.Response.WriteAsJsonAsync(ApiErrorFabric.Create(ApiErrorType.EmailNotConfirmed, new { email }));
         }
-        private bool isTryToConfirm(HttpContext context)
+        private bool isAllowed(HttpContext context)
         {
             var path = context.Request.Path.Value;
 #pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.

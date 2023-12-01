@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Constants;
 
-namespace berserk_online_server.Facades
+namespace berserk_online_server.Utils
 {
     public class CookieExtender
     {
@@ -33,7 +33,7 @@ namespace berserk_online_server.Facades
         }
         private Dictionary<string, string> getCookies()
         {
-            var cookieList = _context.Request.Cookies.Where(cookie => cookie.Key != CookieConstants.AuthenticationCookieName).Select(cookie => cookie).ToList();
+            var cookieList = _context.Request.Cookies.Where(cookie => cookie.Key != CookieConstants.AUTHENTICATION_COOKIE_NAME).Select(cookie => cookie).ToList();
             var cookieDictionary = new Dictionary<string, string>();
             foreach (var cookie in cookieList)
             {
@@ -57,8 +57,8 @@ namespace berserk_online_server.Facades
         {
             try
             {
-                var tokenValue = getCookie(CookieConstants.AuthenticationCookieName).Value;
-                extendCookie(CookieConstants.AuthenticationCookieName, tokenValue, httpOnly: true);
+                var tokenValue = getCookie(CookieConstants.AUTHENTICATION_COOKIE_NAME).Value;
+                extendCookie(CookieConstants.AUTHENTICATION_COOKIE_NAME, tokenValue, httpOnly: true);
             }
             catch (Exception)
             {

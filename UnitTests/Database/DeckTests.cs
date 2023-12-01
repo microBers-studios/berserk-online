@@ -30,6 +30,18 @@ namespace UnitTests.Database
                 {
                     Id = _id,
                 });
+            repo.Setup(r => r.GetByUser(It.Is((string email) =>
+            email == _mail
+            ))).Returns(new[] { new DeckDb()
+            {
+                Id = _id,
+                Main = new[]
+                {
+                    "300-1", "200-1"
+                },
+                Name = "cool name"
+            }
+            });
             var deckReq = new DeckRequest()
             {
                 Main = new[]
@@ -40,7 +52,7 @@ namespace UnitTests.Database
                 Id = _id,
             };
 
-            db.Update(deckReq);
+            db.Update(deckReq, _mail);
 
             Assert.NotNull(deckDb);
             Assert.Equal("0-1", deckDb.Main[0]);

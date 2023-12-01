@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Constants;
-using berserk_online_server.Facades;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using berserk_online_server.Interfaces;
+using berserk_online_server.Utils;
 
 namespace berserk_online_server.Middleware
 {
@@ -8,16 +8,16 @@ namespace berserk_online_server.Middleware
     {
         private readonly RequestDelegate _next;
         public CookieUpdateMiddleware(RequestDelegate next) { _next = next; }
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, IAuthenticationManager authenticationManager)
         {
-            if (!isValidCookie(context, CookieConstants.AuthenticationCookieName))
+            if (!isValidCookie(context, CookieConstants.AUTHENTICATION_COOKIE_NAME))
             {
                 await _next.Invoke(context);
                 return;
             }
-            if (!isValidCookie(context, CookieConstants.RememberMeCookieName))
+            if (!isValidCookie(context, CookieConstants.REMEMBER_ME_COOKIE_NAME))
             {
-                new AuthenticationManager(CookieAuthenticationDefaults.AuthenticationScheme, context).LogOut();
+                authenticationManager.LogOut();
                 writeBadResponse(context);
                 return;
             }
@@ -34,7 +34,7 @@ namespace berserk_online_server.Middleware
         {
             try
             {
-                var rememberMeValue = context.Request.Cookies.First(cookie => cookie.Key == CookieConstants.RememberMeCookieName).Value;
+                var rememberMeValue = context.Request.Cookies.First(cookie => cookie.Key == CookieConstants.REMEMBER_ME_COOKIE_NAME).Value;
                 return bool.Parse(rememberMeValue);
             }
             catch (Exception ex)
