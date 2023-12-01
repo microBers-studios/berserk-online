@@ -24,7 +24,7 @@ function App() {
           currentPage={currentPage}
         />
 
-        <ToastContainer />
+        <ToastContainer className='dark-mode-toasts-container' />
       </main>
     </BrowserRouter>
   )

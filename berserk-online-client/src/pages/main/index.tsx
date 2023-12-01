@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import cls from "./MainPage.module.scss"
-import { useAppDispatch, useAppSelector, RouterPaths } from "src/shared/lib";
+import { useAppDispatch, useAppSelector, RouterPaths, createDeck } from "src/shared/lib";
 import { NotificationComponent } from 'src/shared/ui';
 import { setCurrentDeck } from 'src/entities/decks';
 import { fetchUserStatusSelector, loginUserStatusSelector } from 'src/entities/user';
@@ -32,18 +32,25 @@ export const MainPage = ({ setPage, currentPage }: MainPageProps) => {
 
     useEffect(() => {
         const cashedDeck = localStorage.getItem('deck')
+        console.log(cashedDeck)
 
         if ((fetchUserStatus.isFulfilled || loginUserStatus.isFulfilled) && cashedDeck) {
             toast(<NotificationComponent
                 title={'Последняя созданная дека не была сохранена.Хотите продолжить работу с ней?'}
                 path={RouterPaths.CREATE_DECK}
                 onClick={() => {
-                    dispatch(setCurrentDeck(JSON.parse(cashedDeck)))
+                    dispatch(setCurrentDeck(createDeck(JSON.parse(cashedDeck))))
                     navigate(RouterPaths.DECK)
                     localStorage.removeItem('deck')
                 }}
             />, {
                 onClose: () => {
+                    localStorage.removeItem('deck')
+                },
+                onClick: () => {
+                    const deck = JSON.parse(cashedDeck)
+                    dispatch(setCurrentDeck({ deck }))
+                    navigate(RouterPaths.CREATE_DECK)
                     localStorage.removeItem('deck')
                 }
             });

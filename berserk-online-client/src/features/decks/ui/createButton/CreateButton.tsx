@@ -32,6 +32,9 @@ export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) =>
             return
         }
         dispatch(createDeck({ ...deck, name: deckName }))
+        if (localStorage.getItem('deck')) {
+            localStorage.removeItem('deck')
+        }
     }
 
     return (

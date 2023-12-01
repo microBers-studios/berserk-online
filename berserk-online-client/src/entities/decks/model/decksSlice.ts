@@ -81,6 +81,7 @@ export const decksSlice = createSlice({
         },
         setCurrentDeck: (state, action: PayloadAction<{ deck: DeckType | null }>) => {
             state.currentDeck = action.payload.deck
+            console.log('setCurrentDeck', action.payload)
         }
     },
 

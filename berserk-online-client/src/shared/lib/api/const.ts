@@ -21,6 +21,7 @@ export enum Paths {
     UPDATE_ME = '/User/updateMe',
     FIND_CARDS = '/CardBase/find',
     GET_DECKS = '/Deck/getMe',
+    GET_DECK = '/Deck/get',
     ADD_DECK = '/Deck/add',
     DELETE_DECK = '/Deck/delete',
     UPDATE_DECK = '/Deck/update',

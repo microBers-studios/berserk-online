@@ -19,19 +19,11 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
     const { width } = useResize()
     const deck = useAppSelector(state => state.decks.currentDeck)
     const [isSaveDisabled, setIsSaveDisabled] = useState(true)
-    const [deckName, setDeckName] = useState('')
+    const [deckName, setDeckName] = useState(deck?.name ? deck.name : '')
 
     const [modalCardId, setModalCardId] = useState<number | null>(null)
 
     const modalCard = deck?.main.find(c => c.id === modalCardId)
-
-    useEffect(() => {
-        if (!deck) navigate(RouterPaths.MAIN)
-
-        return function () {
-            setCurrentDeck({ deck: null })
-        }
-    }, [deck, navigate])
 
     useEffect(() => {
         if (deck?.main.length) {
@@ -39,9 +31,16 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
         }
 
         if (deck) {
-            localStorage.setItem('deck', JSON.stringify(deck))
+            localStorage.setItem('deck', JSON.stringify({ ...deck, name: deckName }))
+        } else {
+            navigate(RouterPaths.MAIN)
         }
-    }, [deck])
+
+        return function () {
+            localStorage.removeItem('deck')
+            setCurrentDeck({ deck: null })
+        }
+    }, [deck, navigate, deckName])
 
     const ordinaryCards = deck?.main
         .filter(c => !c.elite)

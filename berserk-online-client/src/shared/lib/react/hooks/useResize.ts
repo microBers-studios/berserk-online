@@ -6,8 +6,6 @@ export const useResize = () => {
 
     const handleResize = (e: UIEvent) => {
         const w = e.target as Window
-        console.log('w: ', w.innerWidth)
-        console.log('window: ', window.innerWidth)
         setWidth(w.innerWidth)
     }
 

@@ -5,7 +5,7 @@ export const getDeck = createAsyncThunk<DeckType, string, { rejectValue: string 
     'decks/getDeck',
     async (id, { rejectWithValue }) => {
         try {
-            const path = apiUrl + Paths.GET_DECKS + `/${id}`
+            const path = apiUrl + Paths.GET_DECK + `/${id}`
 
             const response = await fetch(path, {
                 credentials: 'include'
