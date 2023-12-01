@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Data_objects.Rooms
+﻿namespace berserk_online_server.Constants
 {
     public class RoomEventTypes
     {

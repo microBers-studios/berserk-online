@@ -6,8 +6,8 @@ namespace berserk_online_server.ApiErrors.Rooms
     {
         public RoomIsFull(object? ctx) : base(ctx)
         {
-            Id = (int) ApiErrorType.RoomIsFull;
+            Id = (int)ApiErrorType.RoomIsFull;
             Message = "Room is already full";
-        } 
+        }
     }
 }

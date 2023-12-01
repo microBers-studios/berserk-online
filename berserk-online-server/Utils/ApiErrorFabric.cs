@@ -18,7 +18,8 @@ namespace berserk_online_server.Utils
         EmailNotConfirmed,
         DeckAlreadyExists,
         NoAccess,
-        RoomIsFull
+        RoomIsFull,
+        RoomAlreadyExists
     }
     public static class ApiErrorFabric
     {
@@ -50,6 +51,8 @@ namespace berserk_online_server.Utils
                     return new NoAccess(ctx);
                 case ApiErrorType.RoomIsFull:
                     return new RoomIsFull(ctx);
+                case ApiErrorType.RoomAlreadyExists:
+                    return new RoomAlreadyExists(ctx);
             }
             throw new NotImplementedException();
         }

@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace berserk_online_server.Facades.Rooms
 {
-    public class RoomUpdateDispatcher : IRoomUpdateDispatcher
+    public class RoomUpdateDispatcher : IGroupDispatcher<RoomEvent>
     {
         private readonly IHubContext<RoomHub> _hub;
-        public RoomUpdateDispatcher(IHubContext<RoomHub> hubContext)
+        private readonly IConnectionGroupsManager _connectionManager;
+        public RoomUpdateDispatcher(IHubContext<RoomHub> hubContext, IConnectionGroupsManager connectionManager)
         {
             _hub = hubContext;
+            _connectionManager = connectionManager;
         }
-        public void Dispatch(RoomEvent roomEvent, string roomId)
+        public async Task Dispatch(RoomEvent roomEvent, string roomId)
         {
-            _hub.Clients.Group(roomId).SendAsync(RoomHubMethodNames.ROOM_UPDATE, roomEvent);
+            var clients = _connectionManager.GetConnections(roomId);
+            await _hub.Clients.Clients(clients).SendAsync(RoomHubMethodNames.ROOM_UPDATE, roomEvent);
         }
     }
 }
