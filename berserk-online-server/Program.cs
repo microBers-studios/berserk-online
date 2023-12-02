@@ -1,5 +1,7 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Controllers.Hubs;
+using berserk_online_server.Data_objects.Rooms;
+using berserk_online_server.DTO.Models;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Facades.Database;
@@ -10,7 +12,6 @@ using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Middleware;
-using berserk_online_server.Models.Db;
 using berserk_online_server.Repository;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -68,7 +69,9 @@ builder.Services.AddSingleton<ITempRequestsManager<ConfirmEmailSender>, TempRequ
 
 builder.Services.AddSingleton<IRoomsManager, RoomsManager>();
 builder.Services.AddSingleton<IUserLocationManager, UserLocationManager>();
-builder.Services.AddTransient<IRoomUpdateDispatcher, RoomUpdateDispatcher>();
+builder.Services.AddSingleton<IConnectionGroupsManager, ConnectionGroupsManager>();
+builder.Services.AddTransient<IGroupDispatcher<RoomEvent>, RoomUpdateDispatcher>();
+builder.Services.AddTransient<IDispatcher<RoomListEvent>, RoomListDispatcher>();
 
 builder.Services.AddSingleton<CardProvider>();
 
@@ -105,6 +108,6 @@ app.UseMiddleware<CookieUpdateMiddleware>();
 app.UseMiddleware<ConfirmEmailMiddleware>();
 
 app.MapControllers();
-app.MapHub<RoomHub>("/connect/{roomId}");
+app.MapHub<RoomHub>("/connect");
 
 app.Run();

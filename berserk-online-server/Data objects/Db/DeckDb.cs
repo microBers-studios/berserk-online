@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Models.Db
+﻿namespace berserk_online_server.DTO.Models
 {
     public class DeckDb
     {

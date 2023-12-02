@@ -1,12 +1,10 @@
 ﻿using berserk_online_server.ApiErrors;
 using berserk_online_server.Controllers;
+using berserk_online_server.DTO.Cards;
+using berserk_online_server.DTO.Requests;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Interfaces;
-using berserk_online_server.Models.Cards;
-using berserk_online_server.Models.Db;
-using berserk_online_server.Models.Requests;
-using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 

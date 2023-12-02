@@ -1,6 +1,6 @@
-﻿using berserk_online_server.Interfaces;
+﻿using berserk_online_server.DTO;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Mail;
-using berserk_online_server.Models;
 
 namespace berserk_online_server.Facades
 {

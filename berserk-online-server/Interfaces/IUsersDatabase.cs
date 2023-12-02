@@ -1,5 +1,6 @@
-﻿using berserk_online_server.Models.Db;
-using berserk_online_server.Models.Requests;
+﻿using berserk_online_server.DTO;
+using berserk_online_server.DTO.Models;
+using berserk_online_server.DTO.Requests;
 
 namespace berserk_online_server.Interfaces
 {

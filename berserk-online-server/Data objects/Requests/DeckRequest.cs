@@ -1,6 +1,6 @@
-﻿using berserk_online_server.Models.Cards;
+﻿using berserk_online_server.DTO.Cards;
 
-namespace berserk_online_server.Models.Requests
+namespace berserk_online_server.DTO.Requests
 {
     public class DeckRequest
     {

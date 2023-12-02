@@ -1,4 +1,4 @@
-﻿using berserk_online_server.Models.Db;
+﻿using berserk_online_server.DTO;
 using System.Security.Claims;
 
 namespace berserk_online_server.Interfaces

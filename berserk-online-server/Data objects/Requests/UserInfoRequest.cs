@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Models.Requests
+﻿namespace berserk_online_server.DTO.Requests
 {
     public class UserInfoRequest
     {

@@ -1,7 +1,7 @@
 ﻿using berserk_online_server.Contexts;
+using berserk_online_server.DTO.Models;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Interfaces.Repos;
-using berserk_online_server.Models.Db;
 
 namespace berserk_online_server.Repository
 {
