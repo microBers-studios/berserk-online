@@ -3,6 +3,7 @@ using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
+using System.Collections.Immutable;
 
 namespace berserk_online_server.Facades.Rooms
 {
@@ -13,7 +14,7 @@ namespace berserk_online_server.Facades.Rooms
 
         public event Action<RoomEvent> OnChanges;
 
-        public Tuple<UserInfo?, UserInfo?> Players => new(_players[0], _players[1]);
+        public ImmutableArray<UserInfo?> Players => _players.ToImmutableArray();
 
         public List<UserInfo> Spectators => _spectators.Select(pair => pair.Value)
             .ToList();
@@ -59,21 +60,15 @@ namespace berserk_online_server.Facades.Rooms
 
         public void RemovePlayer(UserInfo player)
         {
-            for (int i = 0; i < 2; i++)
+            if (removeFromPlayers(player))
             {
-                if (_players[i] != null && _players[i].Email == player.Email)
+                OnChanges?.Invoke(new RoomEvent()
                 {
-                    _players[i] = null;
-                    OnChanges?.Invoke(new RoomEvent()
-                    {
-                        Type = RoomEventTypes.PLAYER_LEAVED,
-                        Initiator = player,
-                    });
-                    return;
-                }
+                    Type = RoomEventTypes.PLAYER_LEAVED,
+                    Initiator = player,
+                });
             }
         }
-
         public void RemoveSpectator(UserInfo spectator)
         {
             if (_spectators.Remove(spectator.Email))
@@ -88,16 +83,39 @@ namespace berserk_online_server.Facades.Rooms
 
         public void MoveToSpectators(UserInfo player)
         {
-            RemovePlayer(player);
-            RemoveSpectator(player);
+            if (_spectators.Values.Any(p => p.Id == player.Id))
+                return;
+            removeFromPlayers(player);
             AddSpectator(player);
+            OnChanges?.Invoke(new RoomEvent()
+            {
+                Type = RoomEventTypes.TO_SPECTATOR,
+                Initiator = player,
+            });
         }
 
         public void MoveToPlayers(UserInfo spectator)
         {
-            RemovePlayer(spectator);
-            RemoveSpectator(spectator);
-            AddPlayer(spectator);
+            if (_players.Any(p => p != null && p.Id == spectator.Id))
+                return;
+            _spectators.Remove(spectator.Email);
+            OnChanges?.Invoke(new RoomEvent()
+            {
+                Type = RoomEventTypes.TO_PLAYER,
+                Initiator = spectator,
+            });
+        }
+        private bool removeFromPlayers(UserInfo player)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                if (_players[i] != null && _players[i].Email == player.Email)
+                {
+                    _players[i] = null;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
