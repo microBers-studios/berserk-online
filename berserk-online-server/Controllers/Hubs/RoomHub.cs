@@ -26,7 +26,7 @@ namespace berserk_online_server.Controllers.Hubs
         {
             if (Context.User == null || !Context.User.Claims.Any())
                 Context.Abort();
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_LIST, _roomsManager.GetAll());
+            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -103,7 +103,7 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 await _roomsManager.Leave(getUserInfo());
                 _connectionManager.RemoveConnection(Context.ConnectionId);
-                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_LIST, _roomsManager.GetAll());
+                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
             }
             catch (KeyNotFoundException)
             {
@@ -113,7 +113,7 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public async Task GetAll()
         {
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_LIST, _roomsManager.GetAll());
+            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
         }
         private UserInfo getUserInfo()
         {

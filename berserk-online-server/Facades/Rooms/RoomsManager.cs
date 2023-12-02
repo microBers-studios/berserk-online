@@ -63,6 +63,7 @@ namespace berserk_online_server.Facades.Rooms
         public void Join(UserInfo user, string roomId)
         {
             var room = Get(roomId);
+            _userLocationManager.ChangeLocation(user, room);
             try
             {
                 room.AddPlayer(user);
@@ -72,7 +73,6 @@ namespace berserk_online_server.Facades.Rooms
                 room.AddSpectator(user);
             }
             _logger.LogInformation($"Added user {user.Email} to room with id: {room.Id}");
-            _userLocationManager.ChangeLocation(user, room);
         }
         public async Task Leave(UserInfo user)
         {
@@ -94,7 +94,7 @@ namespace berserk_online_server.Facades.Rooms
         }
         private async Task garbageRoomCheck(IRoom room)
         {
-            if (room.Players.Item1 == null && room.Players.Item2 == null && room.Spectators.Count == 0)
+            if (!room.Players.Any() && room.Spectators.Count == 0)
             {
                 _rooms.Remove(room.Id);
                 await _roomListDispatcher.Dispatch(new RoomListEvent()
