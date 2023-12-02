@@ -1,8 +1,9 @@
+using berserk_online_server.DTO;
+using berserk_online_server.DTO.Models;
+using berserk_online_server.DTO.Requests;
 using berserk_online_server.Exceptions;
 using berserk_online_server.Facades.MailSenders;
 using berserk_online_server.Interfaces;
-using berserk_online_server.Models.Db;
-using berserk_online_server.Models.Requests;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 

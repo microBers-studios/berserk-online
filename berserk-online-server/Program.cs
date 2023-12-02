@@ -1,6 +1,7 @@
 using berserk_online_server.Contexts;
 using berserk_online_server.Controllers.Hubs;
 using berserk_online_server.Data_objects.Rooms;
+using berserk_online_server.DTO.Models;
 using berserk_online_server.Facades;
 using berserk_online_server.Facades.CardBase;
 using berserk_online_server.Facades.Database;
@@ -11,7 +12,6 @@ using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Middleware;
-using berserk_online_server.Models.Db;
 using berserk_online_server.Repository;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;

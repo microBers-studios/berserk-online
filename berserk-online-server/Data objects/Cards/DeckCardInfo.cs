@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Models.Cards
+﻿namespace berserk_online_server.DTO.Cards
 {
     public class DeckCardInfo : DeserealizedCard
     {

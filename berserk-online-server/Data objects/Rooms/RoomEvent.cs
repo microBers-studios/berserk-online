@@ -1,4 +1,4 @@
-﻿using berserk_online_server.Models.Db;
+﻿using berserk_online_server.DTO;
 
 namespace berserk_online_server.Data_objects.Rooms
 {

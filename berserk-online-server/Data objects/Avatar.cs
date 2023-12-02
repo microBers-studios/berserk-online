@@ -1,4 +1,5 @@
-﻿namespace berserk_online_server.Models
+﻿namespace berserk_online_server.DTO
+
 {
     public class Avatar
     {

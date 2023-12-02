@@ -1,4 +1,6 @@
-﻿namespace berserk_online_server.Models.Db
+﻿using berserk_online_server.DTO.Models;
+
+namespace berserk_online_server.DTO
 {
     public class UserInfo
     {

@@ -1,5 +1,5 @@
-﻿using berserk_online_server.Interfaces;
-using berserk_online_server.Models.Requests;
+﻿using berserk_online_server.DTO.Requests;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Utils;
 
 namespace berserk_online_server.Middleware

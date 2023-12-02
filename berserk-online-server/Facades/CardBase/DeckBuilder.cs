@@ -1,7 +1,7 @@
-﻿using berserk_online_server.Interfaces;
-using berserk_online_server.Models.Cards;
-using berserk_online_server.Models.Db;
-using berserk_online_server.Models.Requests;
+﻿using berserk_online_server.DTO.Cards;
+using berserk_online_server.DTO.Models;
+using berserk_online_server.DTO.Requests;
+using berserk_online_server.Interfaces;
 
 namespace berserk_online_server.Facades.CardBase
 {
