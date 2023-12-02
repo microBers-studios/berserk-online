@@ -72,7 +72,7 @@
 
 @keyframes circleTran {
     from {
-        transform: rotate(0)
+        transform: rotate(0);
     }
 
     to {
@@ -81,14 +81,12 @@
 }
 
 @media (max-width: 600px) {
-
     .inputContainer span {
         font-size: 18px;
     }
 }
 
 @media (max-width: 400px) {
-
     .inputContainer span {
         font-size: 14px;
     }

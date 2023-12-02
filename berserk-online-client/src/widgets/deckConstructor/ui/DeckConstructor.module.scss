@@ -14,10 +14,9 @@
     align-items: center;
 }
 
-
 .OrdinaryCardsHeader,
 .EliteCardsHeader {
-    color: var(--secondary-color)
+    color: var(--secondary-color);
 }
 
 .CardsWrapper {
@@ -50,7 +49,6 @@
 }
 
 @media (max-width: 900px) {
-
     .EliteCardsHeader,
     .OrdinaryCardsHeader {
         font-size: 20px;
@@ -58,7 +56,6 @@
 }
 
 @media (max-width: 768px) {
-
     .OrdinaryCardsContainer,
     .EliteCardsContainer {
         width: 50vw;
@@ -72,7 +69,6 @@
 }
 
 @media (max-width: 600px) {
-
     .OrdinaryCardsContainer,
     .EliteCardsContainer {
         width: 70vw;

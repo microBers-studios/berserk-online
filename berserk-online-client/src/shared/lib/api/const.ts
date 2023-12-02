@@ -4,7 +4,7 @@ export enum APIStatus {
     Idle = 'idle',
     Pending = 'pending',
     Fulfilled = 'fulfilled',
-    Rejected = 'rejected'
+    Rejected = 'rejected',
 }
 
 export enum Paths {

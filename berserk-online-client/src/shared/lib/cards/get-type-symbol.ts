@@ -1,9 +1,9 @@
-import flyerSymbol from "src/shared/assets/images/flyer.png"
-import companionSymbol from "src/shared/assets/images/companion.png"
-import parasiteSymbol from "src/shared/assets/images/parasite.png"
-import artifactSymbol from "src/shared/assets/images/artifact.png"
-import terrainSymbol from "src/shared/assets/images/terrain.png"
-import { CardTypes } from "./const"
+import flyerSymbol from 'src/shared/assets/images/flyer.png'
+import companionSymbol from 'src/shared/assets/images/companion.png'
+import parasiteSymbol from 'src/shared/assets/images/parasite.png'
+import artifactSymbol from 'src/shared/assets/images/artifact.png'
+import terrainSymbol from 'src/shared/assets/images/terrain.png'
+import { CardTypes } from './const'
 
 export const getTypeSymbol = (type: CardTypes): string => {
     switch (type) {
@@ -17,6 +17,7 @@ export const getTypeSymbol = (type: CardTypes): string => {
             return artifactSymbol
         case CardTypes.TERRAIN:
             return terrainSymbol
-        default: return ''
+        default:
+            return ''
     }
 }

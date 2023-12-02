@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { useAppDispatch, RouterPaths } from 'src/shared/lib';
-import { confirmUserEmail } from 'src/entities/user';
+import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useAppDispatch, RouterPaths } from 'src/shared/lib'
+import { confirmUserEmail } from 'src/entities/user'
 
 export const EmailConfirmPage = () => {
     const [params] = useSearchParams()
@@ -13,9 +13,15 @@ export const EmailConfirmPage = () => {
     useEffect(() => {
         if (!token) throw new Error('Token Error')
 
-        dispatch(confirmUserEmail([token, () => navigate(RouterPaths.MAIN), () => {
-            navigate(RouterPaths.ERROR)
-        }]))
+        dispatch(
+            confirmUserEmail([
+                token,
+                () => navigate(RouterPaths.MAIN),
+                () => {
+                    navigate(RouterPaths.ERROR)
+                },
+            ])
+        )
     }, [dispatch, navigate, token])
 
     return <></>

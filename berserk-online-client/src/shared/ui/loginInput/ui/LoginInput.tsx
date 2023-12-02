@@ -1,18 +1,23 @@
-import { useState } from "react";
-import cls from "./LoginInput.module.scss"
-import penImage from "src/shared/assets/images/pen.png"
+import { useState } from 'react'
+import cls from './LoginInput.module.scss'
+import penImage from 'src/shared/assets/images/pen.png'
 
 interface LoginInputProps {
-    name: string;
-    setName: (s: string) => void;
-    nameError: boolean;
-    setNameError: (b: boolean) => void;
-    isProtected?: boolean;
+    name: string
+    setName: (s: string) => void
+    nameError: boolean
+    setNameError: (b: boolean) => void
+    isProtected?: boolean
 }
 
-export const LoginInput = ({ name, setName, nameError, setNameError, isProtected = false }: LoginInputProps) => {
+export const LoginInput = ({
+    name,
+    setName,
+    nameError,
+    setNameError,
+    isProtected = false,
+}: LoginInputProps) => {
     const [protect, setProtect] = useState<boolean>(isProtected)
-
 
     const onInputEnter = (e: React.KeyboardEvent) => {
         if (e.code === 'Enter' && isProtected) {
@@ -22,14 +27,18 @@ export const LoginInput = ({ name, setName, nameError, setNameError, isProtected
 
     return (
         <label className={`${cls.FormLabel} ${cls.loginLabel}`}>
-            {isProtected
-                ? <span>Логин: </span>
-                : <span>Введите логин:<span className={cls.red}> *</span></span>
-            }
+            {isProtected ? (
+                <span>Логин: </span>
+            ) : (
+                <span>
+                    Введите логин:<span className={cls.red}> *</span>
+                </span>
+            )}
             <div className={cls.inputContainer}>
-                {protect
-                    ? <span>{name}</span>
-                    : <input
+                {protect ? (
+                    <span>{name}</span>
+                ) : (
+                    <input
                         value={name}
                         type="name"
                         name="name"
@@ -41,16 +50,21 @@ export const LoginInput = ({ name, setName, nameError, setNameError, isProtected
                         onKeyDown={onInputEnter}
                         required
                     />
-                }
-                {isProtected && <img
-                    src={penImage}
-                    onClick={() => setProtect(!protect)}
-                    className={`${cls.inputImage} ${!protect && cls.clicked}`}
-                />}
+                )}
+                {isProtected && (
+                    <img
+                        src={penImage}
+                        onClick={() => setProtect(!protect)}
+                        className={`${cls.inputImage} ${
+                            !protect && cls.clicked
+                        }`}
+                    />
+                )}
             </div>
 
-            {nameError &&
-                <span className={cls.redAlert}>*Заполните это поле</span>}
+            {nameError && (
+                <span className={cls.redAlert}>*Заполните это поле</span>
+            )}
         </label>
-    );
+    )
 }

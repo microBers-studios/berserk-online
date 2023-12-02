@@ -1,4 +1,4 @@
-import { Bar } from "react-chartjs-2";
+import { Bar } from 'react-chartjs-2'
 import {
     Chart,
     ArcElement,
@@ -8,14 +8,22 @@ import {
     ChartData,
     CategoryScale,
     LinearScale,
-    BarElement
+    BarElement,
 } from 'chart.js'
 import cls from './PricesBarChart.module.scss'
 
-Chart.register(ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, BarElement);
+Chart.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    Title,
+    CategoryScale,
+    LinearScale,
+    BarElement
+)
 
 interface PieChartProps {
-    data: ChartData<"bar", (number | [number, number] | null)[], number>
+    data: ChartData<'bar', (number | [number, number] | null)[], number>
 }
 
 export const PricesBarChart = ({ data }: PieChartProps) => {
@@ -34,9 +42,9 @@ export const PricesBarChart = ({ data }: PieChartProps) => {
                 position: 'top' as const,
                 backgroundColor: '#ffffff',
                 labels: {
-                    color: '#ffffff'
-                }
-            }
+                    color: '#ffffff',
+                },
+            },
         },
         scales: {
             x: {
@@ -45,14 +53,11 @@ export const PricesBarChart = ({ data }: PieChartProps) => {
         },
         y: {
             group: 'group1',
-        }
-
+        },
     }
-    return <div className={cls.PieChartWrapper}>
-        <Bar
-            data={data}
-            options={options}
-        />
-    </div>
-
+    return (
+        <div className={cls.PieChartWrapper}>
+            <Bar data={data} options={options} />
+        </div>
+    )
 }

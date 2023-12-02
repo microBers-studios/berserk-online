@@ -1,18 +1,24 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
-import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
-
-export const confirmUserEmail = createAsyncThunk<UserType, [string, () => void, () => void], { rejectValue: string }>(
+export const confirmUserEmail = createAsyncThunk<
+    UserType,
+    [string, () => void, () => void],
+    { rejectValue: string }
+>(
     'user/confirmUserEmail',
-    async function ([token, fulfilledCallback, rejectedCallback], { rejectWithValue }) {
+    async function (
+        [token, fulfilledCallback, rejectedCallback],
+        { rejectWithValue }
+    ) {
         try {
             if (!checkCookie()) throw new Error('Cookie Error')
             const path = apiUrl + Paths.CONFIRM_EMAIL + `?token=${token}`
 
             const response = await fetch(path, {
                 method: 'POST',
-                credentials: 'include'
+                credentials: 'include',
             })
 
             const obj = await response.json()
@@ -33,4 +39,5 @@ export const confirmUserEmail = createAsyncThunk<UserType, [string, () => void, 
             const error = e as IError
             return rejectWithValue(error.message)
         }
-    })
+    }
+)

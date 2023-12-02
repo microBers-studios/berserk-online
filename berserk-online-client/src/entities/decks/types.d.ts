@@ -1,13 +1,12 @@
-
 interface IDeckCard extends CardType {
-    amount: number;
+    amount: number
 }
 
 type DeckType = {
-    id: string;
-    name: string;
-    elements: Elements[];
-    main: IDeckCard[];
+    id: string
+    name: string
+    elements: Elements[]
+    main: IDeckCard[]
 }
 
 type DecksArray = IDeck[]

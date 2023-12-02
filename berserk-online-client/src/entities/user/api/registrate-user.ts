@@ -1,9 +1,12 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
-import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
-
-export const registrateUser = createAsyncThunk<UserType, [Omit<UserType, 'id' | 'avatarUrl'>, () => void], { rejectValue: string }>(
+export const registrateUser = createAsyncThunk<
+    UserType,
+    [Omit<UserType, 'id' | 'avatarUrl'>, () => void],
+    { rejectValue: string }
+>(
     'user/registrateUser',
     async function ([userObject, fulfilledCallback], { rejectWithValue }) {
         try {
@@ -14,12 +17,11 @@ export const registrateUser = createAsyncThunk<UserType, [Omit<UserType, 'id' | 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
                 },
-                credentials: "include",
-                body: JSON.stringify(userObject)
+                credentials: 'include',
+                body: JSON.stringify(userObject),
             })
-
 
             const obj = await response.json()
 
@@ -40,4 +42,5 @@ export const registrateUser = createAsyncThunk<UserType, [Omit<UserType, 'id' | 
             const error = e as IError
             return rejectWithValue(error.message)
         }
-    })
+    }
+)

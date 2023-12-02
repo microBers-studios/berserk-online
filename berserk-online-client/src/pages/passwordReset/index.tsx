@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
-import cls from "./PasswordResetPage.module.scss"
-import { PasswordResetModal } from "src/features/authorization";
+import { useState } from 'react'
+import { Navigate, useSearchParams } from 'react-router-dom'
+import cls from './PasswordResetPage.module.scss'
+import { PasswordResetModal } from 'src/features/authorization'
 
 export const PasswordResetPage = () => {
     const [isModal, setIsModal] = useState<boolean>(true)
@@ -19,13 +19,13 @@ export const PasswordResetPage = () => {
         setIsNavigate(true)
     }
 
-    return isNavigate
-        ? <Navigate to={'/'} />
-        : <div className={cls.PasswordResetPage} >
-            {isModal &&
-                <PasswordResetModal
-                    closeModal={closeModal}
-                    token={token}
-                />}
-        </div >
+    return isNavigate ? (
+        <Navigate to={'/'} />
+    ) : (
+        <div className={cls.PasswordResetPage}>
+            {isModal && (
+                <PasswordResetModal closeModal={closeModal} token={token} />
+            )}
+        </div>
+    )
 }

@@ -1,16 +1,23 @@
-import { useEffect } from 'react';
-import { toast } from "react-toastify";
-import cls from "./CreateButton.module.scss"
-import { createDeck, createDeckStatusSelector, currentDeckSelector } from "src/entities/decks";
-import { RouterPaths, useAppDispatch, useAppSelector } from "src/shared/lib";
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
+import cls from './CreateButton.module.scss'
+import {
+    createDeck,
+    createDeckStatusSelector,
+    currentDeckSelector,
+} from 'src/entities/decks'
+import { RouterPaths, useAppDispatch, useAppSelector } from 'src/shared/lib'
+import { useNavigate } from 'react-router-dom'
 
 interface CreateButtonProps {
-    deckName: string;
-    isSaveDisabled: boolean;
+    deckName: string
+    isSaveDisabled: boolean
 }
 
-export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) => {
+export const CreateButton = ({
+    deckName,
+    isSaveDisabled,
+}: CreateButtonProps) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -22,7 +29,6 @@ export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) =>
             navigate(`${RouterPaths.DECK}/${deck.id}`)
             localStorage.removeItem('deck')
         }
-
     }, [createDeckStatus, deck, navigate])
 
     const onSaveClick = async () => {
@@ -45,5 +51,5 @@ export const CreateButton = ({ deckName, isSaveDisabled }: CreateButtonProps) =>
         >
             Сохранить
         </button>
-    );
+    )
 }

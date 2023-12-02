@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 export function useAnimate(): IAnimator {
     const [isAnimation, setIsAnimation] = useState<boolean>(false)
@@ -11,6 +11,6 @@ export function useAnimate(): IAnimator {
         isOpenAnimation,
         setIsOpenAnimation,
         isCloseAnimation,
-        setIsCloseAnimation
+        setIsCloseAnimation,
     }
 }

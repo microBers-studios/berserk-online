@@ -1,11 +1,18 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
-export const updateUser = createAsyncThunk<UserType, [Partial<UserType>, () => void, (code: number) => void], { rejectValue: { code: number; rejectedCallback: (code: number) => void } }>(
+export const updateUser = createAsyncThunk<
+    UserType,
+    [Partial<UserType>, () => void, (code: number) => void],
+    { rejectValue: { code: number; rejectedCallback: (code: number) => void } }
+>(
     'user/updateUser',
-    async function ([userObject, fulfilledCallback, rejectedCallback], { rejectWithValue }) {
-        let code: number = 0;
+    async function (
+        [userObject, fulfilledCallback, rejectedCallback],
+        { rejectWithValue }
+    ) {
+        let code: number = 0
         try {
             if (!checkCookie()) throw new Error('Cookie Error')
             const path = apiUrl + Paths.UPDATE_ME
@@ -14,9 +21,9 @@ export const updateUser = createAsyncThunk<UserType, [Partial<UserType>, () => v
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userObject)
+                body: JSON.stringify(userObject),
             })
 
             const obj = await response.json()
@@ -37,4 +44,5 @@ export const updateUser = createAsyncThunk<UserType, [Partial<UserType>, () => v
         } catch (e) {
             return rejectWithValue({ code, rejectedCallback })
         }
-    })
+    }
+)

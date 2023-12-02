@@ -47,13 +47,13 @@
     width: 5vw;
 }
 
-@media(max-width: 600px) {
+@media (max-width: 600px) {
     .CardImage {
         width: 215px;
     }
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
     .CardModal {
         width: auto;
         left: 10%;
@@ -65,7 +65,7 @@
     }
 }
 
-@media(max-width: 400px) {
+@media (max-width: 400px) {
     .CardImage {
         width: 200px;
     }

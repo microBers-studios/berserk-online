@@ -1,24 +1,33 @@
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector, useAnimate } from 'src/shared/lib';
-import cls from "./SendEmailConfirmModal.module.scss"
+import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector, useAnimate } from 'src/shared/lib'
+import cls from './SendEmailConfirmModal.module.scss'
 import {
     registrateUserStatusSelector,
     sendConfirmEmailStatusSelector,
-    sendConfirmEmail
-} from 'src/entities/user';
-import { Modal, ModalButton } from "src/shared/ui";
-import { mailServices } from '../../const';
+    sendConfirmEmail,
+} from 'src/entities/user'
+import { Modal, ModalButton } from 'src/shared/ui'
+import { mailServices } from '../../const'
 
 interface CloseModalProps {
-    email: string;
-    isAuto?: boolean;
+    email: string
+    isAuto?: boolean
 }
 
-export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps) => {
-    const { isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
-    const sendConfirmEmailStatus = useAppSelector(sendConfirmEmailStatusSelector)
+export const SendEmailConfirmModal = ({
+    email,
+    isAuto = true,
+}: CloseModalProps) => {
+    const {
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
+    }: IAnimator = useAnimate()
+    const sendConfirmEmailStatus = useAppSelector(
+        sendConfirmEmailStatusSelector
+    )
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
     const dispatch = useAppDispatch()
 
@@ -38,7 +47,7 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
         if (!isAuto) dispatch(sendConfirmEmail())
 
         const interval = setInterval(() => {
-            setTime(t => t - 1)
+            setTime((t) => t - 1)
         }, 1000)
 
         setIntervalID(interval)
@@ -53,14 +62,17 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
     }, [time])
 
     const onButtonClick = async () => {
-        if (!sendConfirmEmailStatus.isPending && !registrateUserStatus.isPending) {
+        if (
+            !sendConfirmEmailStatus.isPending &&
+            !registrateUserStatus.isPending
+        ) {
             dispatch(sendConfirmEmail())
 
             setIsReady(false)
             setTime(59)
 
             const interval = setInterval(() => {
-                setTime(t => t - 1)
+                setTime((t) => t - 1)
             }, 1000)
 
             setIntervalID(interval)
@@ -68,7 +80,10 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
     }
 
     const closeModal = () => {
-        if (!sendConfirmEmailStatus.isPending && !registrateUserStatus.isPending) {
+        if (
+            !sendConfirmEmailStatus.isPending &&
+            !registrateUserStatus.isPending
+        ) {
             window.close()
         }
     }
@@ -82,46 +97,46 @@ export const SendEmailConfirmModal = ({ email, isAuto = true }: CloseModalProps)
             closeModal={closeModal}
             modalClass={cls.modal}
         >
-            <div
-                className={cls.SendEmailModal}
-            >
-                <p
-                    className={cls.SendEmailModalText}
-                >Перейдите в почту, чтобы подтвердить свой аккаунт{mailService === undefined ? '.' : ':'}
+            <div className={cls.SendEmailModal}>
+                <p className={cls.SendEmailModalText}>
+                    Перейдите в почту, чтобы подтвердить свой аккаунт
+                    {mailService === undefined ? '.' : ':'}
                 </p>
                 {mailService &&
-                    (mailService[2] !== undefined ? <div className={cls.MailImageLinkWrapper}>
-                        <a
-                            href={mailService[1]}
-                            target="_blank"
-                            className={cls.MailLink}
-                        >
-                            <img
-                                className={cls.MailServiceImage}
-                                src={mailService[2]}
-                            />
-                        </a>
-                    </div>
-                        :
+                    (mailService[2] !== undefined ? (
+                        <div className={cls.MailImageLinkWrapper}>
+                            <a
+                                href={mailService[1]}
+                                target="_blank"
+                                className={cls.MailLink}
+                            >
+                                <img
+                                    className={cls.MailServiceImage}
+                                    src={mailService[2]}
+                                />
+                            </a>
+                        </div>
+                    ) : (
                         <div className={cls.MailLinkWrapper}>
                             <a
                                 href={mailService[1]}
                                 target="_blank"
                                 className={cls.MailLink}
                             >
-                                <p className={cls.MailLink}>
-                                    {mailService[0]}
-                                </p>
+                                <p className={cls.MailLink}>{mailService[0]}</p>
                             </a>
-                        </div>)}
+                        </div>
+                    ))}
                 <ModalButton
-                    text={isReady
-                        ? `Отправить повторно`
-                        : `Отправить повторно | ${time}`}
+                    text={
+                        isReady
+                            ? `Отправить повторно`
+                            : `Отправить повторно | ${time}`
+                    }
                     isActive={!isReady}
                     onButtonClick={onButtonClick}
                 />
             </div>
         </Modal>
-    );
+    )
 }

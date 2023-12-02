@@ -2,11 +2,11 @@
 @import 'reset';
 
 @font-face {
-    font-family: "Sans";
+    font-family: 'Sans';
     src: url('../../shared/assets/fonts/PT Sans/PTSans-Regular.ttf'),
         url('../../shared/assets/fonts/PT Sans/PTSans-Bold.ttf'),
         url('../../shared/assets/fonts/PT Sans/PTSans-Italic.ttf'),
-        url('../../shared/assets/fonts/PT Sans/PTSans-BoldItalic.ttf')
+        url('../../shared/assets/fonts/PT Sans/PTSans-BoldItalic.ttf');
 }
 
 .dark-mode-toasts-container {

@@ -1,6 +1,5 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
-
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
 export const logoutUser = createAsyncThunk(
     'user/logoutUser',
@@ -9,8 +8,9 @@ export const logoutUser = createAsyncThunk(
         const path = apiUrl + Paths.LOGOUT
 
         const response = await fetch(path, {
-            credentials: 'include'
+            credentials: 'include',
         })
 
         return response.status
-    })
+    }
+)

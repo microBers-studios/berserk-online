@@ -4,19 +4,19 @@ export enum Elements {
     FORESTS = 'Леса',
     SWAMPS = 'Болота',
     DARKNESS = 'Тьма',
-    NEUTRAL = 'Нейтральная'
+    NEUTRAL = 'Нейтральная',
 }
 
 export enum Rarities {
     COMMON = 'Частая',
     UNCOMMON = 'Необычная',
     RARE = 'Редкая',
-    ULTRARARE = 'Ультраредкая'
+    ULTRARARE = 'Ультраредкая',
 }
 
 export enum Sets {
     ELEMENTS_WAR = 'Война стихий',
-    DARKNESS_INVASION = 'Нашествие тьмы'
+    DARKNESS_INVASION = 'Нашествие тьмы',
 }
 
 export enum CardTypes {
@@ -25,5 +25,5 @@ export enum CardTypes {
     COMPANION = 'companion',
     PARASITE = 'parasite',
     ARTIFACT = 'artifact',
-    TERRAIN = 'terrain'
+    TERRAIN = 'terrain',
 }

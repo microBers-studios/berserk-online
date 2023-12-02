@@ -1,14 +1,21 @@
-import { useAppDispatch, useAppSelector } from "src/shared/lib";
-import cls from "./SaveButton.module.scss"
-import { getDeckStatusSelector, updateDeck, updateDeckStatusSelector } from "src/entities/decks";
-import { currentDeckSelector } from "src/entities/decks";
+import { useAppDispatch, useAppSelector } from 'src/shared/lib'
+import cls from './SaveButton.module.scss'
+import {
+    getDeckStatusSelector,
+    updateDeck,
+    updateDeckStatusSelector,
+} from 'src/entities/decks'
+import { currentDeckSelector } from 'src/entities/decks'
 
 interface SaveButtonProps {
-    isSaveDisabled: boolean;
-    setIsSaveDisabled: (b: boolean) => void;
+    isSaveDisabled: boolean
+    setIsSaveDisabled: (b: boolean) => void
 }
 
-export const SaveButton = ({ isSaveDisabled, setIsSaveDisabled }: SaveButtonProps) => {
+export const SaveButton = ({
+    isSaveDisabled,
+    setIsSaveDisabled,
+}: SaveButtonProps) => {
     const dispatch = useAppDispatch()
 
     const deck = useAppSelector(currentDeckSelector)
@@ -24,13 +31,15 @@ export const SaveButton = ({ isSaveDisabled, setIsSaveDisabled }: SaveButtonProp
     return (
         <button
             className={cls.SaveDeckButton}
-            disabled={!deck?.main.length
-                || isSaveDisabled
-                || updateDeckStatus.isPending
-                || getDeckStatus.isUncompleted}
+            disabled={
+                !deck?.main.length ||
+                isSaveDisabled ||
+                updateDeckStatus.isPending ||
+                getDeckStatus.isUncompleted
+            }
             onClick={onSaveClick}
         >
             Сохранить
         </button>
-    );
+    )
 }

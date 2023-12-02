@@ -1,22 +1,30 @@
-import { Modal } from "src/shared/ui";
-import cls from "./SearchbarCardModal.module.scss"
-import { useAnimate, useAppDispatch, useAppSelector } from "src/shared/lib";
+import { Modal } from 'src/shared/ui'
+import cls from './SearchbarCardModal.module.scss'
+import { useAnimate, useAppDispatch, useAppSelector } from 'src/shared/lib'
 import plusImage from 'src/shared/assets/images/red-plus.png'
-import { addCard, currentDeckSelector } from "src/entities/decks";
+import { addCard, currentDeckSelector } from 'src/entities/decks'
 
 interface SearchbarCardModalProps {
-    card: CardType;
-    closeModal: () => void;
-    setIsSaveDisabled: (b: boolean) => void;
+    card: CardType
+    closeModal: () => void
+    setIsSaveDisabled: (b: boolean) => void
 }
 
-export const SearchbarCardModal = ({ card, closeModal, setIsSaveDisabled }: SearchbarCardModalProps) => {
+export const SearchbarCardModal = ({
+    card,
+    closeModal,
+    setIsSaveDisabled,
+}: SearchbarCardModalProps) => {
     const dispatch = useAppDispatch()
     const deck = useAppSelector(currentDeckSelector)
-    const { isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
+    const {
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
+    }: IAnimator = useAnimate()
 
-    const isInDeck = Boolean(deck?.main.find(c => c.id === card.id))
+    const isInDeck = Boolean(deck?.main.find((c) => c.id === card.id))
 
     const hideModal = () => {
         setIsCloseAnimation(true)
@@ -40,7 +48,7 @@ export const SearchbarCardModal = ({ card, closeModal, setIsSaveDisabled }: Sear
             modalClass={cls.CardModal}
             theme={'dark'}
         >
-            <div className={cls.CardModalContent} >
+            <div className={cls.CardModalContent}>
                 <div className={cls.CardImageWrapper}>
                     <img
                         src={card.image}
@@ -48,23 +56,17 @@ export const SearchbarCardModal = ({ card, closeModal, setIsSaveDisabled }: Sear
                         className={cls.CardImage}
                     />
                 </div>
-                <h2
-                    className={cls.CardHeader}
-                >
-                    {card.name}
-                </h2>
-                {!isInDeck && <button
-                    className={cls.AddButton}
-                    onClick={addCardToDeck}
-                >
-                    <img
-                        className={cls.plusImage}
-                        src={plusImage}
-                        alt="add"
-                    />
-                </button>}
-            </div >
+                <h2 className={cls.CardHeader}>{card.name}</h2>
+                {!isInDeck && (
+                    <button className={cls.AddButton} onClick={addCardToDeck}>
+                        <img
+                            className={cls.plusImage}
+                            src={plusImage}
+                            alt="add"
+                        />
+                    </button>
+                )}
+            </div>
         </Modal>
-
-    );
+    )
 }

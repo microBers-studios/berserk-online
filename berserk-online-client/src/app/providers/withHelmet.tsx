@@ -6,5 +6,5 @@ export const withHelmet = (Component: ComponentType) => {
         <HelmetProvider>
             <Component />
         </HelmetProvider>
-    );
-};
+    )
+}

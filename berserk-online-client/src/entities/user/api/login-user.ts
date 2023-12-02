@@ -1,21 +1,23 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import defaultAvatar from "src/shared/assets/images/default-avatar.jpg"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
-
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import defaultAvatar from 'src/shared/assets/images/default-avatar.jpg'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
 export const loginUser = createAsyncThunk<
     UserType,
     [
         Omit<UserType, 'id' | 'avatarUrl' | 'name'> & { rememberMe: boolean },
         () => void,
-        (code: number, id: number) => void
+        (code: number, id: number) => void,
     ],
-    { rejectValue: { code: number, email: string } | string }
+    { rejectValue: { code: number; email: string } | string }
 >(
     'user/loginUser',
-    async function ([userObject, fulfilledCallback, rejectedCallback], { rejectWithValue }) {
-        let code: number = 0;
-        let email: string = '';
+    async function (
+        [userObject, fulfilledCallback, rejectedCallback],
+        { rejectWithValue }
+    ) {
+        let code: number = 0
+        let email: string = ''
         try {
             if (!checkCookie()) throw new Error('Cookie Error')
             const path = apiUrl + Paths.LOGIN
@@ -55,4 +57,5 @@ export const loginUser = createAsyncThunk<
             }
             return rejectWithValue({ code, email })
         }
-    })
+    }
+)

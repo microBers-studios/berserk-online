@@ -1,23 +1,17 @@
-import { Pie } from "react-chartjs-2";
-import { Elements } from "src/shared/lib";
-import {
-    Chart,
-    ArcElement,
-    Tooltip,
-    Legend,
-    Title
-} from 'chart.js'
-import { TooltipItem } from 'chart.js/auto';
-Chart.register(ArcElement, Tooltip, Legend, Title);
+import { Pie } from 'react-chartjs-2'
+import { Elements } from 'src/shared/lib'
+import { Chart, ArcElement, Tooltip, Legend, Title } from 'chart.js'
+import { TooltipItem } from 'chart.js/auto'
+Chart.register(ArcElement, Tooltip, Legend, Title)
 
 interface PieChartProps {
     data: {
-        labels: Elements[],
+        labels: Elements[]
         datasets: {
-            data: number[],
+            data: number[]
             backgroundColor: string[]
         }[]
-    };
+    }
 }
 
 export const ElementsPieChart = ({ data }: PieChartProps) => {
@@ -36,29 +30,27 @@ export const ElementsPieChart = ({ data }: PieChartProps) => {
                 position: 'bottom' as const,
                 backgroundColor: '#ffffff',
                 labels: {
-                    color: '#ffffff'
-                }
+                    color: '#ffffff',
+                },
             },
             tooltip: {
                 callbacks: {
                     label: function (context: TooltipItem<'pie'>) {
-                        let label = context.label || '';
+                        let label = context.label || ''
 
                         if (context.parsed !== null) {
-                            label += ': ' + context.parsed;
+                            label += ': ' + context.parsed
                         }
 
-                        return label;
+                        return label
                     },
                 },
             },
         },
-    };
-    return <div>
-        <Pie
-            data={data}
-            options={options}
-        />
-    </div>
-
-};
+    }
+    return (
+        <div>
+            <Pie data={data} options={options} />
+        </div>
+    )
+}

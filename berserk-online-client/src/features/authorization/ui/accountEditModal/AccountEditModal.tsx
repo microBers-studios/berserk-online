@@ -1,33 +1,35 @@
-import { ReactNode, useState } from "react";
-import { toast } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "src/shared/lib";
-import cls from "./AccountEditModal.module.scss"
+import { ReactNode, useState } from 'react'
+import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector } from 'src/shared/lib'
+import cls from './AccountEditModal.module.scss'
 import {
     deleteAvatarStatusSelector,
     loadAvatarStatusSelector,
     updateUser,
-    updateUserStatusSelector
-} from "src/entities/user";
-import {
-    LoginInput,
-    EmailInput,
-    ModalButton,
-    Modal
-} from "src/shared/ui";
-import { EMAIL_REGULAR } from "../../const";
-import { useAnimate } from "src/shared/lib/react/hooks/useAnimate";
+    updateUserStatusSelector,
+} from 'src/entities/user'
+import { LoginInput, EmailInput, ModalButton, Modal } from 'src/shared/ui'
+import { EMAIL_REGULAR } from '../../const'
+import { useAnimate } from 'src/shared/lib/react/hooks/useAnimate'
 
 interface AccountEditModalProps {
-    closeModal: () => void;
-    ImageInput: ReactNode;
+    closeModal: () => void
+    ImageInput: ReactNode
 }
 
-export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalProps) => {
-    const { user } = useAppSelector(state => state.user)
+export const AccountEditModal = ({
+    closeModal,
+    ImageInput,
+}: AccountEditModalProps) => {
+    const { user } = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
 
-    const { isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
+    const {
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
+    }: IAnimator = useAnimate()
 
     const updateUserStatus = useAppSelector(updateUserStatusSelector)
     const loadAvatarStatus = useAppSelector(loadAvatarStatusSelector)
@@ -45,7 +47,11 @@ export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalPro
     }
 
     const onFormSubmit = (e: React.MouseEvent<HTMLElement>) => {
-        if (!updateUserStatus.isPending && !loadAvatarStatus.isPending && !deleteAvatarStatus.isPending) {
+        if (
+            !updateUserStatus.isPending &&
+            !loadAvatarStatus.isPending &&
+            !deleteAvatarStatus.isPending
+        ) {
             e.preventDefault()
 
             const updateObject: Partial<UserType> = {}
@@ -72,7 +78,9 @@ export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalPro
                 return
             }
 
-            dispatch(updateUser([updateObject, fulfilledCallback, rejectedCallback]))
+            dispatch(
+                updateUser([updateObject, fulfilledCallback, rejectedCallback])
+            )
         }
     }
 
@@ -94,30 +102,34 @@ export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalPro
             setIsCloseAnimation={setIsCloseAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             modalClass={cls.modal}
-            closeModal={() => !updateUserStatus.isPending
-                && !loadAvatarStatus.isPending
-                && !deleteAvatarStatus.isPending
-                && exitModal()}
+            closeModal={() =>
+                !updateUserStatus.isPending &&
+                !loadAvatarStatus.isPending &&
+                !deleteAvatarStatus.isPending &&
+                exitModal()
+            }
         >
-            <form
-                className={cls.AccountEditForm}
-            >
+            <form className={cls.AccountEditForm}>
                 <h1 className={cls.FormHeader}>Аккаунт</h1>
                 {ImageInput}
-                {<LoginInput
-                    name={name}
-                    setName={setName}
-                    nameError={nameError}
-                    setNameError={setNameError}
-                    isProtected={true}
-                />}
-                {<EmailInput
-                    email={email}
-                    setEmail={setEmail}
-                    emailError={emailError}
-                    setEmailError={setEmailError}
-                    isProtected={true}
-                />}
+                {
+                    <LoginInput
+                        name={name}
+                        setName={setName}
+                        nameError={nameError}
+                        setNameError={setNameError}
+                        isProtected={true}
+                    />
+                }
+                {
+                    <EmailInput
+                        email={email}
+                        setEmail={setEmail}
+                        emailError={emailError}
+                        setEmailError={setEmailError}
+                        isProtected={true}
+                    />
+                }
                 <ModalButton
                     text="Сохранить"
                     isActive={updateUserStatus.isPending}
@@ -125,5 +137,5 @@ export const AccountEditModal = ({ closeModal, ImageInput }: AccountEditModalPro
                 />
             </form>
         </Modal>
-    );
+    )
 }

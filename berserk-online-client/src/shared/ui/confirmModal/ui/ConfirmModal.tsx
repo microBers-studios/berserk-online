@@ -1,19 +1,23 @@
-import { useAnimate } from "src/shared/lib";
-import { Modal, ModalButton } from "src/shared/ui";
-import cls from "./ConfirmModal.module.scss"
+import { useAnimate } from 'src/shared/lib'
+import { Modal, ModalButton } from 'src/shared/ui'
+import cls from './ConfirmModal.module.scss'
 
 interface ConfirmModalProps {
-    text: string;
-    callback: () => void;
-    closeModal: () => void;
+    text: string
+    callback: () => void
+    closeModal: () => void
 }
 
-export const ConfirmModal = ({ text, callback, closeModal }: ConfirmModalProps) => {
+export const ConfirmModal = ({
+    text,
+    callback,
+    closeModal,
+}: ConfirmModalProps) => {
     const {
         isOpenAnimation,
         setIsOpenAnimation,
         isCloseAnimation,
-        setIsCloseAnimation
+        setIsCloseAnimation,
     }: IAnimator = useAnimate()
 
     const hideModal = () => {
@@ -31,10 +35,7 @@ export const ConfirmModal = ({ text, callback, closeModal }: ConfirmModalProps) 
             modalClass={cls.modal}
         >
             {text}
-            <ModalButton
-                text='Ок'
-                onButtonClick={callback}
-            />
+            <ModalButton text="Ок" onButtonClick={callback} />
         </Modal>
-    );
+    )
 }

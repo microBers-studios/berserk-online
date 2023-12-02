@@ -12,7 +12,7 @@ export {
     loadAvatarStatusSelector,
     deleteAvatarStatusSelector,
     requestPasswordChangingStatusSelector,
-    changePasswordStatusSelector
+    changePasswordStatusSelector,
 } from './model/selectors'
 
 export { fetchUser } from './api/fetch-user'

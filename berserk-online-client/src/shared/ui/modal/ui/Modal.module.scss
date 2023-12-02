@@ -50,57 +50,57 @@
 
 @keyframes close {
     from {
-        transform: translateY(0)
+        transform: translateY(0);
     }
 
     to {
-        transform: translateY(-100vh)
+        transform: translateY(-100vh);
     }
 }
 
 @keyframes open {
     from {
-        transform: translateY(-100vh)
+        transform: translateY(-100vh);
     }
 
     to {
-        transform: translateY(0)
+        transform: translateY(0);
     }
 }
 
 @keyframes tran {
     0% {
-        transform: translateX(0)
+        transform: translateX(0);
     }
 
     49% {
-        transform: translateX(-100vw)
+        transform: translateX(-100vw);
     }
 
     50% {
-        transform: translateX(100vw)
+        transform: translateX(100vw);
     }
 
     100% {
-        transform: translateX(0)
+        transform: translateX(0);
     }
 }
 
-@media(max-width: 1300px) {
+@media (max-width: 1300px) {
     .Modal {
         left: 30%;
         right: 30%;
     }
 }
 
-@media(max-width: 978px) {
+@media (max-width: 978px) {
     .Modal {
         left: 25%;
         right: 25%;
     }
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     .Modal {
         left: 20%;
         right: 20%;
@@ -139,14 +139,14 @@
     }
 }
 
-@media(max-width: 400px) {
+@media (max-width: 400px) {
     .Modal {
         left: 3%;
         right: 3%;
     }
 }
 
-@media(min-width: 1800px) {
+@media (min-width: 1800px) {
     .Modal {
         left: calc((100% - 500px) / 2);
         right: calc((100% - 500px) / 2);

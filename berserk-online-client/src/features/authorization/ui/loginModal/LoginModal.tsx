@@ -1,51 +1,48 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import cls from "./LoginModal.module.scss"
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import cls from './LoginModal.module.scss'
 import {
     loginUser,
     loginUserStatusSelector,
     registrateUser,
-    registrateUserStatusSelector
-} from "src/entities/user";
+    registrateUserStatusSelector,
+} from 'src/entities/user'
 import {
     CheckboxInput,
     PasswordInput,
     EmailInput,
     LoginInput,
     ModalButton,
-    Modal
-} from "src/shared/ui";
-import {
-    useAppDispatch,
-    useAppSelector,
-    useAnimate
-} from "src/shared/lib";
-import { validatePassword } from "../../lib/validate-password";
-import { EMAIL_REGULAR } from "../../const";
+    Modal,
+} from 'src/shared/ui'
+import { useAppDispatch, useAppSelector, useAnimate } from 'src/shared/lib'
+import { validatePassword } from '../../lib/validate-password'
+import { EMAIL_REGULAR } from '../../const'
 
 interface LoginModalProps {
     mode: 'reg' | 'log' | 'pas' | 'edit' | 'confirm'
-    setMode: (mode: 'reg' | 'log' | 'pas' | 'edit' | 'confirm') => void;
-    setConfirmingEmail: (email: string) => void;
-    closeModal: () => void;
+    setMode: (mode: 'reg' | 'log' | 'pas' | 'edit' | 'confirm') => void
+    setConfirmingEmail: (email: string) => void
+    closeModal: () => void
 }
-
 
 export const LoginModal = ({
     mode,
     setMode,
     setConfirmingEmail,
-    closeModal
+    closeModal,
 }: LoginModalProps) => {
-
     const dispatch = useAppDispatch()
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
 
     const {
-        isAnimation, setIsAnimation,
-        isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation
+        isAnimation,
+        setIsAnimation,
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
     }: IAnimator = useAnimate()
 
     const isRegistration = mode === 'reg'
@@ -104,20 +101,35 @@ export const LoginModal = ({
             }
 
             if (!email || !EMAIL_REGULAR.test(email)) {
-                setEmailError(email ? EMAIL_REGULAR.test(email) ? 0 : 2 : 1)
+                setEmailError(email ? (EMAIL_REGULAR.test(email) ? 0 : 2) : 1)
                 return
             }
 
-            if (!password || !validatePassword(password) && isRegistration) {
-                const error = password ? validatePassword(password) ? 0 : 2 : 1
+            if (!password || (!validatePassword(password) && isRegistration)) {
+                const error = password
+                    ? validatePassword(password)
+                        ? 0
+                        : 2
+                    : 1
                 setPasswordError(error)
                 if (error) return
             }
 
             if (isRegistration) {
-                dispatch(registrateUser([{ name, email, password }, registrationFulfilledCallback]))
+                dispatch(
+                    registrateUser([
+                        { name, email, password },
+                        registrationFulfilledCallback,
+                    ])
+                )
             } else {
-                dispatch(loginUser([{ email, password, rememberMe: isChecked }, loginFulfilledCallback, loginRejectedCallback]))
+                dispatch(
+                    loginUser([
+                        { email, password, rememberMe: isChecked },
+                        loginFulfilledCallback,
+                        loginRejectedCallback,
+                    ])
+                )
             }
         }
     }
@@ -136,10 +148,10 @@ export const LoginModal = ({
             switch (Number(id)) {
                 case 2:
                     setPasswordError(3)
-                    break;
+                    break
                 case 1:
                     setEmailError(3)
-                    break;
+                    break
             }
         }
     }
@@ -156,24 +168,20 @@ export const LoginModal = ({
             modalClass={cls.modal}
         >
             <div className={cls.FormWrapper}>
-                <form
-                    className={cls.Form}
-                >
+                <form className={cls.Form}>
                     <h1 className={cls.FormHeader}>
-                        {isRegistration
-                            ? 'Регистрация'
-                            : 'Войти'}
+                        {isRegistration ? 'Регистрация' : 'Войти'}
                     </h1>
 
                     <div className={cls.inputsWrapper}>
-                        {isRegistration &&
+                        {isRegistration && (
                             <LoginInput
                                 name={name}
                                 setName={setName}
                                 setNameError={setNameError}
                                 nameError={nameError}
                             />
-                        }
+                        )}
                         <EmailInput
                             email={email}
                             setEmail={setEmail}
@@ -186,43 +194,50 @@ export const LoginModal = ({
                             passwordError={passwordError}
                             setPasswordError={setPasswordError}
                         />
-                        {isRegistration && registrateUserStatus.isRejected &&
-                            <span className={cls.redAlert}>*Пользователь уже существует</span>
-                        }
+                        {isRegistration && registrateUserStatus.isRejected && (
+                            <span className={cls.redAlert}>
+                                *Пользователь уже существует
+                            </span>
+                        )}
                     </div>
 
-                    {!isRegistration &&
-                        <CheckboxInput isChecked={isChecked} setIsChecked={setIsChecked} />
-                    }
+                    {!isRegistration && (
+                        <CheckboxInput
+                            isChecked={isChecked}
+                            setIsChecked={setIsChecked}
+                        />
+                    )}
 
                     <div className={cls.ButtonWrapper}>
                         <ModalButton
-                            text={isRegistration
-                                ? 'Зарегистрироваться'
-                                : 'Войти'}
-                            isActive={loginUserStatus.isPending || registrateUserStatus.isPending}
+                            text={
+                                isRegistration ? 'Зарегистрироваться' : 'Войти'
+                            }
+                            isActive={
+                                loginUserStatus.isPending ||
+                                registrateUserStatus.isPending
+                            }
                             onButtonClick={onRegClick}
                         />
                     </div>
                 </form>
                 <div className={cls.ButtonsWrapper}>
-                    {!isRegistration &&
+                    {!isRegistration && (
                         <span
                             className={cls.PasswordResetButton}
                             onClick={onPasswordResetClick}
                         >
                             Забыли пароль?
                         </span>
-                    }
+                    )}
                     <span
                         onClick={onFormChangeClick}
                         className={cls.changeFormButton}
-                    >{isRegistration
-                        ? 'Войти'
-                        : 'Зарегистрироваться'}
+                    >
+                        {isRegistration ? 'Войти' : 'Зарегистрироваться'}
                     </span>
                 </div>
             </div>
         </Modal>
-    );
+    )
 }

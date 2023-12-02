@@ -1,33 +1,33 @@
-import { createSlice, AnyAction, PayloadAction } from "@reduxjs/toolkit"
-import { toast } from 'react-toastify';
-import { APIStatus } from "src/shared/lib";
-import { fetchUser } from "../api/fetch-user";
-import { logoutUser } from "../api/logout-user";
-import { registrateUser } from "../api/registrate-user";
-import { loginUser } from "../api/login-user";
-import { updateUser } from "../api/update-user";
-import { confirmUserEmail } from "../api/confirm-user-email";
-import { loadAvatar } from "../api/load-avatar";
-import { deleteAvatar } from "../api/delete-avatar";
-import { sendConfirmEmail } from "../api/send-confirm-email";
-import { requestPasswordChanging } from "../api/request-password-changing";
-import { changePassword } from "../api/change-password";
+import { createSlice, AnyAction, PayloadAction } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
+import { APIStatus } from 'src/shared/lib'
+import { fetchUser } from '../api/fetch-user'
+import { logoutUser } from '../api/logout-user'
+import { registrateUser } from '../api/registrate-user'
+import { loginUser } from '../api/login-user'
+import { updateUser } from '../api/update-user'
+import { confirmUserEmail } from '../api/confirm-user-email'
+import { loadAvatar } from '../api/load-avatar'
+import { deleteAvatar } from '../api/delete-avatar'
+import { sendConfirmEmail } from '../api/send-confirm-email'
+import { requestPasswordChanging } from '../api/request-password-changing'
+import { changePassword } from '../api/change-password'
 
 interface IUserState {
-    user: UserType;
-    fetchUserStatus: APIStatus;
-    logoutUserStatus: APIStatus;
-    loginUserStatus: APIStatus;
-    registrateUserStatus: APIStatus;
-    updateUserStatus: APIStatus;
-    confirmUserEmailStatus: APIStatus;
-    loadAvatarStatus: APIStatus;
-    deleteAvatarStatus: APIStatus;
-    sendConfirmEmailStatus: APIStatus;
-    requestPasswordChangingStatus: APIStatus;
-    changePasswordStatus: APIStatus;
-    isCookieModal: boolean;
-    isEmailConfirmed: boolean;
+    user: UserType
+    fetchUserStatus: APIStatus
+    logoutUserStatus: APIStatus
+    loginUserStatus: APIStatus
+    registrateUserStatus: APIStatus
+    updateUserStatus: APIStatus
+    confirmUserEmailStatus: APIStatus
+    loadAvatarStatus: APIStatus
+    deleteAvatarStatus: APIStatus
+    sendConfirmEmailStatus: APIStatus
+    requestPasswordChangingStatus: APIStatus
+    changePasswordStatus: APIStatus
+    isCookieModal: boolean
+    isEmailConfirmed: boolean
 }
 
 const defaultUser = {
@@ -35,7 +35,7 @@ const defaultUser = {
     name: '',
     email: '',
     avatarUrl: '',
-    password: ''
+    password: '',
 }
 
 const initialState: IUserState = {
@@ -52,7 +52,7 @@ const initialState: IUserState = {
     requestPasswordChangingStatus: APIStatus.Idle,
     changePasswordStatus: APIStatus.Idle,
     isCookieModal: false,
-    isEmailConfirmed: true
+    isEmailConfirmed: true,
 }
 
 export const userSlice = createSlice({
@@ -61,7 +61,7 @@ export const userSlice = createSlice({
     reducers: {
         closeCookieModal: (state) => {
             state.isCookieModal = false
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -74,7 +74,11 @@ export const userSlice = createSlice({
             })
             .addCase(fetchUser.rejected, (state, action) => {
                 state.fetchUserStatus = APIStatus.Rejected
-                if (action.payload && typeof action.payload !== 'string' && action.payload.code === 403) {
+                if (
+                    action.payload &&
+                    typeof action.payload !== 'string' &&
+                    action.payload.code === 403
+                ) {
                     state.isEmailConfirmed = false
                     state.user.email = action.payload.email
                 }
@@ -105,7 +109,11 @@ export const userSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loginUserStatus = APIStatus.Rejected
-                if (action.payload && typeof action.payload !== 'string' && action.payload.code === 403) {
+                if (
+                    action.payload &&
+                    typeof action.payload !== 'string' &&
+                    action.payload.code === 403
+                ) {
                     state.isEmailConfirmed = false
                     state.user.email = action.payload?.email
                 }
@@ -131,9 +139,12 @@ export const userSlice = createSlice({
                 state.confirmUserEmailStatus = APIStatus.Fulfilled
                 state.user = action.payload
                 state.isEmailConfirmed = true
-                if (state.fetchUserStatus === APIStatus.Rejected) state.fetchUserStatus = APIStatus.Fulfilled
-                if (state.loginUserStatus === APIStatus.Rejected) state.loginUserStatus = APIStatus.Fulfilled
-                if (state.registrateUserStatus === APIStatus.Rejected) state.registrateUserStatus = APIStatus.Fulfilled
+                if (state.fetchUserStatus === APIStatus.Rejected)
+                    state.fetchUserStatus = APIStatus.Fulfilled
+                if (state.loginUserStatus === APIStatus.Rejected)
+                    state.loginUserStatus = APIStatus.Fulfilled
+                if (state.registrateUserStatus === APIStatus.Rejected)
+                    state.registrateUserStatus = APIStatus.Fulfilled
             })
             .addCase(confirmUserEmail.rejected, (state) => {
                 state.confirmUserEmailStatus = APIStatus.Rejected
@@ -190,10 +201,13 @@ export const userSlice = createSlice({
                 state.changePasswordStatus = APIStatus.Rejected
                 toast(action.payload)
             })
-            .addMatcher(isCookieError, (state, action: PayloadAction<string>) => {
-                state.isCookieModal = action.payload === 'Cookie Error'
-            })
-    }
+            .addMatcher(
+                isCookieError,
+                (state, action: PayloadAction<string>) => {
+                    state.isCookieModal = action.payload === 'Cookie Error'
+                }
+            )
+    },
 })
 
 const isCookieError = (action: AnyAction) => {

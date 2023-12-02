@@ -1,21 +1,34 @@
-import { Modal } from "src/shared/ui";
-import cls from "./CardModal.module.scss"
-import { useAnimate, useAppDispatch, useAppSelector } from "src/shared/lib";
-import trashCanImage from "src/shared/assets/images/trash.svg"
-import { changeCardAmount, currentDeckSelector, deleteCard } from "src/entities/decks";
+import { Modal } from 'src/shared/ui'
+import cls from './CardModal.module.scss'
+import { useAnimate, useAppDispatch, useAppSelector } from 'src/shared/lib'
+import trashCanImage from 'src/shared/assets/images/trash.svg'
+import {
+    changeCardAmount,
+    currentDeckSelector,
+    deleteCard,
+} from 'src/entities/decks'
 
 interface CardModalProps {
-    closeModal: () => void;
-    card: IDeckCard;
-    setIsSaveDisabled: (b: boolean) => void;
-    isSaveDisabled: boolean;
+    closeModal: () => void
+    card: IDeckCard
+    setIsSaveDisabled: (b: boolean) => void
+    isSaveDisabled: boolean
 }
 
-export const CardModal = ({ closeModal, card, setIsSaveDisabled, isSaveDisabled }: CardModalProps) => {
+export const CardModal = ({
+    closeModal,
+    card,
+    setIsSaveDisabled,
+    isSaveDisabled,
+}: CardModalProps) => {
     const dispatch = useAppDispatch()
     const deck = useAppSelector(currentDeckSelector)
-    const { isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation }: IAnimator = useAnimate()
+    const {
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
+    }: IAnimator = useAnimate()
 
     const removeCard = () => {
         hideModal()
@@ -53,7 +66,7 @@ export const CardModal = ({ closeModal, card, setIsSaveDisabled, isSaveDisabled 
             modalClass={cls.CardModal}
             theme={'dark'}
         >
-            <div className={cls.CardModalContent} >
+            <div className={cls.CardModalContent}>
                 <div className={cls.CardImageWrapper}>
                     <img
                         src={card.image}
@@ -61,14 +74,10 @@ export const CardModal = ({ closeModal, card, setIsSaveDisabled, isSaveDisabled 
                         className={cls.CardImage}
                     />
                 </div>
-                <h2
-                    className={cls.CardHeader}
-                >
+                <h2 className={cls.CardHeader}>
                     {card.name + ` (${card.amount})`}
                 </h2>
-                <div
-                    className={cls.CardAmountButtonsWrapper}
-                >
+                <div className={cls.CardAmountButtonsWrapper}>
                     <button
                         className={cls.CardAmountButton}
                         onClick={() => regCardAmount(true)}
@@ -82,17 +91,14 @@ export const CardModal = ({ closeModal, card, setIsSaveDisabled, isSaveDisabled 
                         -
                     </button>
                 </div>
-                <button
-                    className={cls.DeleteCardButton}
-                >
+                <button className={cls.DeleteCardButton}>
                     <img
                         src={trashCanImage}
                         className={cls.trashCanImage}
                         onClick={removeCard}
                     />
                 </button>
-            </div >
+            </div>
         </Modal>
-
-    );
+    )
 }

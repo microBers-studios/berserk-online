@@ -1,8 +1,11 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
-import { apiUrl, Paths, checkCookie } from "src/shared/lib";
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 
-
-export const requestPasswordChanging = createAsyncThunk<void, string, { rejectValue: string }>(
+export const requestPasswordChanging = createAsyncThunk<
+    void,
+    string,
+    { rejectValue: string }
+>(
     'user/requestPasswordChanging',
     async function (email: string, { rejectWithValue }) {
         try {
@@ -13,15 +16,14 @@ export const requestPasswordChanging = createAsyncThunk<void, string, { rejectVa
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: email })
+                body: JSON.stringify({ email: email }),
             })
 
             if (response.status !== 200) {
                 throw new Error('Password Changing Error')
             }
-
         } catch (e) {
             const error = e as IError
             return rejectWithValue(error.message)

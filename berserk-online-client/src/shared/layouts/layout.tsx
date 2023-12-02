@@ -1,12 +1,12 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 interface LayoutProps {
-    header: ReactNode;
-    content: ReactNode;
-    footer: ReactNode;
-    title: string;
-    wrapperClassName?: string;
+    header: ReactNode
+    content: ReactNode
+    footer: ReactNode
+    title: string
+    wrapperClassName?: string
 }
 
 export const Layout = ({
@@ -14,9 +14,8 @@ export const Layout = ({
     content,
     footer,
     title,
-    wrapperClassName
+    wrapperClassName,
 }: LayoutProps) => {
-
     return (
         <div className={wrapperClassName}>
             <Helmet>

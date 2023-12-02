@@ -26,19 +26,20 @@
 }
 
 .PasswordResetButton {
-    color: var(--secondary-color)
+    color: var(--secondary-color);
 }
 
 .Form {
     display: grid;
     height: 100%;
-    grid-template-areas: "header"
-        "header"
-        "inputs"
-        "inputs"
-        "remember"
-        "buttons"
-        "buttons";
+    grid-template-areas:
+        'header'
+        'header'
+        'inputs'
+        'inputs'
+        'remember'
+        'buttons'
+        'buttons';
 }
 
 .FormHeader {
@@ -97,7 +98,6 @@
 
 @media (max-width: 450px) {
     .modal {
-
         span {
             font-size: 16px;
         }

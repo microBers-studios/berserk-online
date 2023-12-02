@@ -1,19 +1,24 @@
-import { useState } from "react";
-import { useAnimate, useAppDispatch, useAppSelector } from "src/shared/lib";
-import cls from "./PasswordResetModal.module.scss"
-import { Modal, ModalButton, PasswordInput } from "src/shared/ui";
-import { changePassword, changePasswordStatusSelector } from "src/entities/user";
-import { validatePassword } from "../../lib/validate-password";
+import { useState } from 'react'
+import { useAnimate, useAppDispatch, useAppSelector } from 'src/shared/lib'
+import cls from './PasswordResetModal.module.scss'
+import { Modal, ModalButton, PasswordInput } from 'src/shared/ui'
+import { changePassword, changePasswordStatusSelector } from 'src/entities/user'
+import { validatePassword } from '../../lib/validate-password'
 
 interface PasswordResetModalProps {
-    token: string;
-    closeModal: () => void;
+    token: string
+    closeModal: () => void
 }
 
-export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProps) => {
+export const PasswordResetModal = ({
+    closeModal,
+    token,
+}: PasswordResetModalProps) => {
     const {
-        isOpenAnimation, setIsOpenAnimation,
-        isCloseAnimation, setIsCloseAnimation
+        isOpenAnimation,
+        setIsOpenAnimation,
+        isCloseAnimation,
+        setIsCloseAnimation,
     }: IAnimator = useAnimate()
 
     const endChanging = () => {
@@ -36,7 +41,11 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
             e.preventDefault()
 
             if (!password || !validatePassword(password)) {
-                const error = password ? validatePassword(password) ? 0 : 2 : 1
+                const error = password
+                    ? validatePassword(password)
+                        ? 0
+                        : 2
+                    : 1
                 setPasswordError(error)
                 if (error) return
             }
@@ -46,7 +55,13 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
                 return
             }
 
-            dispatch(changePassword({ token, password, fulfilledCallback: closeModal }))
+            dispatch(
+                changePassword({
+                    token,
+                    password,
+                    fulfilledCallback: closeModal,
+                })
+            )
         }
     }
 
@@ -59,14 +74,8 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
             closeModal={endChanging}
             modalClass={cls.modal}
         >
-            <form
-                className={cls.Form}
-                onSubmit={onFormSubmit}
-            >
-
-                <h1 className={cls.FormHeader}>
-                    Сброс пароля
-                </h1>
+            <form className={cls.Form} onSubmit={onFormSubmit}>
+                <h1 className={cls.FormHeader}>Сброс пароля</h1>
                 <div className={cls.PasswordInputs}>
                     <PasswordInput
                         password={password}
@@ -90,5 +99,5 @@ export const PasswordResetModal = ({ closeModal, token }: PasswordResetModalProp
                 />
             </form>
         </Modal>
-    );
+    )
 }
