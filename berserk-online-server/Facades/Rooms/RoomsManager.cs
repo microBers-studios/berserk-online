@@ -74,10 +74,11 @@ namespace berserk_online_server.Facades.Rooms
             _logger.LogInformation($"Added user {user.Email} to room with id: {room.Id}");
             _userLocationManager.ChangeLocation(user, room);
         }
-        public async Task Leave(UserInfo user, string roomId)
+        public async Task Leave(UserInfo user)
         {
+            var room = _userLocationManager.GetLocation(user);
             _userLocationManager.RemoveLocation(user);
-            await garbageRoomCheck(Get(roomId));
+            await garbageRoomCheck(room);
         }
 
         public void ToPlayer(UserInfo user)

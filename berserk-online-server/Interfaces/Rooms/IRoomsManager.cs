@@ -8,7 +8,7 @@ namespace berserk_online_server.Interfaces.Rooms
         IRoom Get(string id);
         IRoom[] GetAll();
         void Join(UserInfo user, string roomId);
-        Task Leave(UserInfo user, string roomId);
+        Task Leave(UserInfo user);
         void ToSpectator(UserInfo user);
         void ToPlayer(UserInfo user);
     }

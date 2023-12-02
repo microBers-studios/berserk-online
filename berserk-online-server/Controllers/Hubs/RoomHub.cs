@@ -99,9 +99,17 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public async Task Leave()
         {
-            _userLocationManager.RemoveLocation(getUserInfo());
-            _connectionManager.RemoveConnection(Context.ConnectionId);
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_LIST, _roomsManager.GetAll());
+            try
+            {
+                await _roomsManager.Leave(getUserInfo());
+                _connectionManager.RemoveConnection(Context.ConnectionId);
+                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_LIST, _roomsManager.GetAll());
+            }
+            catch (KeyNotFoundException)
+            {
+                await sendErrorMessage(ApiErrorType.NoAccess, "Not in room");
+            }
+
         }
         public async Task GetAll()
         {
