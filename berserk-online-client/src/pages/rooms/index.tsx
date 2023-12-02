@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Layout } from 'src/shared/layouts'
 import { Header } from 'src/widgets/header'
 import { Footer } from 'src/widgets/footer'
+import { RoomsContainer } from 'src/widgets/roomsContainer'
 
 interface RoomsPageProps {
     setPage: (page: RouterPaths | null) => void
@@ -22,7 +23,11 @@ export const RoomsPage = ({ setPage, currentPage }: RoomsPageProps) => {
     return (
         <Layout
             header={<Header currentPage={currentPage} />}
-            content={<div className={cls.RoomsPage}>КОМНАТЫ</div>}
+            content={
+                <div className={cls.RoomsPage}>
+                    <RoomsContainer />
+                </div>
+            }
             footer={<Footer />}
             title="Комнаты | Берсерк онлайн"
         />

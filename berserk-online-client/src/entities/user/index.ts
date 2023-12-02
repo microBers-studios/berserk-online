@@ -13,6 +13,7 @@ export {
     deleteAvatarStatusSelector,
     requestPasswordChangingStatusSelector,
     changePasswordStatusSelector,
+    isEmailConfirmedSelector,
 } from './model/selectors'
 
 export { fetchUser } from './api/fetch-user'

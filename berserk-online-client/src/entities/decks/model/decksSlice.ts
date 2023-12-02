@@ -7,7 +7,7 @@ import { createDeck } from '../api/create-deck'
 import { getDeck } from '../api/get-deck'
 import { updateDeck } from '../api/update-deck'
 
-export interface IDecksState {
+interface IDecksState {
     decks: DeckType[]
     currentDeck: null | DeckType
     fetchDecksStatus: APIStatus

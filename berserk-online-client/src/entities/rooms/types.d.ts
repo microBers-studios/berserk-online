@@ -1,0 +1,3 @@
+interface RoomType {
+    id: number
+}

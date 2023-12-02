@@ -1,37 +1,32 @@
+import { useAppDispatch, useAppSelector } from 'src/shared/lib'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import ReactLoading from 'react-loading'
-import {
-    useAppDispatch,
-    useAppSelector,
-    createDeck,
-    RouterPaths,
-} from 'src/shared/lib'
-import cls from './DecksContainer.module.scss'
+import cls from './RoomsContainer.module.scss'
+// import { useNavigate } from 'react-router-dom'
 import {
     fetchUserStatusSelector,
     loginUserStatusSelector,
     registrateUserStatusSelector,
 } from 'src/entities/user'
-import { DeckItem } from 'src/features/decks'
-import {
-    decksSelector,
-    fetchDecksStatusSelector,
-    fetchDecks,
-    setCurrentDeck,
-} from 'src/entities/decks'
-import { isEmailConfirmedSelector } from 'src/entities/user/model/selectors'
+import { fetchDecksStatusSelector } from 'src/entities/decks'
+import { isEmailConfirmedSelector } from 'src/entities/user'
+import ReactLoading from 'react-loading'
+import { RoomItem } from 'src/features/rooms'
+import { roomsSelector } from 'src/entities/rooms'
 
-export const DecksContainer = () => {
+// interface RoomsContainerProps {
+//     className?: string
+// }
+
+export const RoomsContainer = () => {
     const { user } = useAppSelector((state) => state.user)
     const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
     const fetchDecksStatus = useAppSelector(fetchDecksStatusSelector)
     const isEmailConfirmed = useAppSelector(isEmailConfirmedSelector)
-    const decks = useAppSelector(decksSelector)
+    const rooms = useAppSelector(roomsSelector)
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const userIsUnauthorized = !user.id && !fetchUserStatus.isUncompleted
 
@@ -42,7 +37,7 @@ export const DecksContainer = () => {
                 registrateUserStatus.isFulfilled) &&
             isEmailConfirmed
         ) {
-            dispatch(fetchDecks())
+            // dispatch(fetchDecks())
         }
     }, [
         fetchUserStatus,
@@ -52,19 +47,19 @@ export const DecksContainer = () => {
         dispatch,
     ])
 
-    const makeDeck = () => {
-        dispatch(setCurrentDeck({ deck: createDeck('') }))
-        navigate(RouterPaths.CREATE_DECK)
+    const makeRoom = () => {
+        // dispatch(setCurrentDeck({ deck: createDeck('') }))
+        // navigate(RouterPaths.CREATE_DECK)
     }
 
     return (
-        <div className={cls.DecksContainer}>
-            <div className={cls.DecksHeaderWrapper}>
+        <div className={cls.RoomsContainer}>
+            <div className={cls.RoomsHeaderWrapper}>
                 <div className={cls.HeaderWrapper}>
-                    <span className={cls.DecksHeader}>Колоды</span>
+                    <span className={cls.RoomsHeader}>Комнаты</span>
                     {!userIsUnauthorized && fetchDecksStatus.isFulfilled && (
-                        <span className={cls.DecksCount}>
-                            {decks.length} из {decks.length}
+                        <span className={cls.RoomsCount}>
+                            {rooms.length} из {rooms.length}
                         </span>
                     )}
                 </div>
@@ -74,14 +69,14 @@ export const DecksContainer = () => {
                         loginUserStatus.isUncompleted &&
                         registrateUserStatus.isUncompleted
                     ) && (
-                        <button className={cls.AddButton} onClick={makeDeck}>
+                        <button className={cls.AddButton} onClick={makeRoom}>
                             Создать
                         </button>
                     )}
             </div>
             <div
-                className={`${cls.DecksWrapper} ${
-                    (userIsUnauthorized || !decks.length) && cls.NoDecks
+                className={`${cls.RoomsWrapper} ${
+                    (userIsUnauthorized || !rooms.length) && cls.NoRooms
                 }`}
             >
                 {fetchDecksStatus.isPending ||
@@ -95,13 +90,13 @@ export const DecksContainer = () => {
                         width={90}
                     />
                 ) : userIsUnauthorized ? (
-                    <span className={cls.NoDecksContent}>
-                        Войдите в аккаунт, чтобы увидеть колоды
+                    <span className={cls.NoRoomsContent}>
+                        Войдите в аккаунт, чтобы увидеть комнаты
                     </span>
-                ) : decks.length ? (
-                    decks.map((deck) => <DeckItem key={deck.id} deck={deck} />)
+                ) : rooms.length ? (
+                    rooms.map((room) => <RoomItem key={room.id} />)
                 ) : (
-                    <span className={cls.NoDecksContent}>Колод пока нет</span>
+                    <span className={cls.NoRoomsContent}>Комнат пока нет</span>
                 )}
             </div>
         </div>
