@@ -118,14 +118,22 @@ export const LoginModal = ({
             if (isRegistration) {
                 dispatch(
                     registrateUser([
-                        { name, email, password },
+                        {
+                            name,
+                            email,
+                            password,
+                        },
                         registrationFulfilledCallback,
                     ])
                 )
             } else {
                 dispatch(
                     loginUser([
-                        { email, password, rememberMe: isChecked },
+                        {
+                            email,
+                            password,
+                            rememberMe: isChecked,
+                        },
                         loginFulfilledCallback,
                         loginRejectedCallback,
                     ])

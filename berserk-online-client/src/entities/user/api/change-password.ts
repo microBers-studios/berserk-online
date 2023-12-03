@@ -20,7 +20,10 @@ export const changePassword = createAsyncThunk<
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token, password }),
+                body: JSON.stringify({
+                    token,
+                    password,
+                }),
             })
 
             if (response.status !== 200) {

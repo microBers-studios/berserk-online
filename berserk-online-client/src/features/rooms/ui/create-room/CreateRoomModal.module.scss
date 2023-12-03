@@ -1,0 +1,24 @@
+.Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+}
+
+.ModalHeader {
+    color: black;
+}
+
+.modal {
+    top: 30%;
+    bottom: 30%;
+}
+
+@media (max-width: 600px) {
+    .modal {
+        top: 35%;
+        bottom: 35%;
+    }
+}

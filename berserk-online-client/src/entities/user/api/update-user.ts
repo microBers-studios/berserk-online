@@ -5,7 +5,12 @@ import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 export const updateUser = createAsyncThunk<
     UserType,
     [Partial<UserType>, () => void, (code: number) => void],
-    { rejectValue: { code: number; rejectedCallback: (code: number) => void } }
+    {
+        rejectValue: {
+            code: number
+            rejectedCallback: (code: number) => void
+        }
+    }
 >(
     'user/updateUser',
     async function (

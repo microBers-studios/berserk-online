@@ -90,7 +90,7 @@ export const DeckConstructor = ({
                     </div>
                 </div>
             </div>
-            {modalCard && modalCard && (
+            {modalCard && (
                 <CardModal
                     card={modalCard}
                     closeModal={() => setModalCardId(null)}

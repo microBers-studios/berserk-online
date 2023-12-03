@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import cls from './CreateButton.module.scss'
 import {
     createDeck,
     createDeckStatusSelector,
@@ -8,6 +7,7 @@ import {
 } from 'src/entities/decks'
 import { RouterPaths, useAppDispatch, useAppSelector } from 'src/shared/lib'
 import { useNavigate } from 'react-router-dom'
+import { Button } from 'src/shared/ui'
 
 interface CreateButtonProps {
     deckName: string
@@ -44,12 +44,10 @@ export const CreateButton = ({
     }
 
     return (
-        <button
-            className={cls.SaveDeckButton}
+        <Button
             disabled={!deck?.main.length || isSaveDisabled}
             onClick={onSaveClick}
-        >
-            Сохранить
-        </button>
+            title="Сохранить"
+        />
     )
 }

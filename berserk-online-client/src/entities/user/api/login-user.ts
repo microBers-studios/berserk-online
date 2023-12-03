@@ -5,7 +5,9 @@ import { apiUrl, Paths, checkCookie } from 'src/shared/lib'
 export const loginUser = createAsyncThunk<
     UserType,
     [
-        Omit<UserType, 'id' | 'avatarUrl' | 'name'> & { rememberMe: boolean },
+        Omit<UserType, 'id' | 'avatarUrl' | 'name'> & {
+            rememberMe: boolean
+        },
         () => void,
         (code: number, id: number) => void,
     ],

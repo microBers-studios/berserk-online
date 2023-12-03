@@ -33,7 +33,10 @@ export const DeckCreatingPage = ({ currentPage }: DeckCreatingPageProps) => {
         if (deck) {
             localStorage.setItem(
                 'deck',
-                JSON.stringify({ ...deck, name: deckName })
+                JSON.stringify({
+                    ...deck,
+                    name: deckName,
+                })
             )
         } else {
             navigate(RouterPaths.MAIN)

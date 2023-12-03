@@ -1,104 +1,93 @@
-import { useAppDispatch, useAppSelector } from 'src/shared/lib'
-import { useEffect } from 'react'
+import { useAppSelector } from 'src/shared/lib'
+import { useState } from 'react'
 import cls from './RoomsContainer.module.scss'
-// import { useNavigate } from 'react-router-dom'
 import {
     fetchUserStatusSelector,
     loginUserStatusSelector,
     registrateUserStatusSelector,
 } from 'src/entities/user'
-import { fetchDecksStatusSelector } from 'src/entities/decks'
-import { isEmailConfirmedSelector } from 'src/entities/user'
 import ReactLoading from 'react-loading'
-import { RoomItem } from 'src/features/rooms'
-import { roomsSelector } from 'src/entities/rooms'
+import { CreateRoomModal, RoomItem } from 'src/features/rooms'
 
-// interface RoomsContainerProps {
-//     className?: string
-// }
+interface RoomsContainerProps {
+    rooms: RoomType[] | null
+    connection: boolean
+}
 
-export const RoomsContainer = () => {
+export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
+    const [isRoomCreating, setIsRoomCreating] = useState<boolean>(false)
     const { user } = useAppSelector((state) => state.user)
     const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
     const registrateUserStatus = useAppSelector(registrateUserStatusSelector)
-    const fetchDecksStatus = useAppSelector(fetchDecksStatusSelector)
-    const isEmailConfirmed = useAppSelector(isEmailConfirmedSelector)
-    const rooms = useAppSelector(roomsSelector)
-    const dispatch = useAppDispatch()
-    // const navigate = useNavigate()
 
     const userIsUnauthorized = !user.id && !fetchUserStatus.isUncompleted
 
-    useEffect(() => {
-        if (
-            (fetchUserStatus.isFulfilled ||
-                loginUserStatus.isFulfilled ||
-                registrateUserStatus.isFulfilled) &&
-            isEmailConfirmed
-        ) {
-            // dispatch(fetchDecks())
-        }
-    }, [
-        fetchUserStatus,
-        loginUserStatus,
-        registrateUserStatus,
-        isEmailConfirmed,
-        dispatch,
-    ])
-
-    const makeRoom = () => {
-        // dispatch(setCurrentDeck({ deck: createDeck('') }))
-        // navigate(RouterPaths.CREATE_DECK)
+    const openCreateRoomModal = () => {
+        setIsRoomCreating(true)
     }
 
     return (
-        <div className={cls.RoomsContainer}>
-            <div className={cls.RoomsHeaderWrapper}>
-                <div className={cls.HeaderWrapper}>
-                    <span className={cls.RoomsHeader}>Комнаты</span>
-                    {!userIsUnauthorized && fetchDecksStatus.isFulfilled && (
-                        <span className={cls.RoomsCount}>
-                            {rooms.length} из {rooms.length}
+        <>
+            <div className={cls.RoomsContainer}>
+                <div className={cls.RoomsHeaderWrapper}>
+                    <div className={cls.HeaderWrapper}>
+                        <span className={cls.RoomsHeader}>Комнаты</span>
+                        {!userIsUnauthorized && connection && rooms && (
+                            <span className={cls.RoomsCount}>
+                                {rooms.length} из {rooms.length}
+                            </span>
+                        )}
+                    </div>
+                    {!userIsUnauthorized &&
+                        connection &&
+                        !(
+                            fetchUserStatus.isUncompleted &&
+                            loginUserStatus.isUncompleted &&
+                            registrateUserStatus.isUncompleted
+                        ) && (
+                            <button
+                                className={cls.AddButton}
+                                onClick={openCreateRoomModal}
+                            >
+                                Создать
+                            </button>
+                        )}
+                </div>
+                <div
+                    className={`${cls.RoomsWrapper} ${
+                        (userIsUnauthorized || !rooms?.length) && cls.NoRooms
+                    }`}
+                >
+                    {!connection ||
+                    !rooms ||
+                    (fetchUserStatus.isUncompleted &&
+                        loginUserStatus.isUncompleted &&
+                        registrateUserStatus.isUncompleted) ? (
+                        <ReactLoading
+                            type={'bubbles'}
+                            color={'#ffffff'}
+                            height={100}
+                            width={90}
+                        />
+                    ) : userIsUnauthorized ? (
+                        <span className={cls.NoRoomsContent}>
+                            Войдите в аккаунт, чтобы увидеть комнаты
+                        </span>
+                    ) : rooms.length ? (
+                        rooms.map((room) => (
+                            <RoomItem key={room.id} room={room} />
+                        ))
+                    ) : (
+                        <span className={cls.NoRoomsContent}>
+                            Комнат пока нет
                         </span>
                     )}
                 </div>
-                {!userIsUnauthorized &&
-                    !(
-                        fetchUserStatus.isUncompleted &&
-                        loginUserStatus.isUncompleted &&
-                        registrateUserStatus.isUncompleted
-                    ) && (
-                        <button className={cls.AddButton} onClick={makeRoom}>
-                            Создать
-                        </button>
-                    )}
             </div>
-            <div
-                className={`${cls.RoomsWrapper} ${
-                    (userIsUnauthorized || !rooms.length) && cls.NoRooms
-                }`}
-            >
-                {fetchDecksStatus.isPending ||
-                (fetchUserStatus.isUncompleted &&
-                    loginUserStatus.isUncompleted &&
-                    registrateUserStatus.isUncompleted) ? (
-                    <ReactLoading
-                        type={'bubbles'}
-                        color={'#ffffff'}
-                        height={100}
-                        width={90}
-                    />
-                ) : userIsUnauthorized ? (
-                    <span className={cls.NoRoomsContent}>
-                        Войдите в аккаунт, чтобы увидеть комнаты
-                    </span>
-                ) : rooms.length ? (
-                    rooms.map((room) => <RoomItem key={room.id} />)
-                ) : (
-                    <span className={cls.NoRoomsContent}>Комнат пока нет</span>
-                )}
-            </div>
-        </div>
+            {isRoomCreating && (
+                <CreateRoomModal closeModal={() => setIsRoomCreating(false)} />
+            )}
+        </>
     )
 }

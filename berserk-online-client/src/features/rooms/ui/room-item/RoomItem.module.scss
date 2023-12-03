@@ -1,0 +1,51 @@
+.RoomItem {
+    width: 60vw;
+    border: 1px solid var(--border-shadow-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 20px;
+
+    &:hover {
+        .RoomHeader {
+            color: white;
+        }
+    }
+}
+
+.RoomItemImage {
+    width: 100px;
+    height: 150px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.RoomItemImageWrapper {
+    height: 4.5vw;
+    width: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-right: 1px solid var(--border-shadow-color);
+}
+
+.RoomItemInfo {
+    display: flex;
+    flex-direction: column;
+    width: 42vw;
+}
+
+.RoomHeader {
+    margin: 2px;
+    color: var(--border-color);
+}
+
+.RoomParticipantsInfo {
+    color: var(--border-color);
+}
+
+.JoinRoomButton {
+    margin-right: 1vw;
+}

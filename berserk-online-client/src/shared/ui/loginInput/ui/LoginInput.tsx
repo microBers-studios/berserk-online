@@ -31,7 +31,8 @@ export const LoginInput = ({
                 <span>Логин: </span>
             ) : (
                 <span>
-                    Введите логин:<span className={cls.red}> *</span>
+                    Введите логин:
+                    <span className={cls.red}> *</span>
                 </span>
             )}
             <div className={cls.inputContainer}>

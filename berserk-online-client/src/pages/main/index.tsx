@@ -66,7 +66,11 @@ export const MainPage = ({ setPage, currentPage }: MainPageProps) => {
                     },
                     onClick: () => {
                         const deck = JSON.parse(cashedDeck)
-                        dispatch(setCurrentDeck({ deck }))
+                        dispatch(
+                            setCurrentDeck({
+                                deck,
+                            })
+                        )
                         navigate(RouterPaths.CREATE_DECK)
                         localStorage.removeItem('deck')
                     },

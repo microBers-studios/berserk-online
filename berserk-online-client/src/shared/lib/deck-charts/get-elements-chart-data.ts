@@ -26,7 +26,10 @@ export const getElementsChartData = (deck: IDeck) => {
             const elementIndex = elements.findIndex((i) => i.element === e)
 
             if (elementIndex === -1) {
-                elements.push({ element: e, count: card.amount })
+                elements.push({
+                    element: e,
+                    count: card.amount,
+                })
             } else {
                 elements[elementIndex].count += card.amount
             }

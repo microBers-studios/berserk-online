@@ -33,7 +33,10 @@ export const decksSlice = createSlice({
     reducers: {
         changeCardAmount: (
             state,
-            action: PayloadAction<{ cardId: number; isIncrease: boolean }>
+            action: PayloadAction<{
+                cardId: number
+                isIncrease: boolean
+            }>
         ) => {
             const { cardId, isIncrease } = action.payload
 
@@ -78,7 +81,10 @@ export const decksSlice = createSlice({
             )
 
             if (!isInDeck) {
-                newDeck.main.push({ ...card, amount: 1 })
+                newDeck.main.push({
+                    ...card,
+                    amount: 1,
+                })
                 newDeck.main = newDeck.main.sort(
                     (a: IDeckCard, b: IDeckCard) => a.price - b.price
                 )
