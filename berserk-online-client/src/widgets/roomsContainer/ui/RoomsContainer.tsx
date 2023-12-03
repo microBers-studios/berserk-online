@@ -7,7 +7,7 @@ import {
     registrateUserStatusSelector,
 } from 'src/entities/user'
 import ReactLoading from 'react-loading'
-import { CreateRoomModal, RoomItem } from 'src/features/rooms'
+import { CreateRoomModal, JoinRoomModal, RoomItem } from 'src/features/rooms'
 
 interface RoomsContainerProps {
     rooms: RoomType[] | null
@@ -16,6 +16,7 @@ interface RoomsContainerProps {
 
 export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
     const [isRoomCreating, setIsRoomCreating] = useState<boolean>(false)
+    const [joiningRoom, setJoiningRoom] = useState<null | RoomType>(null)
     const { user } = useAppSelector((state) => state.user)
     const fetchUserStatus = useAppSelector(fetchUserStatusSelector)
     const loginUserStatus = useAppSelector(loginUserStatusSelector)
@@ -76,7 +77,7 @@ export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
                         </span>
                     ) : rooms.length ? (
                         rooms.map((room) => (
-                            <RoomItem key={room.id} room={room} />
+                            <RoomItem key={room.id} room={room} setJoiningRoom={setJoiningRoom} />
                         ))
                     ) : (
                         <span className={cls.NoRoomsContent}>
@@ -87,6 +88,12 @@ export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
             </div>
             {isRoomCreating && (
                 <CreateRoomModal closeModal={() => setIsRoomCreating(false)} />
+            )}
+            {joiningRoom && (
+                <JoinRoomModal
+                    room={joiningRoom}
+                    closeModal={() => setJoiningRoom(null)}
+                />
             )}
         </>
     )

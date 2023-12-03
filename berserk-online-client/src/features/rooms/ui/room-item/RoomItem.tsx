@@ -3,13 +3,12 @@ import cls from './RoomItem.module.scss'
 import classicalCard from 'src/shared/assets/images/classical-berserk-card.jpg'
 
 interface RoomItemProps {
-    room: RoomType
+    room: RoomType;
+    setJoiningRoom: (b: null | RoomType) => void;
 }
 
-export const RoomItem = ({ room }: RoomItemProps) => {
+export const RoomItem = ({ room, setJoiningRoom }: RoomItemProps) => {
     const roomPlayers = room.players.filter((p) => p)
-
-    const joinRoom = () => {}
 
     return (
         <div className={cls.RoomItem}>
@@ -25,8 +24,8 @@ export const RoomItem = ({ room }: RoomItemProps) => {
                 </div>
             </div>
             <Button
-                title="Присоединиться"
-                onClick={joinRoom}
+                title="Зайти"
+                onClick={() => setJoiningRoom(room)}
                 className={cls.JoinRoomButton}
             />
         </div>
