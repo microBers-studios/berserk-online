@@ -94,8 +94,8 @@ namespace berserk_online_server.Controllers.Hubs
         public async Task Create(string name)
         {
             var room = await _roomsManager.Create(name, getUserInfo());
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
             _connectionManager.Add(Context.ConnectionId, room.Id);
+            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
         }
         public async Task Leave()
         {

@@ -94,7 +94,7 @@ namespace berserk_online_server.Facades.Rooms
         }
         private async Task garbageRoomCheck(IRoom room)
         {
-            if (!room.Players.Any() && room.Spectators.Count == 0)
+            if (!room.Players.Any(el => el != null) && room.Spectators.Count == 0)
             {
                 _rooms.Remove(room.Id);
                 await _roomListDispatcher.Dispatch(new RoomListEvent()
