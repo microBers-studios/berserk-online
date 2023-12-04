@@ -20,7 +20,8 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public async Task Create(string name)
         {
-            await _roomsManager.Create(name);
+            var room = await _roomsManager.Create(name);
+            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
         }
 
         public async Task GetAll()
