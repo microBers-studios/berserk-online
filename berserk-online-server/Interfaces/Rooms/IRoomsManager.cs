@@ -4,7 +4,7 @@ namespace berserk_online_server.Interfaces.Rooms
 {
     public interface IRoomsManager
     {
-        Task<IRoom> Create(string name, UserInfo creator);
+        Task<IRoom> Create(string name);
         IRoom Get(string id);
         IRoom[] GetAll();
         void Join(UserInfo user, string roomId);

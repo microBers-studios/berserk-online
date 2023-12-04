@@ -8,18 +8,14 @@ namespace berserk_online_server.Facades.Rooms
 {
     public class RoomListDispatcher : IDispatcher<RoomListEvent>
     {
-        private readonly IHubContext<RoomHub> _hubContext;
-        private readonly IConnectionGroupsManager _connectionManager;
-        public RoomListDispatcher(IHubContext<RoomHub> hubContext, IConnectionGroupsManager connectionManager)
+        private readonly IHubContext<RoomsListHub> _hubContext;
+        public RoomListDispatcher(IHubContext<RoomsListHub> hubContext)
         {
             _hubContext = hubContext;
-            _connectionManager = connectionManager;
         }
         public async Task Dispatch(RoomListEvent info)
         {
-            var idsInGroups = _connectionManager.ConnectionIds;
-            var connectionIds = _hubContext.Clients.AllExcept(idsInGroups);
-            await connectionIds.SendAsync(RoomHubMethodNames.ROOM_LIST_UPDATE, info);
+            await _hubContext.Clients.All.SendAsync(RoomHubMethodNames.ROOM_LIST_UPDATE, info);
         }
     }
 }

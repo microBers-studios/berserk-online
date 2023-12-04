@@ -34,12 +34,7 @@ namespace berserk_online_server.Facades.Rooms
         }
         public void AddPlayer(UserInfo player)
         {
-            if (_players[0] == null)
-                _players[0] = player;
-            else if (_players[1] == null)
-                _players[1] = player;
-            else
-                throw new InvalidOperationException("room is full, but try to add player.");
+            addPlayer(player);
             OnChanges?.Invoke(new RoomEvent()
             {
                 Type = RoomEventTypes.PLAYER_JOINED,
@@ -49,8 +44,7 @@ namespace berserk_online_server.Facades.Rooms
 
         public void AddSpectator(UserInfo spectator)
         {
-            if (!_spectators.TryAdd(spectator.Email, spectator))
-                throw new InvalidOperationException("this spectator already exists");
+            addSpectator(spectator);
             OnChanges?.Invoke(new RoomEvent()
             {
                 Type = RoomEventTypes.SPECTATOR_JOINED,
@@ -86,7 +80,7 @@ namespace berserk_online_server.Facades.Rooms
             if (_spectators.Values.Any(p => p.Id == player.Id))
                 return;
             removeFromPlayers(player);
-            AddSpectator(player);
+            addSpectator(player);
             OnChanges?.Invoke(new RoomEvent()
             {
                 Type = RoomEventTypes.TO_SPECTATOR,
@@ -99,6 +93,7 @@ namespace berserk_online_server.Facades.Rooms
             if (_players.Any(p => p != null && p.Id == spectator.Id))
                 return;
             _spectators.Remove(spectator.Email);
+            addPlayer(spectator);
             OnChanges?.Invoke(new RoomEvent()
             {
                 Type = RoomEventTypes.TO_PLAYER,
@@ -116,6 +111,20 @@ namespace berserk_online_server.Facades.Rooms
                 }
             }
             return false;
+        }
+        private void addPlayer(UserInfo player)
+        {
+            if (_players[0] == null)
+                _players[0] = player;
+            else if (_players[1] == null)
+                _players[1] = player;
+            else
+                throw new InvalidOperationException("room is full, but try to add player.");
+        }
+        private void addSpectator(UserInfo spectator)
+        {
+            if (!_spectators.TryAdd(spectator.Email, spectator))
+                throw new InvalidOperationException("this spectator already exists");
         }
     }
 }
