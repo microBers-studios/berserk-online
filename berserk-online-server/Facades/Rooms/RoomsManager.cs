@@ -30,7 +30,7 @@ namespace berserk_online_server.Facades.Rooms
                 }
             }, null, CLEARING_DELAY_MS, CLEARING_DELAY_MS);
         }
-        public async Task<IRoom> Create(string name, UserInfo creator)
+        public async Task<IRoom> Create(string name)
         {
             var id = TokenGenerator.Generate();
             var room = new Room(name, id);
@@ -40,8 +40,6 @@ namespace berserk_online_server.Facades.Rooms
             {
                 await _roomDispatcher.Dispatch(roomEvent, id);
             };
-            room.AddPlayer(creator);
-            _userLocationManager.ChangeLocation(creator, room);
             await _roomListDispatcher.Dispatch(new RoomListEvent()
             {
                 Subject = room,

@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Constants;
-using berserk_online_server.DTO;
 using berserk_online_server.DTO.Requests;
+using berserk_online_server.DTO;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
@@ -10,40 +10,46 @@ namespace berserk_online_server.Controllers.Hubs
 {
     public class RoomHub : Hub
     {
-        private readonly IUserLocationManager _userLocationManager;
         private readonly IRoomsManager _roomsManager;
         private readonly IUsersDatabase _db;
         private readonly IConnectionGroupsManager _connectionManager;
-        public RoomHub(IUserLocationManager locationManager, IUsersDatabase db,
-            IRoomsManager roomsManager, IConnectionGroupsManager connectionManager)
+        private readonly ILogger<RoomHub> _logger;
+        public RoomHub(IRoomsManager roomsManager, IUsersDatabase usersDatabase,
+            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger)
         {
-            _userLocationManager = locationManager;
-            _db = db;
             _roomsManager = roomsManager;
+            _db = usersDatabase;
             _connectionManager = connectionManager;
+            _logger = logger;
+
         }
         public override async Task OnConnectedAsync()
         {
-            if (Context.User == null || !Context.User.Claims.Any())
-                Context.Abort();
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
-            await base.OnConnectedAsync();
-        }
-        public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-            var userInfo = getUserInfo();
+            var roomId = Context.GetHttpContext().Request.Path.Value.Split('/')[2];
             try
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, _userLocationManager.GetLocation(userInfo).Id);
-                _userLocationManager.RemoveLocation(userInfo);
-                _connectionManager.RemoveConnection(Context.ConnectionId);
-                await base.OnDisconnectedAsync(exception);
+                var room = _roomsManager.Get(roomId);
+                _roomsManager.Join(getUserInfo(), roomId);
+                _connectionManager.Add(Context.ConnectionId, roomId);
+                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
+                await base.OnConnectedAsync();
             }
             catch (KeyNotFoundException)
             {
-                await base.OnDisconnectedAsync(exception);
+                await sendErrorMessage(ApiErrorType.NotFound, "room with this id not found");
+                Context.Abort();
             }
-
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex.ToString());
+                Context.Abort();
+            }
+        }
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            await _roomsManager.Leave(getUserInfo());
+            _connectionManager.RemoveConnection(Context.ConnectionId);
+            await base.OnDisconnectedAsync(exception);
         }
         public async Task SwitchToPlayer()
         {
@@ -77,43 +83,18 @@ namespace berserk_online_server.Controllers.Hubs
                 await sendErrorMessage(ApiErrorType.NoAccess, "Invalid action");
             }
         }
-        public async Task Connect(string roomId)
-        {
-            try
-            {
-                var room = _roomsManager.Get(roomId);
-                _roomsManager.Join(getUserInfo(), roomId);
-                _connectionManager.Add(Context.ConnectionId, roomId);
-                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
-            }
-            catch (KeyNotFoundException)
-            {
-                await sendErrorMessage(ApiErrorType.NotFound, "room with this id not found.");
-            }
-        }
-        public async Task Create(string name)
-        {
-            var room = await _roomsManager.Create(name, getUserInfo());
-            _connectionManager.Add(Context.ConnectionId, room.Id);
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
-        }
         public async Task Leave()
         {
             try
             {
                 await _roomsManager.Leave(getUserInfo());
                 _connectionManager.RemoveConnection(Context.ConnectionId);
-                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
             }
             catch (KeyNotFoundException)
             {
                 await sendErrorMessage(ApiErrorType.NoAccess, "Not in room");
             }
 
-        }
-        public async Task GetAll()
-        {
-            await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
         }
         private UserInfo getUserInfo()
         {
