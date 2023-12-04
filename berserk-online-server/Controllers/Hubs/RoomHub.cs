@@ -25,7 +25,7 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public override async Task OnConnectedAsync()
         {
-            var roomId = Context.GetHttpContext().Request.Path.Value.Split('/')[2];
+            var roomId = getRoomIdFromURL();
             try
             {
                 var room = _roomsManager.Get(roomId);
@@ -107,6 +107,11 @@ namespace berserk_online_server.Controllers.Hubs
         {
             await Clients.Caller
                 .SendAsync(RoomHubMethodNames.ERROR, ApiErrorFabric.Create(errorType, ctx));
+        }
+        private string getRoomIdFromURL()
+        {
+            var urlValue = Context.GetHttpContext().Request.Path.Value.Split("/")[2];
+            return urlValue.Split("?")[0];
         }
     }
 }
