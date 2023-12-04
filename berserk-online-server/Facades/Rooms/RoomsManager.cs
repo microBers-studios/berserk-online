@@ -12,11 +12,11 @@ namespace berserk_online_server.Facades.Rooms
         private readonly IUserLocationManager _userLocationManager;
         private readonly IGroupDispatcher<RoomEvent> _roomDispatcher;
         private readonly ILogger<RoomsManager> _logger;
-        private readonly IDispatcher<RoomListEvent> _roomListDispatcher;
+        private readonly IRoomListDispatcher _roomListDispatcher;
         private const int CLEARING_DELAY_MS = 1 * 1000 * 60;
 
         public RoomsManager(IUserLocationManager userLocationManager, IGroupDispatcher<RoomEvent> dispatcher,
-            ILogger<RoomsManager> logger, IDispatcher<RoomListEvent> roomListDispatcher)
+            ILogger<RoomsManager> logger, IRoomListDispatcher roomListDispatcher)
         {
             _userLocationManager = userLocationManager;
             _roomDispatcher = dispatcher;
@@ -32,15 +32,12 @@ namespace berserk_online_server.Facades.Rooms
         }
         public async Task<IRoom> Create(string name)
         {
-            var id = TokenGenerator.Generate();
-            var room = new Room(name, id);
-            if (!_rooms.TryAdd(id, room))
+            var roomId = TokenGenerator.Generate();
+            var room = new Room(name, roomId);
+            if (!_rooms.TryAdd(roomId, room))
                 throw new InvalidOperationException("id already taken");
-            room.OnChanges += async (roomEvent) =>
-            {
-                await _roomDispatcher.Dispatch(roomEvent, id);
-            };
-            await _roomListDispatcher.Dispatch(new RoomListEvent()
+            subscribeDispatchers(room);
+            await _roomListDispatcher.Dispatch(new RoomsListEvent()
             {
                 Subject = room,
                 Type = RoomListEventTypes.ROOM_CREATED
@@ -95,12 +92,23 @@ namespace berserk_online_server.Facades.Rooms
             if (!room.Players.Any(el => el != null) && room.Spectators.Count == 0)
             {
                 _rooms.Remove(room.Id);
-                await _roomListDispatcher.Dispatch(new RoomListEvent()
+                await _roomListDispatcher.Dispatch(new RoomsListEvent()
                 {
                     Subject = room,
                     Type = RoomListEventTypes.ROOM_REMOVED
                 });
             }
+        }
+        private void subscribeDispatchers(IRoom room)
+        {
+            room.OnChanges += async roomEvent =>
+            {
+                await _roomDispatcher.Dispatch(roomEvent, room.Id);
+            };
+            room.OnChanges += async _ =>
+            {
+                await _roomListDispatcher.DispatchList(GetAll());
+            };
         }
     }
 }
