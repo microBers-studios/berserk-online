@@ -41,7 +41,6 @@ builder.Services.AddDbContext<Databases>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
-
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
@@ -72,6 +71,7 @@ builder.Services.AddSingleton<IUserLocationManager, UserLocationManager>();
 builder.Services.AddSingleton<IConnectionGroupsManager, ConnectionGroupsManager>();
 builder.Services.AddTransient<IGroupDispatcher<RoomEvent>, RoomUpdateDispatcher>();
 builder.Services.AddTransient<IDispatcher<RoomListEvent>, RoomListDispatcher>();
+builder.Services.AddSingleton<ICancellationTokenManager<string>, CancellationTokenManager<string>>();
 
 builder.Services.AddSingleton<CardProvider>();
 
