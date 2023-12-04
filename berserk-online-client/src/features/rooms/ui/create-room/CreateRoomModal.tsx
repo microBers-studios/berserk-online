@@ -1,14 +1,24 @@
 import { useState } from 'react'
 import { Modal, ModalButton, TextInput } from 'src/shared/ui'
 import cls from './CreateRoomModal.module.scss'
-import { useAnimate } from 'src/shared/lib'
-import { signalRConnection } from 'src/shared/api'
+import { RouterPaths, useAnimate } from 'src/shared/lib'
+import { HubConnection } from '@microsoft/signalr'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 interface CreateRoomModalProps {
     closeModal: () => void
+    connection: HubConnection | null
+    setIsInvoking: (b: boolean) => void
 }
 
-export const CreateRoomModal = ({ closeModal }: CreateRoomModalProps) => {
+export const CreateRoomModal = ({
+    closeModal,
+    connection,
+    setIsInvoking,
+}: CreateRoomModalProps) => {
+    const navigate = useNavigate()
+
     const [name, setName] = useState<string>('')
     const {
         isOpenAnimation,
@@ -25,7 +35,18 @@ export const CreateRoomModal = ({ closeModal }: CreateRoomModalProps) => {
 
     const createRoom = async (e: React.FormEvent) => {
         e.preventDefault()
-        await signalRConnection.invoke('Create', name)
+
+        if (connection) {
+            connection.on('RoomInfo', async (room: RoomType) => {
+                navigate(`${RouterPaths.ROOMS}/${room.id}/play`)
+            })
+
+            setIsInvoking(true)
+            await connection.invoke('Create', name)
+        } else {
+            toast('Соединение прервано')
+        }
+
         hideModal()
     }
 

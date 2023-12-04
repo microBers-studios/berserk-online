@@ -3,6 +3,8 @@ export enum RoomEvent {
     SpectatorJoined = 'SpectatorJoined',
     PlayerLeaved = 'PlayerLeaved',
     SpectatorLeaved = 'SpectatorLeaved',
+    SpectatorToPlayer = 'SpectatorToPlayer',
+    PlayerToSpectator = 'PlayerToSpectator',
 }
 
 export enum RoomListEvent {

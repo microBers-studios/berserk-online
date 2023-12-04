@@ -1,1 +1,1 @@
-export { signalRConnection } from './signalr/connection'
+export { connect } from './signalr/connection'

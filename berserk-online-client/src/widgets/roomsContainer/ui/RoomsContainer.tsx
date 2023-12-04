@@ -8,13 +8,19 @@ import {
 } from 'src/entities/user'
 import ReactLoading from 'react-loading'
 import { CreateRoomModal, JoinRoomModal, RoomItem } from 'src/features/rooms'
+import { HubConnection } from '@microsoft/signalr'
 
 interface RoomsContainerProps {
     rooms: RoomType[] | null
-    connection: boolean
+    connection: HubConnection | null
+    setIsInvoking: (b: boolean) => void
 }
 
-export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
+export const RoomsContainer = ({
+    rooms,
+    connection,
+    setIsInvoking,
+}: RoomsContainerProps) => {
     const [isRoomCreating, setIsRoomCreating] = useState<boolean>(false)
     const [joiningRoom, setJoiningRoom] = useState<null | RoomType>(null)
     const { user } = useAppSelector((state) => state.user)
@@ -77,7 +83,11 @@ export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
                         </span>
                     ) : rooms.length ? (
                         rooms.map((room) => (
-                            <RoomItem key={room.id} room={room} setJoiningRoom={setJoiningRoom} />
+                            <RoomItem
+                                key={room.id}
+                                room={room}
+                                setJoiningRoom={setJoiningRoom}
+                            />
                         ))
                     ) : (
                         <span className={cls.NoRoomsContent}>
@@ -87,7 +97,11 @@ export const RoomsContainer = ({ rooms, connection }: RoomsContainerProps) => {
                 </div>
             </div>
             {isRoomCreating && (
-                <CreateRoomModal closeModal={() => setIsRoomCreating(false)} />
+                <CreateRoomModal
+                    closeModal={() => setIsRoomCreating(false)}
+                    connection={connection}
+                    setIsInvoking={setIsInvoking}
+                />
             )}
             {joiningRoom && (
                 <JoinRoomModal

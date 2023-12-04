@@ -7,6 +7,8 @@ import { EmailConfirmPage } from 'src/pages/emailConfirm'
 import { ErrorModalPage } from 'src/pages/errorModal'
 import { DeckCreatingPage } from 'src/pages/deckCreating'
 import { DeckPage } from 'src/pages/deckPage'
+import { GamePage } from 'src/pages/game'
+
 interface AppRouterProps {
     setPage: (page: RouterPaths | null) => void
     currentPage: RouterPaths | null
@@ -46,7 +48,11 @@ const AppRouter = ({ setPage, currentPage }: AppRouterProps) => {
             />
             <Route
                 path={RouterPaths.DECK}
-                element={<Navigate to={`${RouterPaths.DECK}/1`} />}
+                element={<Navigate to={RouterPaths.MAIN} />}
+            />
+            <Route
+                path={`${RouterPaths.ROOMS}/:id/:mode`}
+                element={<GamePage />}
             />
         </Routes>
     )

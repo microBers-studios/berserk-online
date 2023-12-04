@@ -3,8 +3,8 @@ import cls from './RoomItem.module.scss'
 import classicalCard from 'src/shared/assets/images/classical-berserk-card.jpg'
 
 interface RoomItemProps {
-    room: RoomType;
-    setJoiningRoom: (b: null | RoomType) => void;
+    room: RoomType
+    setJoiningRoom: (b: null | RoomType) => void
 }
 
 export const RoomItem = ({ room, setJoiningRoom }: RoomItemProps) => {

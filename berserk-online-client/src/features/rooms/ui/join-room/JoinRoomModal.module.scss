@@ -1,3 +1,28 @@
-.ModalHeader {
+.Form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+}
+
+.ModalHeader,
+.RoomName {
     color: black;
+    margin: 0;
+    text-align: center;
+}
+
+.RoomParticipantsCount {
+    color: black;
+}
+
+.modal {
+    top: 30%;
+    bottom: 30%;
+}
+
+.ModalButtonsWrapper {
+    display: flex;
+    flex-direction: column;
 }

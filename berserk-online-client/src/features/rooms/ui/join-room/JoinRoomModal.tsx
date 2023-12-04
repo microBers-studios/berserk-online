@@ -1,13 +1,14 @@
-import { Modal, ModalButton } from "src/shared/ui";
-import cls from "./JoinRoomModal.module.scss"
-import { useAnimate } from "src/shared/lib";
+import { Modal, ModalButton } from 'src/shared/ui'
+import cls from './JoinRoomModal.module.scss'
+import { RouterPaths, useAnimate } from 'src/shared/lib'
+import { useNavigate } from 'react-router-dom'
 
 interface JoinRoomModalProps {
-    closeModal: () => void;
-    room: RoomType;
+    closeModal: () => void
+    room: RoomType
 }
 
-export const JoinRoomModal = ({closeModal, room}: JoinRoomModalProps) => {
+export const JoinRoomModal = ({ closeModal, room }: JoinRoomModalProps) => {
     const {
         isOpenAnimation,
         setIsOpenAnimation,
@@ -15,18 +16,22 @@ export const JoinRoomModal = ({closeModal, room}: JoinRoomModalProps) => {
         setIsCloseAnimation,
     }: IAnimator = useAnimate()
 
+    const navigate = useNavigate()
+
+    const roomPlayers = room.players.filter((p) => p)
+
     const hideModal = () => {
         setIsCloseAnimation(true)
         setTimeout(closeModal, 300)
         document.body.style.overflow = ''
     }
 
-    const joinRoom = (role: 'player' | 'spectator') => {
-
+    const joinRoom = async (role: 'play' | 'spectate') => {
+        navigate(`${RouterPaths.ROOMS}/${room.id}/${role}`)
     }
 
     return (
-       <Modal
+        <Modal
             isOpenAnimation={isOpenAnimation}
             setIsOpenAnimation={setIsOpenAnimation}
             isCloseAnimation={isCloseAnimation}
@@ -34,12 +39,32 @@ export const JoinRoomModal = ({closeModal, room}: JoinRoomModalProps) => {
             closeModal={hideModal}
             modalClass={cls.modal}
         >
-            <form className={cls.Form} onSubmit={(e: React.FormEvent) => e.preventDefault()}>
+            <form
+                className={cls.Form}
+                onSubmit={(e: React.FormEvent) => e.preventDefault()}
+            >
                 <h2 className={cls.ModalHeader}>Зайти</h2>
-                
-                {room.players.filter(p => p).length < room.players.length && <ModalButton text="Как игрок" onButtonClick={() => joinRoom('player')} />}
-                <ModalButton text="Как наблюдатель" onButtonClick={() => joinRoom('spectator')} />
+                <div className={cls.RoomInfo}>
+                    <h3 className={cls.RoomName}>{room.name}</h3>
+                    <span className={cls.RoomParticipantsCount}>
+                        {roomPlayers.length}/{room.players.length} игроков
+                    </span>
+                </div>
+
+                <div className={cls.ModalButtonsWrapper}>
+                    {room.players.filter((p) => p).length <
+                        room.players.length && (
+                        <ModalButton
+                            text="Как игрок"
+                            onButtonClick={() => joinRoom('play')}
+                        />
+                    )}
+                    <ModalButton
+                        text="Как наблюдатель"
+                        onButtonClick={() => joinRoom('spectate')}
+                    />
+                </div>
             </form>
         </Modal>
-    );
+    )
 }

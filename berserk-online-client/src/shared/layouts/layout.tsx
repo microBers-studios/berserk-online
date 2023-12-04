@@ -2,9 +2,9 @@ import { ReactNode } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 interface LayoutProps {
-    header: ReactNode
+    header?: ReactNode
     content: ReactNode
-    footer: ReactNode
+    footer?: ReactNode
     title: string
     wrapperClassName?: string
 }
