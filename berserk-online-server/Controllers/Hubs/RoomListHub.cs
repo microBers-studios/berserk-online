@@ -12,12 +12,10 @@ namespace berserk_online_server.Controllers.Hubs
     {
         private readonly IRoomsManager _roomsManager;
         private readonly IUsersDatabase _db;
-        private readonly IConnectionGroupsManager _connectionManager;
-        public RoomListHub(IUsersDatabase db, IRoomsManager roomsManager, IConnectionGroupsManager connectionManager)
+        public RoomListHub(IUsersDatabase db, IRoomsManager roomsManager)
         {
             _db = db;
             _roomsManager = roomsManager;
-            _connectionManager = connectionManager;
         }
         public override async Task OnConnectedAsync()
         {
