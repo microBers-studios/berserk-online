@@ -108,7 +108,7 @@ app.UseMiddleware<CookieUpdateMiddleware>();
 app.UseMiddleware<ConfirmEmailMiddleware>();
 
 app.MapControllers();
-app.MapHub<RoomListHub>("/connect");
+app.MapHub<RoomsListHub>("/connect");
 app.MapHub<RoomHub>("/connect/{roomId}");
 
 app.Run();

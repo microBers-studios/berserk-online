@@ -8,8 +8,8 @@ namespace berserk_online_server.Facades.Rooms
 {
     public class RoomListDispatcher : IDispatcher<RoomListEvent>
     {
-        private readonly IHubContext<RoomListHub> _hubContext;
-        public RoomListDispatcher(IHubContext<RoomListHub> hubContext)
+        private readonly IHubContext<RoomsListHub> _hubContext;
+        public RoomListDispatcher(IHubContext<RoomsListHub> hubContext)
         {
             _hubContext = hubContext;
         }

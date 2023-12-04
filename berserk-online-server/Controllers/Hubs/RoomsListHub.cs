@@ -1,20 +1,14 @@
 ﻿using berserk_online_server.Constants;
-using berserk_online_server.DTO;
-using berserk_online_server.DTO.Requests;
-using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
-using berserk_online_server.Utils;
 using Microsoft.AspNetCore.SignalR;
 
 namespace berserk_online_server.Controllers.Hubs
 {
-    public class RoomListHub : Hub
+    public class RoomsListHub : Hub
     {
         private readonly IRoomsManager _roomsManager;
-        private readonly IUsersDatabase _db;
-        public RoomListHub(IUsersDatabase db, IRoomsManager roomsManager)
+        public RoomsListHub(IRoomsManager roomsManager)
         {
-            _db = db;
             _roomsManager = roomsManager;
         }
         public override async Task OnConnectedAsync()
@@ -26,24 +20,12 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public async Task Create(string name)
         {
-            var room = await _roomsManager.Create(name);
+            await _roomsManager.Create(name);
         }
 
         public async Task GetAll()
         {
             await Clients.Caller.SendAsync(RoomHubMethodNames.ROOMS_LIST, _roomsManager.GetAll());
-        }
-        private UserInfo getUserInfo()
-        {
-            return new UserInfo(_db.GetUser(new UserInfoRequest()
-            {
-                Email = IAuthenticationManager.GetMail(Context.User)
-            }));
-        }
-        private async Task sendErrorMessage(ApiErrorType errorType, object? ctx = null)
-        {
-            await Clients.Caller
-                .SendAsync(RoomHubMethodNames.ERROR, ApiErrorFabric.Create(errorType, ctx));
         }
     }
 }
