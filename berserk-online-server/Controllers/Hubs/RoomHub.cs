@@ -1,33 +1,40 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.DTO;
+using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.SignalR;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace berserk_online_server.Controllers.Hubs
 {
     public class RoomHub : Hub
     {
+        private readonly ICancellationTokenManager<string> _cancellationTokenManager;
         private readonly IRoomsManager _roomsManager;
         private readonly IUsersDatabase _db;
         private readonly IConnectionGroupsManager _connectionManager;
         private readonly ILogger<RoomHub> _logger;
+        private const int CONNECTION_TIMEOUT = 10000;
         public RoomHub(IRoomsManager roomsManager, IUsersDatabase usersDatabase,
-            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger)
+            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger, ICancellationTokenManager<string> cancellationTokenManager)
         {
             _roomsManager = roomsManager;
             _db = usersDatabase;
             _connectionManager = connectionManager;
             _logger = logger;
-
+            _cancellationTokenManager = cancellationTokenManager;
         }
         public override async Task OnConnectedAsync()
         {
-            var roomId = Context.GetHttpContext().Request.Path.Value.Split('/')[2];
+            var roomId = getRoomIdFromURL();
             try
             {
+                var email = getUserInfo().Email;
+                _cancellationTokenManager.TryCancel(email);
                 var room = _roomsManager.Get(roomId);
                 _roomsManager.Join(getUserInfo(), roomId);
                 _connectionManager.Add(Context.ConnectionId, roomId);
@@ -47,8 +54,25 @@ namespace berserk_online_server.Controllers.Hubs
         }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            await _roomsManager.Leave(getUserInfo());
+            var token = new CancellationTokenSource();
+            var user = getUserInfo();
             _connectionManager.RemoveConnection(Context.ConnectionId);
+            _cancellationTokenManager.AddToken(user.Email, token);
+            new Timer(async state =>
+            {
+                var token = (CancellationToken)state;
+                if (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        await _roomsManager.Leave(user);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        _logger.LogWarning("Key not found");
+                    }
+                }
+            }, token.Token, CONNECTION_TIMEOUT, Timeout.Infinite);
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SwitchToPlayer()
@@ -107,6 +131,11 @@ namespace berserk_online_server.Controllers.Hubs
         {
             await Clients.Caller
                 .SendAsync(RoomHubMethodNames.ERROR, ApiErrorFabric.Create(errorType, ctx));
+        }
+        private string getRoomIdFromURL()
+        {
+            var urlValue = Context.GetHttpContext().Request.Path.Value.Split("/")[2];
+            return urlValue.Split('?')[0];
         }
     }
 }
