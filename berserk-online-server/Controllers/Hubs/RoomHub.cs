@@ -1,15 +1,11 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
-using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.SignalR;
-using System.Data;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace berserk_online_server.Controllers.Hubs
 {
@@ -129,13 +125,16 @@ namespace berserk_online_server.Controllers.Hubs
         public async Task SendChatMessage(string message)
         {
             var user = getUserInfo();
-            var connections = _connectionManager.GetConnections(_userLocationManager.GetLocation(user).Id);
-            await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, new ChatMessage()
+            var room = _userLocationManager.GetLocation(user);
+            var connections = _connectionManager.GetConnections(room.Id);
+            var chatMessage = new ChatMessage()
             {
                 Content = message,
                 Sender = user,
                 Id = TokenGenerator.Generate()
-            });
+            };
+            room.Chat.AddMessage(chatMessage);
+            await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
         }
         private UserInfo getUserInfo()
         {
