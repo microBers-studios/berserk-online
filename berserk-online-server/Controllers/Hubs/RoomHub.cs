@@ -133,7 +133,8 @@ namespace berserk_online_server.Controllers.Hubs
             await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, new ChatMessage()
             {
                 Content = message,
-                Sender = user
+                Sender = user,
+                Id = TokenGenerator.Generate()
             });
         }
         private UserInfo getUserInfo()
