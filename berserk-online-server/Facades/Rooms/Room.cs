@@ -4,6 +4,7 @@ using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 
 namespace berserk_online_server.Facades.Rooms
 {
@@ -11,6 +12,7 @@ namespace berserk_online_server.Facades.Rooms
     {
         private UserInfo?[] _players = new UserInfo?[2];
         private Dictionary<string, UserInfo> _spectators = new();
+        private IChat _chat = new Chat();
 
         public event Action<RoomEvent> OnChanges;
 
@@ -21,6 +23,11 @@ namespace berserk_online_server.Facades.Rooms
 
         public string Name { get; set; }
         public string Id { get; set; }
+
+
+        public ChatMessage[] ChatMessages => _chat.GetMessages();
+        [JsonIgnore]
+        public IChat Chat => _chat;
 
         public Room(string name, string id)
         {
