@@ -7,5 +7,6 @@
         public const string ROOM_INFO = "RoomInfo";
         public const string ROOMS_LIST_UPDATE = "RoomsListUpdate";
         public const string ROOMS_LIST = "RoomsList";
+        public const string CHAT_EVENT = "ChatEvent";
     }
 }
