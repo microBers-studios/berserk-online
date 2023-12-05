@@ -3,6 +3,7 @@ interface RoomType {
     name: string
     players: UserType[]
     spectators: UserType[]
+    chatMessages: IMessage[]
 }
 
 interface IRoomEvent {

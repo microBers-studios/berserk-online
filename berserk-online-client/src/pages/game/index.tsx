@@ -5,6 +5,8 @@ import { connect } from 'src/shared/api'
 import { useParams } from 'react-router-dom'
 import { HubConnection } from '@microsoft/signalr'
 import { toast } from 'react-toastify'
+import ReactLoading from 'react-loading'
+import { GamePageContent } from 'src/widgets/gameContent'
 
 export const GamePage = () => {
     const { id, mode } = useParams()
@@ -19,7 +21,7 @@ export const GamePage = () => {
             roomConnection.on('RoomInfo', setRoom)
             roomConnection.on('Error', (error) => toast(error.message))
 
-            if (mode === 'spectator') {
+            if (mode === 'spectate') {
                 roomConnection.invoke('SwitchToSpectator')
             }
         })
@@ -35,9 +37,16 @@ export const GamePage = () => {
         <Layout
             content={
                 <div className={cls.GamePage}>
-                    <span style={{ color: '#ffffff' }}>
-                        {JSON.stringify(room)}
-                    </span>
+                    {room && connection ? (
+                        <GamePageContent connection={connection} room={room} />
+                    ) : (
+                        <ReactLoading
+                            type={'bubbles'}
+                            color={'#ffffff'}
+                            height={100}
+                            width={90}
+                        />
+                    )}
                 </div>
             }
             title={
