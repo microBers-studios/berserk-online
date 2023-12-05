@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace berserk_online_server.Contexts
 {
-    public class Databases : DbContext
+    public class DatabaseContext : DbContext
     {
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<DeckDb> Decks { get; set; }
-        public Databases(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }

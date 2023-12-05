@@ -7,9 +7,9 @@ namespace berserk_online_server.Repository
 {
     public class DeckRepository : IDeckRepository
     {
-        private readonly Databases _db;
+        private readonly DatabaseContext _db;
         private readonly IUserRepository _userRepo;
-        public DeckRepository(Databases db, IUserRepository userRepository)
+        public DeckRepository(DatabaseContext db, IUserRepository userRepository)
         {
             _db = db;
             _userRepo = userRepository;

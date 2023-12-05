@@ -8,8 +8,8 @@ namespace berserk_online_server.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private Databases _db;
-        public UserRepository(Databases db)
+        private DatabaseContext _db;
+        public UserRepository(DatabaseContext db)
         {
             _db = db;
         }

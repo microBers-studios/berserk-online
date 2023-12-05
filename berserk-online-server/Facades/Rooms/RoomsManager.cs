@@ -24,7 +24,7 @@ namespace berserk_online_server.Facades.Rooms
             _roomListDispatcher = roomListDispatcher;
             new Timer(async (state) =>
             {
-                foreach (Room room in _rooms.Values)
+                foreach (IRoom room in _rooms.Values)
                 {
                     await garbageRoomCheck(room);
                 }

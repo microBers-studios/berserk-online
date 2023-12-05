@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.Cookie.SameSite = SameSiteMode.None;
     });
-builder.Services.AddDbContext<Databases>(options =>
+builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });

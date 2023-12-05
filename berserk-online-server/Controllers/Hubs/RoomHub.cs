@@ -1,4 +1,5 @@
 ﻿using berserk_online_server.Constants;
+using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
@@ -6,6 +7,7 @@ using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.SignalR;
+using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -18,15 +20,19 @@ namespace berserk_online_server.Controllers.Hubs
         private readonly IUsersDatabase _db;
         private readonly IConnectionGroupsManager _connectionManager;
         private readonly ILogger<RoomHub> _logger;
+        private readonly IUserLocationManager _userLocationManager;
         private const int CONNECTION_TIMEOUT = 10000;
         public RoomHub(IRoomsManager roomsManager, IUsersDatabase usersDatabase,
-            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger, ICancellationTokenManager<string> cancellationTokenManager)
+            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger,
+            ICancellationTokenManager<string> cancellationTokenManager,
+            IUserLocationManager userLocationManager)
         {
             _roomsManager = roomsManager;
             _db = usersDatabase;
             _connectionManager = connectionManager;
             _logger = logger;
             _cancellationTokenManager = cancellationTokenManager;
+            _userLocationManager = userLocationManager;
         }
         public override async Task OnConnectedAsync()
         {
@@ -119,6 +125,16 @@ namespace berserk_online_server.Controllers.Hubs
                 await sendErrorMessage(ApiErrorType.NoAccess, "Not in room");
             }
 
+        }
+        public async Task SendChatMessage(string message)
+        {
+            var user = getUserInfo();
+            var connections = _connectionManager.GetConnections(_userLocationManager.GetLocation(user).Id);
+            await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, new ChatMessage()
+            {
+                Content = message,
+                Sender = user
+            });
         }
         private UserInfo getUserInfo()
         {
