@@ -68,6 +68,7 @@ namespace berserk_online_server.Controllers.Hubs
                 {
                     try
                     {
+                        _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
                         await _roomsManager.Leave(user);
                     }
                     catch (KeyNotFoundException)
@@ -115,7 +116,9 @@ namespace berserk_online_server.Controllers.Hubs
         {
             try
             {
-                await _roomsManager.Leave(getUserInfo());
+                var user = getUserInfo();
+                _logger.LogInformation($"Пользователь {user.Email} запросил выход из комнаты.");
+                await _roomsManager.Leave(user);
                 _connectionManager.RemoveConnection(Context.ConnectionId);
             }
             catch (KeyNotFoundException)
