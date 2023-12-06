@@ -10,9 +10,10 @@ namespace berserk_online_server.Facades.Rooms
 {
     public class Room : IRoom
     {
-        private UserInfo?[] _players = new UserInfo?[2];
-        private Dictionary<string, UserInfo> _spectators = new();
-        private IChat _chat = new Chat();
+        private readonly UserInfo?[] _players = new UserInfo[2];
+        private readonly Dictionary<string, UserInfo> _spectators = new();
+        private readonly IChat _chat = new Chat();
+        private readonly List<RoomEvent> _eventLogs = new();
 
         public event Action<RoomEvent> OnChanges;
 
@@ -24,17 +25,22 @@ namespace berserk_online_server.Facades.Rooms
         public string Name { get; set; }
         public string Id { get; set; }
 
-
+        public Room()
+        {
+            OnChanges += _eventLogs.Add;
+        }
         public ChatMessage[] ChatMessages => _chat.GetMessages();
         [JsonIgnore]
         public IChat Chat => _chat;
 
-        public Room(string name, string id)
+        public List<RoomEvent> Logs => _eventLogs.ToList();
+
+        public Room(string name, string id) : this()
         {
             Name = name;
             Id = id;
         }
-        public Room(string name)
+        public Room(string name) : this()
         {
             Name = name;
             Id = TokenGenerator.Generate();

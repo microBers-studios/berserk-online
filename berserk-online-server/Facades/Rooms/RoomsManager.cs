@@ -92,6 +92,7 @@ namespace berserk_online_server.Facades.Rooms
             if (!room.Players.Any(el => el != null) && room.Spectators.Count == 0)
             {
                 _rooms.Remove(room.Id);
+                _logger.LogInformation($"Room with id {room.Id} and name {room.Name} removed.");
                 await _roomListDispatcher.Dispatch(new RoomsListEvent()
                 {
                     Subject = room,
