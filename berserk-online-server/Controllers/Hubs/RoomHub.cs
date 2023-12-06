@@ -35,9 +35,9 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 var email = getUserInfo().Email;
                 _cancellationTokenManager.TryCancel(email);
-                var room = _roomsManager.Get(roomId);
                 _roomsManager.Join(getUserInfo(), roomId);
                 _connectionManager.Add(Context.ConnectionId, roomId);
+                var room = _roomsManager.Get(roomId);
                 await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
                 await base.OnConnectedAsync();
             }
