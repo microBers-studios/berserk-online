@@ -60,9 +60,10 @@ namespace berserk_online_server.Controllers.Hubs
             var user = getUserInfo();
             _connectionManager.RemoveConnection(Context.ConnectionId);
             _cancellationTokenManager.AddToken(user.Email, token);
-            new Timer(async state =>
+#pragma warning disable CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
+            Task.Factory.StartNew(async () =>
             {
-                var token = (CancellationToken)state;
+                Thread.Sleep(CONNECTION_TIMEOUT);
                 if (!token.IsCancellationRequested)
                 {
                     try
@@ -74,7 +75,8 @@ namespace berserk_online_server.Controllers.Hubs
                         _logger.LogWarning("Key not found");
                     }
                 }
-            }, token.Token, CONNECTION_TIMEOUT, Timeout.Infinite);
+            }, token.Token);
+#pragma warning restore CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SwitchToPlayer()
