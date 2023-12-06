@@ -13,6 +13,7 @@ namespace berserk_online_server.Interfaces.Rooms
         ChatMessage[] ChatMessages { get; }
         [JsonIgnore]
         IChat Chat { get; }
+        List<RoomEvent> Logs { get; }
         string Name { get; set; }
         string Id { get; set; }
         void MoveToSpectators(UserInfo player);
