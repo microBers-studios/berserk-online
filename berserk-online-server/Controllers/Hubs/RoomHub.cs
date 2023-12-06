@@ -1,13 +1,11 @@
 ﻿using berserk_online_server.Constants;
+using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
-using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.SignalR;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace berserk_online_server.Controllers.Hubs
 {
@@ -18,15 +16,19 @@ namespace berserk_online_server.Controllers.Hubs
         private readonly IUsersDatabase _db;
         private readonly IConnectionGroupsManager _connectionManager;
         private readonly ILogger<RoomHub> _logger;
+        private readonly IUserLocationManager _userLocationManager;
         private const int CONNECTION_TIMEOUT = 10000;
         public RoomHub(IRoomsManager roomsManager, IUsersDatabase usersDatabase,
-            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger, ICancellationTokenManager<string> cancellationTokenManager)
+            IConnectionGroupsManager connectionManager, ILogger<RoomHub> logger,
+            ICancellationTokenManager<string> cancellationTokenManager,
+            IUserLocationManager userLocationManager)
         {
             _roomsManager = roomsManager;
             _db = usersDatabase;
             _connectionManager = connectionManager;
             _logger = logger;
             _cancellationTokenManager = cancellationTokenManager;
+            _userLocationManager = userLocationManager;
         }
         public override async Task OnConnectedAsync()
         {
@@ -58,13 +60,15 @@ namespace berserk_online_server.Controllers.Hubs
             var user = getUserInfo();
             _connectionManager.RemoveConnection(Context.ConnectionId);
             _cancellationTokenManager.AddToken(user.Email, token);
-            new Timer(async state =>
+#pragma warning disable CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
+            Task.Factory.StartNew(async () =>
             {
-                var token = (CancellationToken)state;
+                Thread.Sleep(CONNECTION_TIMEOUT);
                 if (!token.IsCancellationRequested)
                 {
                     try
                     {
+                        _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
                         await _roomsManager.Leave(user);
                     }
                     catch (KeyNotFoundException)
@@ -72,7 +76,8 @@ namespace berserk_online_server.Controllers.Hubs
                         _logger.LogWarning("Key not found");
                     }
                 }
-            }, token.Token, CONNECTION_TIMEOUT, Timeout.Infinite);
+            }, token.Token);
+#pragma warning restore CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SwitchToPlayer()
@@ -111,7 +116,9 @@ namespace berserk_online_server.Controllers.Hubs
         {
             try
             {
-                await _roomsManager.Leave(getUserInfo());
+                var user = getUserInfo();
+                _logger.LogInformation($"Пользователь {user.Email} запросил выход из комнаты.");
+                await _roomsManager.Leave(user);
                 _connectionManager.RemoveConnection(Context.ConnectionId);
             }
             catch (KeyNotFoundException)
@@ -119,6 +126,20 @@ namespace berserk_online_server.Controllers.Hubs
                 await sendErrorMessage(ApiErrorType.NoAccess, "Not in room");
             }
 
+        }
+        public async Task SendChatMessage(string message)
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            var connections = _connectionManager.GetConnections(room.Id);
+            var chatMessage = new ChatMessage()
+            {
+                Content = message,
+                Sender = user,
+                Id = TokenGenerator.Generate()
+            };
+            room.Chat.AddMessage(chatMessage);
+            await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
         }
         private UserInfo getUserInfo()
         {

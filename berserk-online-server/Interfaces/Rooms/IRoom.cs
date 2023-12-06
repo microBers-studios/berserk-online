@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 
 namespace berserk_online_server.Interfaces.Rooms
 {
@@ -9,6 +10,10 @@ namespace berserk_online_server.Interfaces.Rooms
         event Action<RoomEvent> OnChanges;
         ImmutableArray<UserInfo?> Players { get; }
         List<UserInfo> Spectators { get; }
+        ChatMessage[] ChatMessages { get; }
+        [JsonIgnore]
+        IChat Chat { get; }
+        List<RoomEvent> Logs { get; }
         string Name { get; set; }
         string Id { get; set; }
         void MoveToSpectators(UserInfo player);
