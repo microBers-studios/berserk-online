@@ -10,6 +10,7 @@
 
 .ChatMessagesWrapper {
     display: flex;
+    position: relative;
     flex-direction: column;
     height: 93%;
     overflow-x: hidden;
@@ -32,7 +33,6 @@
         border-radius: 10px;
         background-color: var(--dark-primary-color);
     }
-
 
     &.reversedFlex {
         flex-direction: column-reverse;
@@ -79,7 +79,7 @@
 .MessageTime {
     font-size: 10px;
     align-self: flex-end;
-    color: var(--border-shadow-color)
+    color: var(--border-shadow-color);
 }
 
 .ChatMessageUserName {
@@ -107,7 +107,6 @@
     box-shadow: 0 6px var(--shadow-secondary-color);
     transition: all 0.2s;
 
-
     &:hover {
         cursor: pointer;
         transform: translateY(2px);
@@ -118,4 +117,27 @@
         transform: translateY(6px);
         box-shadow: none;
     }
+}
+
+.ScrollButton {
+    position: fixed;
+    width: 65px;
+    height: 65px;
+    box-sizing: border-box;
+    background-color: var(--secondary-color);
+    border-radius: 40px;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.arrowImage {
+    width: 30px;
+    transform: rotate(180deg);
 }

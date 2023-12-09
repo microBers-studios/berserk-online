@@ -4,11 +4,14 @@ interface RoomType {
     players: UserType[]
     spectators: UserType[]
     chatMessages: IMessage[]
+    logs: IRoomEvent[]
 }
 
 interface IRoomEvent {
+    id: string
     type: RoomEvent
     initiator: UserType
+    timeStamp: string
 }
 
 interface IRoomListEvent {

@@ -1,6 +1,6 @@
 interface IMessage {
-    id: string;
-    sender: UserType;
-    content: string;
-    time: string;
+    id: string
+    sender: UserType
+    content: string
+    timeStamp: string
 }

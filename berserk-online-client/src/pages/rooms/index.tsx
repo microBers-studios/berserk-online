@@ -20,7 +20,6 @@ export const RoomsPage = ({ setPage, currentPage }: RoomsPageProps) => {
 
     const disconnect = useCallback(() => {
         setPage(null)
-        console.log('isInvoking: ', isInvoking)
         if (!isInvoking) connection?.stop()
         setConnection(null)
     }, [isInvoking])

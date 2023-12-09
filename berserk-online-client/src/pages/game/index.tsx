@@ -20,7 +20,9 @@ export const GamePage = () => {
         roomConnection.start().then(() => {
             roomConnection.on('RoomInfo', setRoom)
             roomConnection.on('Error', (error) => toast(error.message))
-
+            roomConnection.on('RoomUpdate', (message: IRoomEvent) => {
+                console.log('PlayerJoined')
+            })
             if (mode === 'spectate') {
                 roomConnection.invoke('SwitchToSpectator')
             }
