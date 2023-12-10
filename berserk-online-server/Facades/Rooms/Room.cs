@@ -2,9 +2,7 @@
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Rooms;
-using berserk_online_server.Utils;
 using System.Collections.Immutable;
-using System.Text.Json.Serialization;
 
 namespace berserk_online_server.Facades.Rooms
 {
@@ -30,7 +28,6 @@ namespace berserk_online_server.Facades.Rooms
             OnChanges += _eventLogs.Add;
         }
         public ChatMessage[] ChatMessages => _chat.GetMessages();
-        [JsonIgnore]
         public IChat Chat => _chat;
 
         public List<RoomEvent> Logs => _eventLogs.ToList();
@@ -43,7 +40,7 @@ namespace berserk_online_server.Facades.Rooms
         public Room(string name) : this()
         {
             Name = name;
-            Id = TokenGenerator.Generate();
+            Id = Guid.NewGuid().ToString();
         }
         public void AddPlayer(UserInfo player)
         {

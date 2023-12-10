@@ -11,7 +11,7 @@ namespace berserk_online_server.DTO
         public TempRequest(string mail)
         {
             Expires = DateTimeOffset.Now.AddMinutes(20);
-            Token = TokenGenerator.Generate();
+            Token = Guid.NewGuid().ToString();
             Mail = mail;
         }
     }

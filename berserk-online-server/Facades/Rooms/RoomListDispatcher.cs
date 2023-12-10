@@ -20,7 +20,9 @@ namespace berserk_online_server.Facades.Rooms
 
         public async Task DispatchList(IEnumerable<IRoom> rooms)
         {
-            await _hubContext.Clients.All.SendAsync(RoomHubMethodNames.ROOMS_LIST, rooms);
+            await _hubContext.Clients.All.SendAsync(RoomHubMethodNames.ROOMS_LIST, rooms
+                .Select(RoomMapper.ToOverview)
+                .ToArray());
         }
     }
 }
