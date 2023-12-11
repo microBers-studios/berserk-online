@@ -132,7 +132,7 @@ export const Chat = ({ room, connection }: ChatProps) => {
                         className={cls.SendMessageButton}
                         onClick={sendMessage}
                     >
-                        Send
+                        Отправить
                     </button>
                 </div>
             </div>

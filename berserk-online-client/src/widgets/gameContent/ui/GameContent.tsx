@@ -3,6 +3,7 @@ import cls from './GameContent.module.scss'
 import { Button, Chat } from 'src/shared/ui'
 import { useNavigate } from 'react-router-dom'
 import { RouterPaths } from 'src/shared/lib'
+import { GameField } from 'src/shared/ui/gameField'
 
 interface GamePageContentProps {
     connection: HubConnection
@@ -23,10 +24,20 @@ export const GamePageContent = ({ connection, room }: GamePageContentProps) => {
         <div className={cls.GamePageContentWrapper}>
             <div className={cls.GamePageContent}>
                 <div className={cls.GamePageHeaderWrapper}>
-                    <Button title="Leave" onClick={leaveRoom} />
-                    <h1 className={cls.GamePageHeader}>{room.name}</h1>
+                    <Button title="Выйти" onClick={leaveRoom} />
+                    <div className={cls.HeaderWrapper}>
+                        <h1
+                            className={`${cls.GamePageHeader} ${
+                                room.name.length > 8 && cls.LongHeader
+                            }`}
+                        >
+                            {room.name}
+                        </h1>
+                    </div>
                 </div>
-                <div className={cls.GameProcessWrapper}></div>
+                <div className={cls.GameProcessWrapper}>
+                    <GameField />
+                </div>
             </div>
             <Chat connection={connection} room={room} />
         </div>
