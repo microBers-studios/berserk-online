@@ -16,11 +16,31 @@ export const RoomItem = ({ room, setJoiningRoom }: RoomItemProps) => {
                 <img className={cls.RoomItemImage} src={classicalCard} alt="" />
             </div>
             <div className={cls.RoomItemInfo}>
-                <h3 className={cls.RoomHeader}>{room.name}</h3>
-                <div className={cls.RoomParticipantsInfo}>
-                    <span>
+                <div className={cls.RoomItemHeaderWrapper}>
+                    <h3 className={cls.RoomHeader}>{room.name}</h3>
+                    <span className={cls.PlayersCount}>
                         {roomPlayers.length}/{room.players.length} игроков
                     </span>
+                </div>
+                <div className={cls.RoomParticipantsInfo}>
+                    <ul className={cls.PlayersInfo}>
+                        {room.players
+                            .filter((p) => p)
+                            .map((p) => (
+                                <li className={cls.PlayerInfo} key={p.id}>
+                                    <div className={cls.PlayerImageWrapper}>
+                                        <img
+                                            className={cls.PlayerImage}
+                                            src={p.avatarUrl}
+                                            alt={p.name}
+                                        />
+                                    </div>
+                                    <span className={cls.PlayerName}>
+                                        {p.name}
+                                    </span>
+                                </li>
+                            ))}
+                    </ul>
                 </div>
             </div>
             <Button

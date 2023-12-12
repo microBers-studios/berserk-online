@@ -38,8 +38,21 @@
 }
 
 .RoomHeader {
-    margin: 2px;
+    margin: 0;
+    max-width: 35vw;
+    overflow: hidden;
+}
+
+.RoomItemHeaderWrapper {
+    display: flex;
+    align-items: center;
     color: var(--border-color);
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.PlayersCount {
+    margin: 3px 0 0;
 }
 
 .RoomParticipantsInfo {
@@ -48,4 +61,27 @@
 
 .JoinRoomButton {
     margin-right: 1vw;
+}
+
+.PlayersInfo {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.PlayerInfo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.PlayerImageWrapper {
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.PlayerImage {
+    height: 30px;
 }

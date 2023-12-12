@@ -42,7 +42,7 @@ export const RoomsContainer = ({
                         <span className={cls.RoomsHeader}>Комнаты</span>
                         {!userIsUnauthorized && connection && rooms && (
                             <span className={cls.RoomsCount}>
-                                {rooms.length} из {rooms.length}
+                                {rooms.length || 0} из {rooms.length || 0}
                             </span>
                         )}
                     </div>

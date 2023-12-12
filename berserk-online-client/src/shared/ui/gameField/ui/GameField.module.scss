@@ -1,4 +1,5 @@
 .GameField {
+    position: relative;
     display: flex;
     gap: 10px;
 }
@@ -64,10 +65,18 @@
         transform: scaleY(-1);
         border-top: 3px solid black;
     }
+}
 
-    // background-size: 100%;
-
-    &:first-child {
-        // background: url('../../../assets/images/pole2.webp');
-    }
+.blocked {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.8);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    border: 1px solid black;
 }

@@ -3,5 +3,9 @@ interface GraveCellProps {
 }
 
 export const GraveCell = ({ className }: GraveCellProps) => {
-    return <div className={className}>Кладбище</div>
+    return (
+        <div className={className} title="Кладбище">
+            Кладбище
+        </div>
+    )
 }

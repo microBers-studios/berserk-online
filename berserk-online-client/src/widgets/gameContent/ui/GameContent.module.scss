@@ -41,6 +41,46 @@
     overflow: hidden;
 }
 
+.PlayersInfo,
+.SpectatorsInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+}
+
+.ParticipantInfo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+    width: 10vw;
+
+    &:hover {
+        background-color: rgba(100, 96, 96, 0.5);
+        cursor: pointer;
+    }
+}
+
+.ParticipantsInfoHeader,
+.ParticipantName {
+    color: var(--border-color);
+}
+
+.ParticipantImageWrapper {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ParticipantImage {
+    height: 50px;
+}
+
 @keyframes marquee {
     from {
         transform: translateX(0%);

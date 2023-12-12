@@ -7,7 +7,7 @@ interface DeckCellProps {
 
 export const DeckCell = ({ className }: DeckCellProps) => {
     return (
-        <div className={className} id={cls.DeckCell}>
+        <div className={className} id={cls.DeckCell} title="Колода">
             <div className={cls.DeckWrapper}>
                 <img src={berserkCard} className={cls.DeckItem} alt="Колода" />
             </div>

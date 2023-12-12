@@ -1,12 +1,11 @@
+import { Button } from '../..'
 import { DeckCell } from '../../deckCell'
 import { GraveCell } from '../../graveCell'
 import cls from './GameField.module.scss'
 
-interface GameFieldProps {
-    className?: string
-}
-
 export const GameField = () => {
+    const startGame = () => {}
+
     return (
         <div className={cls.GameField}>
             <div className={cls.SideColumn}>
@@ -67,6 +66,9 @@ export const GameField = () => {
                 <div className={cls.GameFieldCell}>Местность</div>
                 <DeckCell className={cls.GameFieldCell} />
                 <GraveCell className={cls.GameFieldCell} />
+            </div>
+            <div className={cls.blocked}>
+                <Button title="Начать игру" onClick={startGame} />
             </div>
         </div>
     )
