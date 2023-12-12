@@ -145,7 +145,7 @@ namespace berserk_online_server.Controllers.Hubs
         {
             return new UserInfo(_db.GetUser(new UserInfoRequest()
             {
-                Email = IAuthenticationManager.GetMail(Context.User)
+                Email = IAuthenticationManager.GetMail(Context.User!)
             }));
         }
         private async Task sendErrorMessage(ApiErrorType errorType, object? ctx = null)
@@ -155,7 +155,7 @@ namespace berserk_online_server.Controllers.Hubs
         }
         private string getRoomIdFromURL()
         {
-            var urlValue = Context.GetHttpContext().Request.Path.Value.Split("/")[2];
+            var urlValue = Context.GetHttpContext()!.Request.Path.Value!.Split("/")[2];
             return urlValue.Split('?')[0];
         }
     }
