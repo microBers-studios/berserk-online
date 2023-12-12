@@ -16,7 +16,6 @@ using berserk_online_server.Repository;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 var staticContentPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 if (!Directory.Exists(staticContentPath))
@@ -66,7 +65,6 @@ builder.Services.AddSingleton<IMailClient, MailClient>();
 
 builder.Services.AddSingleton<ITempRequestsManager<RecoveryMailSender>, TempRequestsManager<RecoveryMailSender>>();
 builder.Services.AddSingleton<ITempRequestsManager<ConfirmEmailSender>, TempRequestsManager<ConfirmEmailSender>>();
-builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Services.AddSingleton<IRoomsManager, RoomsManager>();
 builder.Services.AddSingleton<IUserLocationManager, UserLocationManager>();
 builder.Services.AddSingleton<IConnectionGroupsManager, ConnectionGroupsManager>();
@@ -89,6 +87,8 @@ builder.Services.AddCors(options =>
 #pragma warning restore CS8604 // ¬озможно, аргумент-ссылка, допускающий значение NULL.
     });
 });
+
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 
 var app = builder.Build();
 

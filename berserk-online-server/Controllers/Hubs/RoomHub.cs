@@ -2,6 +2,7 @@
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.DTO.Requests;
+using berserk_online_server.Facades.Rooms;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
@@ -40,7 +41,7 @@ namespace berserk_online_server.Controllers.Hubs
                 var room = _roomsManager.Get(roomId);
                 _roomsManager.Join(getUserInfo(), roomId);
                 _connectionManager.Add(Context.ConnectionId, roomId);
-                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, room);
+                await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, RoomMapper.ToInfo(room));
                 await base.OnConnectedAsync();
             }
             catch (KeyNotFoundException)
@@ -68,6 +69,7 @@ namespace berserk_online_server.Controllers.Hubs
                 {
                     try
                     {
+                        _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
                         await _roomsManager.Leave(user);
                     }
                     catch (KeyNotFoundException)
@@ -115,7 +117,9 @@ namespace berserk_online_server.Controllers.Hubs
         {
             try
             {
-                await _roomsManager.Leave(getUserInfo());
+                var user = getUserInfo();
+                _logger.LogInformation($"Пользователь {user.Email} запросил выход из комнаты.");
+                await _roomsManager.Leave(user);
                 _connectionManager.RemoveConnection(Context.ConnectionId);
             }
             catch (KeyNotFoundException)
@@ -133,7 +137,7 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 Content = message,
                 Sender = user,
-                Id = TokenGenerator.Generate()
+                Id = Guid.NewGuid().ToString(),
             };
             room.Chat.AddMessage(chatMessage);
             await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
