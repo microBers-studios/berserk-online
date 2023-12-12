@@ -1,1 +1,0 @@
-export { CookieModalContextProvider } from "./lib/CookieModalContextProvider"

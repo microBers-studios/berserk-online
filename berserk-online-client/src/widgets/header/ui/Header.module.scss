@@ -1,0 +1,75 @@
+.Navbar {
+    background-color: black;
+    top: 0;
+    display: flex;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.NavbarMenu {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+}
+
+.NavbarLink {
+    color: white;
+    text-decoration: none;
+
+    &:focus,
+    &:hover,
+    &:visited,
+    &:link,
+    &:active {
+        text-decoration: none;
+    }
+}
+
+.active {
+    color: var(--secondary-color);
+}
+
+.login,
+.registration {
+    color: white;
+}
+
+.registration {
+    padding: 2px 4px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+}
+
+.login:hover,
+.registration:hover {
+    cursor: pointer;
+    color: var(--secondary-color);
+}
+
+.NavbarLoginButtons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .NavbarMenu {
+        width: 60vw;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -60vw;
+        background-color: var(--primary-color);
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+        transition: left 0.5s;
+        z-index: 40;
+
+        &.opened {
+            left: 0;
+        }
+    }
+}

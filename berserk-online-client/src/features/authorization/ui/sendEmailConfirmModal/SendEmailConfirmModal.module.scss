@@ -1,0 +1,45 @@
+.SendEmailModal {
+    position: absolute;
+    top: 14%;
+    left: 0;
+    right: 0;
+    padding: 2.5vw 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SendEmailModalText {
+    padding: 0 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.MailLinkImageWrapper {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.MailLinkWrapper {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    margin: 15px 0;
+}
+
+.MailLink {
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    margin: 0;
+}
+
+.MailServiceImage {
+    width: 50px;
+}
+
+.modal {
+    top: 30%;
+    bottom: 30%;
+}

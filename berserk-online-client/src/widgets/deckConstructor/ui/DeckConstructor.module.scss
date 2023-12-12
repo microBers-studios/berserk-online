@@ -1,0 +1,76 @@
+.CardsContainer {
+    width: 73vw;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    color: white;
+}
+
+.OrdinaryCardsContainer,
+.EliteCardsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 31vw;
+    align-items: center;
+}
+
+.OrdinaryCardsHeader,
+.EliteCardsHeader {
+    color: var(--secondary-color);
+}
+
+.CardsWrapper {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.NoCardsText {
+    font-size: 20px;
+    color: var(--border-color);
+}
+
+@media (max-width: 1200px) {
+    .CardsContainer {
+        width: 55vw;
+    }
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 25vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    .CardsContainer {
+        width: 65vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .EliteCardsHeader,
+    .OrdinaryCardsHeader {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 50vw;
+    }
+}
+
+@media (max-width: 700px) {
+    .CardsContainer {
+        width: 100vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 70vw;
+    }
+}

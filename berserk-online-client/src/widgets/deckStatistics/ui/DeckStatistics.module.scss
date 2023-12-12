@@ -1,0 +1,27 @@
+.DeckStatistics {
+    width: 60vw;
+    margin-bottom: 20px;
+}
+
+.DeckStatisticsHeader {
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+.ChartsWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+@media (max-width: 1200px) {
+    .DeckStatistics {
+        width: 50vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .ChartsWrapper {
+        flex-direction: column;
+    }
+}

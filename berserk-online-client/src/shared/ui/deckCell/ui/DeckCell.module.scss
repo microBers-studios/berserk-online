@@ -1,0 +1,14 @@
+#DeckCell {
+    border: none;
+}
+
+.DeckWrapper {
+    border: 2px solid var(--border-shadow-color);
+    width: fit-content;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.DeckItem {
+    width: 70px;
+}

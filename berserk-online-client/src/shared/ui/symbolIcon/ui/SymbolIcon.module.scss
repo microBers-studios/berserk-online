@@ -1,0 +1,21 @@
+.SymbolIcon {
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.SymbolImage {
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 900px) {
+    .SymbolIcon,
+    .SymbolImage {
+        width: 17px;
+        height: 17px;
+    }
+}

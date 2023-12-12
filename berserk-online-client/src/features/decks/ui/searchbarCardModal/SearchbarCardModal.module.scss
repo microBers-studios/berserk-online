@@ -1,0 +1,72 @@
+.CardModal {
+    width: 60vw;
+    background-color: var(--primary-color);
+    border: 2px solid var(--border-color);
+}
+
+.CardModalContent {
+    display: flex;
+    padding: 80px;
+    box-sizing: border-box;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.CardImageWrapper {
+    height: 300px;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.CardImage {
+    width: 212px;
+}
+
+.CardHeader {
+    text-align: center;
+    margin: 10px 0;
+    color: white;
+}
+
+.AddButton {
+    margin-top: 10px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20vw;
+    background-color: var(--primary-color);
+    border: 2px solid var(--border-shadow-color);
+    border-radius: 10px;
+}
+
+.plusImage {
+    width: 5vw;
+}
+
+@media (max-width: 600px) {
+    .CardImage {
+        width: 215px;
+    }
+}
+
+@media (max-width: 500px) {
+    .CardModal {
+        width: auto;
+        left: 10%;
+        right: 10%;
+    }
+
+    .CardImage {
+        width: 215px;
+    }
+}
+
+@media (max-width: 400px) {
+    .CardImage {
+        width: 200px;
+    }
+}

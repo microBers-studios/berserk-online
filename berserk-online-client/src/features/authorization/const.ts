@@ -1,0 +1,35 @@
+import gmailSvg from 'src/shared/assets/images/gmail.svg'
+import mailDotRuSvg from 'src/shared/assets/images/maildotru.svg'
+import mailDotComSvg from 'src/shared/assets/images/maildotcom.svg'
+
+export const mailServices = {
+    'mail.ru': ['Почта Mail.Ru', 'https://e.mail.ru/', mailDotRuSvg],
+    'mail.com': ['Почта Mail.Com', 'https://mail.com/', mailDotComSvg],
+    'bk.ru': ['Почта Mail.Ru (bk.ru)', 'https://e.mail.ru/'],
+    'list.ru': ['Почта Mail.Ru (list.ru)', 'https://e.mail.ru/'],
+    'inbox.ru': ['Почта Mail.Ru (inbox.ru)', 'https://e.mail.ru/'],
+    'yandex.ru': ['Яндекс.Почта', 'https://mail.yandex.ru/'],
+    'ya.ru': ['Яндекс.Почта', 'https://mail.yandex.ru/'],
+    'yandex.ua': ['Яндекс.Почта', 'https://mail.yandex.ua/'],
+    'yandex.by': ['Яндекс.Почта', 'https://mail.yandex.by/'],
+    'yandex.kz': ['Яндекс.Почта', 'https://mail.yandex.kz/'],
+    'yandex.com': ['Yandex.Mail', 'https://mail.yandex.com/'],
+    'gmail.com': ['Gmail', 'https://mail.google.com/', gmailSvg],
+    'googlemail.com': ['Gmail', 'https://mail.google.com/'],
+    'outlook.com': ['Outlook.com', 'https://mail.live.com/'],
+    'hotmail.com': ['Outlook.com (Hotmail)', 'https://mail.live.com/'],
+    'live.ru': ['Outlook.com (live.ru)', 'https://mail.live.com/'],
+    'live.com': ['Outlook.com (live.com)', 'https://mail.live.com/'],
+    'me.com': ['iCloud Mail', 'https://www.icloud.com/'],
+    'icloud.com': ['iCloud Mail', 'https://www.icloud.com/'],
+    'rambler.ru': ['Рамблер-Почта', 'https://mail.rambler.ru/'],
+    'yahoo.com': ['Yahoo! Mail', 'https://mail.yahoo.com/'],
+    'ukr.net': ['Почта ukr.net', 'https://mail.ukr.net/'],
+    'i.ua': ['Почта I.UA', 'http://mail.i.ua/'],
+    'bigmir.net': ['Почта Bigmir.net', 'http://mail.bigmir.net/'],
+    'tut.by': ['Почта tut.by', 'https://mail.tut.by/'],
+    'inbox.lv': ['Inbox.lv', 'https://www.inbox.lv/'],
+    'mail.kz': ['Почта mail.kz', 'http://mail.kz/'],
+} as Record<string, string[]>
+
+export const EMAIL_REGULAR = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

@@ -1,0 +1,57 @@
+.CardTitleItem {
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    z-index: 200;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 0.1vw;
+        left: 43%;
+        top: -1.2vw;
+        border: 10px solid transparent;
+        border-bottom: 10px solid var(--border-color);
+    }
+
+    &.top {
+        top: auto;
+        bottom: 100%;
+
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 0.1vw;
+            left: 43%;
+            bottom: -1.2vw;
+            border: 10px solid transparent;
+            border-top: 10px solid var(--border-color);
+        }
+    }
+}
+
+.CardImage {
+    margin: 0;
+    padding: 0;
+    width: 15vw;
+}
+
+.CardImageWrapper {
+    height: 21vw;
+    padding: 0;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+
+    &.Searchbar {
+        height: 16.8vw;
+
+        .CardImage {
+            width: 12vw;
+        }
+    }
+}

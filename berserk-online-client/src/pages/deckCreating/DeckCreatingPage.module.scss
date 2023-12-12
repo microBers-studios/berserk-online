@@ -1,0 +1,174 @@
+.DeckCreatingPage {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+}
+
+.DeckHeaderWrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.DeckPageHeader {
+    width: 20%;
+    color: var(--border-color);
+}
+
+.DeckContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.DeckPageHeaderInput {
+    box-sizing: border-box;
+    background-color: transparent;
+    height: 30px;
+    border-radius: 4px;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 20px;
+    color: var(--border-color);
+}
+
+.DeckCardsCount {
+    font-size: 25px;
+    margin-left: 50px;
+    color: var(--border-color);
+}
+
+.DeckContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.CardsContainer {
+    width: 73vw;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    color: white;
+}
+
+.OrdinaryCardsContainer,
+.EliteCardsContainer,
+.SideboardCardsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 31vw;
+    align-items: center;
+}
+
+.OrdinaryCardsHeader,
+.EliteCardsHeader,
+.SideboardCardsHeader {
+    color: var(--secondary-color);
+}
+
+.CardsWrapper {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.NoCardsText {
+    font-size: 20px;
+    color: var(--border-color);
+}
+
+@media (max-width: 1200px) {
+    .CardsContainer {
+        width: 55vw;
+    }
+
+    .DeckContainer {
+        width: 65vw;
+    }
+
+    .DeckPageHeaderInput {
+        width: 19vw;
+    }
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 25vw;
+    }
+}
+
+@media (max-width: 1000px) {
+    .DeckPageWrapper {
+        width: 65vw;
+    }
+
+    .CardsContainer {
+        width: 65vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .EliteCardsHeader,
+    .OrdinaryCardsHeader {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 810px) {
+    .DeckCardsCount {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 50vw;
+    }
+
+    .DeckPageHeader {
+        margin-left: 20px;
+    }
+
+    .DeckCardsCount {
+        font-size: 18px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .DeckCreatingPage {
+        justify-content: center;
+    }
+
+    .DeckHeaderWrapper {
+        width: 100vw;
+    }
+
+    .DeckPageHeaderInput {
+        width: 33vw;
+    }
+
+    .CardsContainer {
+        width: 100vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .DeckPageHeader {
+        margin: 0;
+    }
+
+    .DeckPageHeaderInput {
+        width: 30vw;
+    }
+
+    .OrdinaryCardsContainer,
+    .EliteCardsContainer {
+        width: 70vw;
+    }
+}

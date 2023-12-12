@@ -1,0 +1,87 @@
+.RoomItem {
+    width: 60vw;
+    border: 1px solid var(--border-shadow-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 20px;
+
+    &:hover {
+        .RoomHeader {
+            color: white;
+        }
+    }
+}
+
+.RoomItemImage {
+    width: 100px;
+    height: 150px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.RoomItemImageWrapper {
+    height: 4.5vw;
+    width: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-right: 1px solid var(--border-shadow-color);
+}
+
+.RoomItemInfo {
+    display: flex;
+    flex-direction: column;
+    width: 46vw;
+}
+
+.RoomHeader {
+    margin: 0;
+    max-width: 35vw;
+    overflow: hidden;
+}
+
+.RoomItemHeaderWrapper {
+    display: flex;
+    align-items: center;
+    color: var(--border-color);
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.PlayersCount {
+    margin: 3px 0 0;
+}
+
+.RoomParticipantsInfo {
+    color: var(--border-color);
+}
+
+.JoinRoomButton {
+    margin-right: 1vw;
+}
+
+.PlayersInfo {
+    display: flex;
+    padding: 0;
+    margin: 0;
+}
+
+.PlayerInfo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.PlayerImageWrapper {
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.PlayerImage {
+    height: 30px;
+}
