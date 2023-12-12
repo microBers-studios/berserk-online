@@ -32,7 +32,7 @@ namespace berserk_online_server.Facades.Rooms
         }
         public async Task<IRoom> Create(string name)
         {
-            var roomId = TokenGenerator.Generate();
+            var roomId = Guid.NewGuid().ToString();
             var room = new Room(name, roomId);
             if (!_rooms.TryAdd(roomId, room))
                 throw new InvalidOperationException("id already taken");

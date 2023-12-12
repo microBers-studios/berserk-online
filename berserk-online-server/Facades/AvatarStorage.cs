@@ -5,9 +5,9 @@ namespace berserk_online_server.Facades
 {
     public class AvatarStorage : IAvatarStorage
     {
-        private IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly string _baseUrl;
-        private Dictionary<string, Avatar> _avatars = new();
+        private readonly Dictionary<string, Avatar> _avatars = new();
         public AvatarStorage(IWebHostEnvironment environment, IConfiguration configuration)
         {
             _env = environment;
@@ -22,8 +22,8 @@ namespace berserk_online_server.Facades
             else fillAvatarsMap();
         }
 
-        public string AvatarsFolderPath { get => _env.WebRootPath + "/Avatars/"; }
-        public string AvatarsUrl { get => _baseUrl + "/Avatars/"; }
+        public string AvatarsFolderPath { get => _env.WebRootPath + "/avatars/"; }
+        public string AvatarsUrl { get => _baseUrl + "/avatars/"; }
 
         public async Task<string> AddAvatar(IFormFile file, string email)
         {

@@ -10,8 +10,6 @@ namespace berserk_online_server.Interfaces.Rooms
         event Action<RoomEvent> OnChanges;
         ImmutableArray<UserInfo?> Players { get; }
         List<UserInfo> Spectators { get; }
-        ChatMessage[] ChatMessages { get; }
-        [JsonIgnore]
         IChat Chat { get; }
         List<RoomEvent> Logs { get; }
         string Name { get; set; }
