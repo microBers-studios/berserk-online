@@ -67,6 +67,10 @@ namespace berserk_online_server.Controllers
             catch (InvalidOperationException)
             {
                 return Unauthorized();
+            } catch (NotFoundException)
+            {
+                _authenticationManager.LogOut();
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, "Maybe your cookie is corrupted, you will be logged out."));
             }
         }
         [HttpPost("loadAvatar")]
@@ -75,7 +79,10 @@ namespace berserk_online_server.Controllers
             try
             {
                 string email = _authenticationManager.GetMail();
-                string fileName = await _contentService.AddAvatar(avatar, email);
+                var user = _db.GetUser(new UserInfoRequest() { Email = email });
+                if (user.AvatarUrl != null)
+                    _contentService.DeleteAvatar(user.AvatarUrl.Split('/').Last());
+                string fileName = await _contentService.AddAvatar(avatar);
                 if (!fileName.Contains('.'))
                 {
                     return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFileName, avatar.Name));
@@ -134,7 +141,7 @@ namespace berserk_online_server.Controllers
             try
             {
                 string oldMail = _authenticationManager.GetMail();
-                var updatedUser = await _db.UpdateUser(request, oldMail);
+                var updatedUser = _db.UpdateUser(request, oldMail);
                 await updateCookie(updatedUser);
                 return Ok(updatedUser);
             }

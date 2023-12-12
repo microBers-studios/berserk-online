@@ -12,18 +12,15 @@ namespace berserk_online_server.Facades.Database
     public class UsersDatabase : IUsersDatabase
     {
         private readonly string _avatarUrlBase;
-        private readonly IAvatarStorage _staticContent;
         private readonly IUserRepository _userRepo;
         private readonly ICache<string, User> _memoryCache;
         public IDeckDatabase Decks { get; private set; }
-        public UsersDatabase(IAvatarStorage staticContent,
-            IUserRepository userRepository, ICache<string, User> cache, IDeckDatabase deckDatabase)
+        public UsersDatabase(IAvatarStorage avatarStorage, IUserRepository userRepository, ICache<string, User> cache, IDeckDatabase deckDatabase)
         {
             _memoryCache = cache;
-            _avatarUrlBase = staticContent.AvatarsUrl;
-            _staticContent = staticContent;
             _userRepo = userRepository;
             Decks = deckDatabase;
+            _avatarUrlBase = avatarStorage.AvatarsUrl;
         }
         public void AddUser(User user)
         {
@@ -43,15 +40,10 @@ namespace berserk_online_server.Facades.Database
         /// <param name="oldMail"></param>
         /// <exception cref="NotFoundException"></exception>
         /// <returns></returns>
-        public async Task<UserInfo> UpdateUser(UserInfoRequest request, string oldMail)
+        public UserInfo UpdateUser(UserInfoRequest request, string oldMail)
         {
             var user = _userRepo.Get(oldMail);
             mergeUserWithRequest(user, request);
-            if (user.AvatarUrl != null && request.Email != null)
-            {
-                var avatarName = await _staticContent.RenameAvatarByEmail(oldMail, user.Email);
-                user.AvatarUrl = avatarName;
-            }
             _userRepo.Update(user);
             _memoryCache.Remove(oldMail);
             return new UserInfo(formatUser(user));

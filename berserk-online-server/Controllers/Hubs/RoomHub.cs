@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
+using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
 using berserk_online_server.Facades.Rooms;
 using berserk_online_server.Interfaces;
@@ -60,25 +61,16 @@ namespace berserk_online_server.Controllers.Hubs
             var token = new CancellationTokenSource();
             var user = getUserInfo();
             _connectionManager.RemoveConnection(Context.ConnectionId);
-            _cancellationTokenManager.AddToken(user.Email, token);
-#pragma warning disable CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
-            Task.Factory.StartNew(async () =>
+            try
             {
-                Thread.Sleep(CONNECTION_TIMEOUT);
-                if (!token.IsCancellationRequested)
+                _cancellationTokenManager.AddToken(user.Email, token);
+                var room = _userLocationManager.GetLocation(user);
+                if (room.Players.Any(u => u?.Id == user.Id))
                 {
-                    try
-                    {
-                        _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
-                        await _roomsManager.Leave(user);
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        _logger.LogWarning("Key not found");
-                    }
+                    Task.Factory.StartNew(() => processTimeout(user, token.Token));
                 }
-            }, token.Token);
-#pragma warning restore CS4014 // Так как этот вызов не ожидается, выполнение существующего метода продолжается до тех пор, пока вызов не будет завершен
+            }
+            catch (KeyNotFoundException) { }
             await base.OnDisconnectedAsync(exception);
         }
         public async Task SwitchToPlayer()
@@ -141,6 +133,23 @@ namespace berserk_online_server.Controllers.Hubs
             };
             room.Chat.AddMessage(chatMessage);
             await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
+        }
+        private void processTimeout(UserInfo user, CancellationToken token)
+        {
+            Thread.Sleep(CONNECTION_TIMEOUT);
+            if (!token.IsCancellationRequested)
+            {
+                try
+                {
+                    var room = _userLocationManager.GetLocation(user);
+                    _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
+                    room.RemovePlayer(user);
+                }
+                catch (KeyNotFoundException)
+                {
+                    _logger.LogWarning("Key not found");
+                }
+            }
         }
         private UserInfo getUserInfo()
         {

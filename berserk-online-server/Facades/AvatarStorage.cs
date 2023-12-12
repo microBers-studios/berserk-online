@@ -7,7 +7,6 @@ namespace berserk_online_server.Facades
     {
         private readonly IWebHostEnvironment _env;
         private readonly string _baseUrl;
-        private readonly Dictionary<string, Avatar> _avatars = new();
         public AvatarStorage(IWebHostEnvironment environment, IConfiguration configuration)
         {
             _env = environment;
@@ -19,56 +18,18 @@ namespace berserk_online_server.Facades
                 throw new ArgumentNullException("please provide static content url");
             }
             if (!Directory.Exists(AvatarsFolderPath)) createAvatarsFolder();
-            else fillAvatarsMap();
         }
 
         public string AvatarsFolderPath { get => _env.WebRootPath + "/avatars/"; }
         public string AvatarsUrl { get => _baseUrl + "/avatars/"; }
 
-        public async Task<string> AddAvatar(IFormFile file, string email)
+        public async Task<string> AddAvatar(IFormFile file)
         {
-            var key = createKeyFromEmail(email);
-            if (_avatars.ContainsKey(key))
-            {
-                var avatar = _avatars[key];
-                await avatar.Replace(file);
-                return avatar.FileName;
-            }
-            else
-            {
-                var avatar = new Avatar(AvatarsFolderPath, file, key);
-                _avatars.Add(key, avatar);
-                return avatar.FileName;
-            }
+            return await writeFileAsync(file);
         }
-        public async Task<string> RenameAvatarByEmail(string oldMail, string newMail)
+        public void DeleteAvatar(string filename)
         {
-            var oldKey = createKeyFromEmail(oldMail);
-            if (_avatars.ContainsKey(oldKey))
-            {
-                var avatar = _avatars[oldKey];
-                var avatarName = await avatar.RenameByMail(newMail);
-                _avatars.Remove(oldKey);
-                _avatars[createKeyFromEmail(newMail)] = avatar;
-                return avatarName;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-        }
-        public void DeleteAvatar(string email)
-        {
-            var key = createKeyFromEmail(email);
-            if (_avatars.ContainsKey(key))
-            {
-                _avatars[key].Delete();
-                _avatars.Remove(key);
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
+            File.Delete(Path.Combine(AvatarsFolderPath, filename));
         }
         private void createAvatarsFolder()
         {
@@ -81,22 +42,14 @@ namespace berserk_online_server.Facades
                 throw new IOException("Failed to create avatars folder.");
             }
         }
-        private void fillAvatarsMap()
+        private async Task<string> writeFileAsync(IFormFile data)
         {
-            var avatarNames = Directory.GetFiles(AvatarsFolderPath);
-            foreach (var avatarPath in avatarNames)
+            var fileName = Guid.NewGuid().ToString() + '.' + data.FileName.Split('.')[1];
+            using (var fs = new FileStream(Path.Combine(AvatarsFolderPath, fileName), FileMode.Create))
             {
-                var avatarName = Path.GetFileName(avatarPath);
-                _avatars.Add(createKeyFromFileName(avatarName), new Avatar(AvatarsFolderPath, avatarName));
+                await data.CopyToAsync(fs);  
             }
-        }
-        private string createKeyFromFileName(string fileName)
-        {
-            return fileName.Split('.')[0];
-        }
-        private string createKeyFromEmail(string email)
-        {
-            return email.Replace('.', '-').Replace('@', '_');
+            return fileName;
         }
     }
 }
