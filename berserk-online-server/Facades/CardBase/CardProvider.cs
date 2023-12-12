@@ -1,8 +1,10 @@
-﻿using berserk_online_server.DTO.Cards;
+﻿using berserk_online_server.Data_objects.Cards;
+using berserk_online_server.DTO.Cards;
 using System.Text.Json;
 
 namespace berserk_online_server.Facades.CardBase
 {
+
     public class CardProvider
     {
         private DeserealizedCard[] _cards;
@@ -27,18 +29,14 @@ namespace berserk_online_server.Facades.CardBase
         {
             return _cards;
         }
-        public DeserealizedCard[] Find(string query, int limit)
+        public DeserealizedCard[] Find(string? query, FilterParams filterParams,  int limit)
         {
-            if (limit > 0)
-            {
-                return _cards
-                    .OrderBy(card => compareNames(card.Name, query))
-                    .Take(limit > _cards.Length ? _cards.Length : limit)
-                    .ToArray();
-            }
-            return _cards
-                .OrderBy(card => compareNames(card.Name, query))
-                .ToArray();
+            var result = filter(filterParams);
+            if (query != null)
+                result = result.OrderBy(c => compareNames(c.Name, query));
+            if (limit > 0 && limit < _cards.Length)
+                result = result.Take(limit);
+            return result.ToArray();
         }
         public DeserealizedCard GetCard(int id)
         {
@@ -52,6 +50,32 @@ namespace berserk_online_server.Facades.CardBase
                 cards.Add(GetCard(id));
             }
             return cards.ToArray();
+        }
+        private IEnumerable<DeserealizedCard> filter(FilterParams filter)
+        {
+            IEnumerable<DeserealizedCard> filteredCards = _cards;
+            if (filter.Health != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Health >= filter.Health.From && c.Health <= filter.Health.To);
+            if (filter.Elite != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Elite == filter.Elite);
+            if (filter.Moves != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Moves >= filter.Moves.From && c.Moves <= filter.Moves.To);
+            if (filter.Element != null)
+                filteredCards = filteredCards
+                    .Where(c => checkElements(c.Element, filter.Element));
+            if (filter.Price != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Price >= filter.Price.From && c.Price <= filter.Price.To);
+            if (filter.Rarity != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Rarity == filter.Rarity);
+            if (filter.Type != null)
+                filteredCards = filteredCards
+                    .Where(c => c.Type == filter.Type);
+            return filteredCards;
         }
         private int compareNames(string cardName, string userInput)
         {
@@ -99,6 +123,17 @@ namespace berserk_online_server.Facades.CardBase
             }
 
             return matrixD[n - 1, m - 1];
+        }
+        private bool checkElements(string[] el1, string[] el2)
+        {
+            foreach (var el in el1)
+            {
+                foreach(var comparableEl  in el2)
+                {
+                    if (el == comparableEl) return true;
+                }
+            }
+            return false;
         }
     }
 }

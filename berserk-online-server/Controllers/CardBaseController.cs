@@ -1,5 +1,7 @@
-﻿using berserk_online_server.DTO.Cards;
+﻿using berserk_online_server.Data_objects.Cards;
+using berserk_online_server.DTO.Cards;
 using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace berserk_online_server.Controllers
@@ -21,9 +23,27 @@ namespace berserk_online_server.Controllers
             return _cardProvider.GetAll();
         }
         [HttpGet("find")]
-        public DeserealizedCard[] Find(string query, int? limit)
+        public ActionResult<DeserealizedCard[]> Find(string? query,string? rarity, bool? elite, string? type,
+            string? elements,string? price, string? health, string? moves, int? limit)
         {
-            return _cardProvider.Find(query, limit ?? -1);
+            try
+            {
+                var filterParams = FilterFabric.Create(new FilterParamsRaw()
+                {
+                    Element = elements,
+                    Health = health,
+                    Elite = elite,
+                    Type = type,
+                    Moves = moves,
+                    Price = price,
+                    Rarity = rarity,
+                });
+                return _cardProvider.Find(query, filterParams, limit ?? -1);
+            } catch (FormatException)
+            {
+                return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFormat));
+            }
+            
         }
     }
 }
