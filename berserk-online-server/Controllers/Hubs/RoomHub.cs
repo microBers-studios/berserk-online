@@ -141,9 +141,8 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 try
                 {
-                    var room = _userLocationManager.GetLocation(user);
+                    _roomsManager.Leave(user);
                     _logger.LogWarning($"Пользователь {user.Email} вышел из комнаты из-за бездействия.");
-                    room.RemovePlayer(user);
                 }
                 catch (KeyNotFoundException)
                 {
