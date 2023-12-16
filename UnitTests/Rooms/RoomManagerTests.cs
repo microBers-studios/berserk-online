@@ -1,5 +1,5 @@
 ﻿using berserk_online_server.DTO;
-using berserk_online_server.Facades.Rooms;
+using berserk_online_server.Implementations.Rooms;
 
 namespace UnitTests.Rooms
 {

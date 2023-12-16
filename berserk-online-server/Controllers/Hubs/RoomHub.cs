@@ -1,9 +1,8 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
-using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
-using berserk_online_server.Facades.Rooms;
+using berserk_online_server.Implementations.Rooms;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;

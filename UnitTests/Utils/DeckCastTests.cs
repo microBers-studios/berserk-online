@@ -1,13 +1,13 @@
 ﻿using berserk_online_server.DTO.Cards;
 using berserk_online_server.DTO.Models;
 using berserk_online_server.DTO.Requests;
-using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Implementations.CardBase;
 
 namespace UnitTests.Utils
 {
     public class DeckCastTests
     {
-        private readonly CardProvider _cardProvider = new CardProvider();
+        private readonly ICardProvider _cardProvider = new CardProvider();
         [Theory]
         [InlineData(data: new object[] {
             new string[]

@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Data_objects.Cards;
 using berserk_online_server.DTO.Cards;
-using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Implementations.CardBase;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +10,8 @@ namespace berserk_online_server.Controllers
     [ApiController]
     public class CardBaseController : ControllerBase
     {
-        private CardProvider _cardProvider;
-        public CardBaseController(CardProvider cardProvider)
+        private ICardProvider _cardProvider;
+        public CardBaseController(ICardProvider cardProvider)
         {
             _cardProvider = cardProvider;
         }

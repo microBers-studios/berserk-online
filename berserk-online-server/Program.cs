@@ -2,11 +2,11 @@ using berserk_online_server.Contexts;
 using berserk_online_server.Controllers.Hubs;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO.Models;
-using berserk_online_server.Facades;
-using berserk_online_server.Facades.CardBase;
-using berserk_online_server.Facades.Database;
-using berserk_online_server.Facades.MailSenders;
-using berserk_online_server.Facades.Rooms;
+using berserk_online_server.Implementations;
+using berserk_online_server.Implementations.CardBase;
+using berserk_online_server.Implementations.Database;
+using berserk_online_server.Implementations.MailSenders;
+using berserk_online_server.Implementations.Rooms;
 using berserk_online_server.Interfaces;
 using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
@@ -72,7 +72,8 @@ builder.Services.AddTransient<IGroupDispatcher<RoomEvent>, RoomUpdateDispatcher>
 builder.Services.AddTransient<IRoomListDispatcher, RoomListDispatcher>();
 builder.Services.AddSingleton<ICancellationTokenManager<string>, CancellationTokenManager<string>>();
 
-builder.Services.AddSingleton<CardProvider>();
+builder.Services.AddSingleton<ICardProvider, CardProvider>();
+builder.Services.AddTransient<IPlayableCardFabric, PlayableCardFabric>();
 
 builder.Services.AddCors(options =>
 {

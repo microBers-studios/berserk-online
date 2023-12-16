@@ -3,7 +3,7 @@ using berserk_online_server.Controllers;
 using berserk_online_server.DTO.Cards;
 using berserk_online_server.DTO.Requests;
 using berserk_online_server.Exceptions;
-using berserk_online_server.Facades.CardBase;
+using berserk_online_server.Implementations.CardBase;
 using berserk_online_server.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

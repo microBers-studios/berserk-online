@@ -1,5 +1,5 @@
 ﻿using berserk_online_server.Constants;
-using berserk_online_server.Facades.Rooms;
+using berserk_online_server.Implementations.Rooms;
 using berserk_online_server.Interfaces.Rooms;
 using Microsoft.AspNetCore.SignalR;
 
