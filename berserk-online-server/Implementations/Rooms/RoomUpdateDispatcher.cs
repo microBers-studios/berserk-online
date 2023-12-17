@@ -1,12 +1,13 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Controllers.Hubs;
 using berserk_online_server.Data_objects.Rooms;
+using berserk_online_server.Interfaces.Dispatchers;
 using berserk_online_server.Interfaces.Rooms;
 using Microsoft.AspNetCore.SignalR;
 
 namespace berserk_online_server.Implementations.Rooms
 {
-    public class RoomUpdateDispatcher : IGroupDispatcher<RoomEvent>
+    public class RoomUpdateDispatcher : IRoomInfoDispatcher<RoomEvent>
     {
         private readonly IHubContext<RoomHub> _hub;
         private readonly IConnectionGroupsManager _connectionManager;

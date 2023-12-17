@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
+using berserk_online_server.Interfaces.Dispatchers;
 using berserk_online_server.Interfaces.Rooms;
 using berserk_online_server.Utils;
 
@@ -10,12 +11,12 @@ namespace berserk_online_server.Implementations.Rooms
     {                     //roomId
         private readonly Dictionary<string, IRoom> _rooms = new();
         private readonly IUserLocationManager _userLocationManager;
-        private readonly IGroupDispatcher<RoomEvent> _roomDispatcher;
+        private readonly IRoomInfoDispatcher<RoomEvent> _roomDispatcher;
         private readonly ILogger<RoomsManager> _logger;
         private readonly IRoomListDispatcher _roomListDispatcher;
         private const int CLEARING_DELAY_MS = 1 * 1000 * 60;
 
-        public RoomsManager(IUserLocationManager userLocationManager, IGroupDispatcher<RoomEvent> dispatcher,
+        public RoomsManager(IUserLocationManager userLocationManager, IRoomInfoDispatcher<RoomEvent> dispatcher,
             ILogger<RoomsManager> logger, IRoomListDispatcher roomListDispatcher)
         {
             _userLocationManager = userLocationManager;

@@ -8,6 +8,8 @@ using berserk_online_server.Implementations.Database;
 using berserk_online_server.Implementations.MailSenders;
 using berserk_online_server.Implementations.Rooms;
 using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Dispatchers;
+using berserk_online_server.Interfaces.Fabrics;
 using berserk_online_server.Interfaces.Mail;
 using berserk_online_server.Interfaces.Repos;
 using berserk_online_server.Interfaces.Rooms;
@@ -68,7 +70,7 @@ builder.Services.AddSingleton<ITempRequestsManager<ConfirmEmailSender>, TempRequ
 builder.Services.AddSingleton<IRoomsManager, RoomsManager>();
 builder.Services.AddSingleton<IUserLocationManager, UserLocationManager>();
 builder.Services.AddSingleton<IConnectionGroupsManager, ConnectionGroupsManager>();
-builder.Services.AddTransient<IGroupDispatcher<RoomEvent>, RoomUpdateDispatcher>();
+builder.Services.AddTransient<IRoomInfoDispatcher<RoomEvent>, RoomUpdateDispatcher>();
 builder.Services.AddTransient<IRoomListDispatcher, RoomListDispatcher>();
 builder.Services.AddSingleton<ICancellationTokenManager<string>, CancellationTokenManager<string>>();
 

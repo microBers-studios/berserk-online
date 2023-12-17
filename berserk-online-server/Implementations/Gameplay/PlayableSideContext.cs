@@ -1,6 +1,6 @@
 ﻿using berserk_online_server.Data_objects.Cards;
 using berserk_online_server.DTO.Cards;
-using berserk_online_server.Interfaces;
+using berserk_online_server.Interfaces.Fabrics;
 
 namespace berserk_online_server.Implementations.Gameplay
 {
