@@ -2,7 +2,6 @@
 {
     public interface IGameplayContext
     {
-        public string ConnectionsGroupId { get; set; }
         void Handle(Enum type, object arg, byte owner);
     }
 }

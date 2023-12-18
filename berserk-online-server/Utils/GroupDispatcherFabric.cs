@@ -21,12 +21,12 @@ namespace berserk_online_server.Utils
 
         public IGroupDispatcher<T> Create<T>(string groupId)
         {
-            return new GameplayUpdateDispatcher<T>(_hubContext, _connectionGroupsManager, groupId);
+            return new GameplayUpdateDispatcher<T>(_hubContext, _connectionGroupsManager);
         }
 
         public IGroupDispatcher<T> Create<T>()
         {
-            return new GameplayUpdateDispatcher<T>(_hubContext, _connectionGroupsManager, GroupId);
+            return new GameplayUpdateDispatcher<T>(_hubContext, _connectionGroupsManager);
         }
     }
 }

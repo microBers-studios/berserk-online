@@ -1,8 +1,10 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
+using berserk_online_server.Interfaces.Gameplay;
 using berserk_online_server.Interfaces.Rooms;
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 
 namespace berserk_online_server.Implementations.Rooms
 {
@@ -31,6 +33,8 @@ namespace berserk_online_server.Implementations.Rooms
         public IChat Chat => _chat;
 
         public List<RoomEvent> Logs => _eventLogs.ToList();
+        [JsonIgnore]
+        public IGameplayContext GameplayContext { get; set; }
 
         public Room(string name, string id) : this()
         {

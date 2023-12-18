@@ -2,8 +2,8 @@
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Dispatchers;
+using berserk_online_server.Interfaces.Fabrics;
 using berserk_online_server.Interfaces.Rooms;
-using berserk_online_server.Utils;
 
 namespace berserk_online_server.Implementations.Rooms
 {
@@ -14,15 +14,17 @@ namespace berserk_online_server.Implementations.Rooms
         private readonly IRoomInfoDispatcher<RoomEvent> _roomDispatcher;
         private readonly ILogger<RoomsManager> _logger;
         private readonly IRoomListDispatcher _roomListDispatcher;
+        private readonly IRoomFabric _roomFabric;
         private const int CLEARING_DELAY_MS = 1 * 1000 * 60;
 
         public RoomsManager(IUserLocationManager userLocationManager, IRoomInfoDispatcher<RoomEvent> dispatcher,
-            ILogger<RoomsManager> logger, IRoomListDispatcher roomListDispatcher)
+            ILogger<RoomsManager> logger, IRoomListDispatcher roomListDispatcher, IRoomFabric roomFabric)
         {
             _userLocationManager = userLocationManager;
             _roomDispatcher = dispatcher;
             _logger = logger;
             _roomListDispatcher = roomListDispatcher;
+            _roomFabric = roomFabric;
             new Timer(async (state) =>
             {
                 foreach (IRoom room in _rooms.Values)
@@ -34,7 +36,7 @@ namespace berserk_online_server.Implementations.Rooms
         public async Task<IRoom> Create(string name)
         {
             var roomId = Guid.NewGuid().ToString();
-            var room = new Room(name, roomId);
+            var room = _roomFabric.Create(name, roomId);
             if (!_rooms.TryAdd(roomId, room))
                 throw new InvalidOperationException("id already taken");
             subscribeDispatchers(room);

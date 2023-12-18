@@ -2,6 +2,6 @@
 {
     public interface IGroupDispatcher<T>
     {
-        Task DispatchAsync(T message, string ActionName);
+        Task DispatchAsync(T message, string ActionName, string groupId);
     }
 }

@@ -76,6 +76,8 @@ builder.Services.AddSingleton<ICancellationTokenManager<string>, CancellationTok
 
 builder.Services.AddSingleton<ICardProvider, CardProvider>();
 builder.Services.AddTransient<IPlayableCardFabric, PlayableCardFabric>();
+builder.Services.AddTransient<IRoomFabric, RoomFabric>();
+builder.Services.AddTransient<IGroupDispatcherFabric,  GroupDispatcherFabric>();
 
 builder.Services.AddCors(options =>
 {

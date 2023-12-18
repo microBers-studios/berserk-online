@@ -1,6 +1,7 @@
 ﻿using berserk_online_server.Data_objects.Cards;
 using berserk_online_server.DTO.Cards;
 using berserk_online_server.Implementations.CardBase;
+using berserk_online_server.Interfaces;
 using berserk_online_server.Utils;
 using Microsoft.AspNetCore.Mvc;
 

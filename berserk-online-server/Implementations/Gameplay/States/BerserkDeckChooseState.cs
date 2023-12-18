@@ -24,9 +24,9 @@ namespace berserk_online_server.Implementations.Gameplay.States
             throwInvalidOperation();
         }
 
-        public override void AddChipToCard(Point point, ChipType type)
+        public override void AddChipToCard(Point point, Chip type)
         {
-            throwInvalidOperation();
+            throw new NotImplementedException();
         }
 
         public override void AddExileCard(PlayableCard card, byte owner)

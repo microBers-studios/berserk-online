@@ -9,16 +9,14 @@ namespace berserk_online_server.Implementations.Gameplay.Dispatchers
     {
         private readonly IHubContext<RoomHub> _context;
         private readonly IConnectionGroupsManager _connectionGroupsManager;
-        private readonly string _groupId;
-        public GameplayUpdateDispatcher(IHubContext<RoomHub> context, IConnectionGroupsManager connectionGroupsManager, string groupId)
+        public GameplayUpdateDispatcher(IHubContext<RoomHub> context, IConnectionGroupsManager connectionGroupsManager)
         {
             _connectionGroupsManager = connectionGroupsManager;
             _context = context;
-            _groupId = groupId;
         }
-        public async Task DispatchAsync(T message, string ActionName)
+        public async Task DispatchAsync(T message, string ActionName, string groupId)
         {
-            var connections = _connectionGroupsManager.GetConnections(_groupId);
+            var connections = _connectionGroupsManager.GetConnections(groupId);
             await _context.Clients.Clients(connections).SendAsync(ActionName, message);
         }
     }
