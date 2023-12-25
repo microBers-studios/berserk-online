@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Data_objects.Rooms;
+﻿using berserk_online_server.Data_objects.Gameplay;
+using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Gameplay;
 using System.Collections.Immutable;
@@ -8,7 +9,7 @@ namespace berserk_online_server.Interfaces.Rooms
     public interface IRoom
     {
         event Action<RoomEvent> OnChanges;
-        ImmutableArray<UserInfo?> Players { get; }
+        ImmutableArray<PlayerSlot> Players { get; }
         List<UserInfo> Spectators { get; }
         IChat Chat { get; }
         List<RoomEvent> Logs { get; }
