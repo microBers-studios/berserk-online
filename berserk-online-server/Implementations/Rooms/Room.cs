@@ -25,11 +25,6 @@ namespace berserk_online_server.Implementations.Rooms
 
         public string Name { get; set; }
         public string Id { get; set; }
-
-        public Room()
-        {
-            OnChanges += _eventLogs.Add;
-        }
         public ChatMessage[] ChatMessages => _chat.GetMessages();
         public IChat Chat => _chat;
 
@@ -37,12 +32,19 @@ namespace berserk_online_server.Implementations.Rooms
         [JsonIgnore]
         public IGameplayContext GameplayContext { get; set; }
 
-        public Room(string name, string id) : this()
+        public RoomType Type { get; private set; }
+
+        public Room(RoomType type)
+        {
+            Type = type;
+            OnChanges += _eventLogs.Add;
+        }
+        public Room(string name, string id, RoomType type) : this(type)
         {
             Name = name;
             Id = id;
         }
-        public Room(string name) : this()
+        public Room(string name, RoomType type) : this(type)
         {
             Name = name;
             Id = Guid.NewGuid().ToString();
@@ -127,11 +129,31 @@ namespace berserk_online_server.Implementations.Rooms
             }
             return false;
         }
+        public void ToggleReady(UserInfo player)
+        {
+            var slot = Players.Where(p => p.User?.Id == player.Id).FirstOrDefault();
+            if (slot != null)
+            {
+                slot.IsReady = !slot.IsReady;
+                OnChanges?.Invoke(new RoomEvent()
+                {
+                    Type = slot.IsReady ? RoomEventTypes.PLAYER_READY : RoomEventTypes.PLAYER_NOT_READY,
+                    Initiator = slot.User!,
+                });
+            }
+        }
+        private void checkGameStarting()
+        {
+            if (Players.All(p => p.IsReady))
+            {
+                GameplayContext.Handle(BerserkActionType.StartGame, )
+            }
+        }
         private void addPlayer(UserInfo player)
         {
-            if (_players[0] == null)
+            if (_players[0].User == null)
                 _players[0] = new PlayerSlot(player);
-            else if (_players[1] == null)
+            else if (_players[1].User == null)
                 _players[1] = new PlayerSlot(player);
             else
                 throw new InvalidOperationException("room is full, but try to add player.");

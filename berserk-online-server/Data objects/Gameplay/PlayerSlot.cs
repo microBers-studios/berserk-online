@@ -9,7 +9,7 @@ namespace berserk_online_server.Data_objects.Gameplay
             User = user;
         }
         public PlayerSlot() { }
-        public UserInfo? User {  get; set; }
+        public UserInfo? User { get; set; }
         public bool IsReady { get; set; } = false;
     }
 }

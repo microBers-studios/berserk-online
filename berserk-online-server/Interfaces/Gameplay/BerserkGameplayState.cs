@@ -8,27 +8,110 @@ namespace berserk_online_server.Interfaces.Gameplay
 {
     public abstract class BerserkGameplayState
     {
-        public BerserkContext Context { get; private set; }
+        public BerserkContext Context { get; private set; } 
         public BerserkGameplayState(BerserkContext context)
         {
             Context = context;
         }
-        public abstract void SetDeck(Deck deck, byte owner);
-        public abstract void MoveFieldCard(Point oldPoint, Point newPoint, byte owner);
-        public abstract void RemoveFieldCard(Point point, byte owner);
-        public abstract void SetFieldCard(Point point, PlayableCard card, byte owner);
-        public abstract void AddGraveyardCard(byte owner, PlayableCard card);
-        public abstract void RemoveGraveyardCard(byte owner, PlayableCard card);
-        public abstract void AddExileCard(PlayableCard card, byte owner);
-        public abstract void RemoveExileCard(PlayableCard card, byte owner);
-        public abstract void AddChipToCard(Point point, Chip type);
-        public abstract void AddSymbioteToCard(Point point, PlayableCard card);
-        public abstract void RemoveSymbioteFromCard(Point point, PlayableCard card);
-        public abstract void AddChip(Point point, Chip chip);
-        public abstract void RemoveChip(Point point, Chip chip);
-        public abstract void EditChip(Point point, Chip chip, int id);
-        public abstract void FlipCard(Point point);
-        public abstract void TapCard(Point point);
+        public virtual void AddChip(Point point, Chip chip)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void AddChipToCard(Point point, Chip type)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void AddExileCard(PlayableCard card, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void AddGraveyardCard(byte owner, PlayableCard card)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void AddSymbioteToCard(Point point, PlayableCard card)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void EditChip(Point point, Chip chip, int id)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void FlipCard(Point point)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void MoveFieldCard(Point oldPoint, Point newPoint, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void RemoveChip(Point point, Chip chip)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void RemoveExileCard(PlayableCard card, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void RemoveFieldCard(Point point, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void RemoveGraveyardCard(byte owner, PlayableCard card)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void RemoveSymbioteFromCard(Point point, PlayableCard card)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void SetDeck(Deck deck, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void SetFieldCard(Point point, PlayableCard card, byte owner)
+        {
+            throwInvalidOperation();
+        }
+
+        public virtual void TapCard(Point point)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void StartGame()
+        {
+            throwInvalidOperation();
+        }
+        public virtual PlayableCard[] GetExile(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public virtual PlayableCard[] GetGraveyard(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public virtual PlayableCard[] GetDeck(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public virtual PlayableCard[] GetFlying(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
 
         protected void throwInvalidOperation()
         {

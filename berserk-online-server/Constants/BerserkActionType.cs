@@ -1,4 +1,4 @@
-﻿namespace berserk_online_server.Data_objects.Gameplay
+﻿namespace berserk_online_server.Constants
 {
     public enum BerserkActionType
     {
@@ -17,6 +17,7 @@
         RemoveChip,
         EditChip,
         FlipCard,
-        TapCard
+        TapCard,
+        StartGame
     }
 }

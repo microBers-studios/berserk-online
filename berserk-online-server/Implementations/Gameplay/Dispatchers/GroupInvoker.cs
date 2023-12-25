@@ -15,11 +15,9 @@ namespace berserk_online_server.Implementations.Gameplay.Dispatchers
             _connectionGroupsManager = connectionGroupsManager;
         }
 
-        public string GroupId { get; set; }
-
-        public async Task InvokeClientAsync(string actionName)
+        public async Task InvokeClientAsync(string actionName, string roomId)
         {
-            var connections = _connectionGroupsManager.GetConnections(GroupId);
+            var connections = _connectionGroupsManager.GetConnections(roomId);
             await _context.Clients.Clients(connections).SendAsync(actionName);
         }
     }

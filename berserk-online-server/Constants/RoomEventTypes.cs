@@ -8,5 +8,7 @@
         public const string SPECTATOR_LEAVED = "SpectatorLeaved";
         public const string TO_PLAYER = "SpectatorToPlayer";
         public const string TO_SPECTATOR = "PlayerToSpectator";
+        public const string PLAYER_NOT_READY = "PlayerNotReady";
+        public const string PLAYER_READY = "PlayerReady";
     }
 }

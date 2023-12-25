@@ -1,6 +1,6 @@
 ﻿namespace berserk_online_server.Constants
 {
-    public static class GameplayActionNames
+    public static class GameplayEventNames
     {
         public const string ADDITIONAL_CELLS_CHANGE = "AdditionalCellsChange";
         public const string CARD_CHANGE = "GameplayCardChange";

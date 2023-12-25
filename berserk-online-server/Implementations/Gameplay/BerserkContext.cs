@@ -1,12 +1,13 @@
 ﻿using berserk_online_server.Constants;
 using berserk_online_server.Data_objects.Cards;
-using berserk_online_server.Data_objects.Gameplay;
 using berserk_online_server.Data_objects.Gameplay.Events;
 using berserk_online_server.Data_objects.Gameplay.Requests;
+using berserk_online_server.DTO;
 using berserk_online_server.DTO.Cards;
 using berserk_online_server.Implementations.Gameplay.States;
 using berserk_online_server.Interfaces.Fabrics;
 using berserk_online_server.Interfaces.Gameplay;
+using berserk_online_server.Interfaces.Rooms;
 using System.Drawing;
 
 namespace berserk_online_server.Implementations.Gameplay
@@ -21,23 +22,29 @@ namespace berserk_online_server.Implementations.Gameplay
         public PlayableSideContext[] SideContexts { get; } = new PlayableSideContext[2];
         public BerserkField Field { get; } = new BerserkField();
         public BerserkGameplayState State { get; private set; }
-        private readonly string _roomId;
-        public BerserkContext(IGroupDispatcherFabric fabric, string roomId)
+        public string RoomId { get; private set; }
+        public IBerserkStateFabric StateFabric { get; private set; }
+        public IUserLocationManager LocationManager { get; private set; }
+        public IGroupDispatcherFabric GroupDispatcherFabric { get; private set; }
+        public BerserkContext(IGroupDispatcherFabric fabric, IBerserkStateFabric stateFabric,IUserLocationManager locationManager, string roomId)
         {
-            _roomId = roomId;
+            GroupDispatcherFabric = fabric;
+            RoomId = roomId;
+            StateFabric = stateFabric;
+            LocationManager = locationManager;
             State = new BerserkGameNotStartedState(this);
             var additionalCellsDispatcher = fabric.Create<AdditionalCellsEvent>();
             OnAdditionalCellsChange += async message => await additionalCellsDispatcher.DispatchAsync(message,
-                GameplayActionNames.ADDITIONAL_CELLS_CHANGE, _roomId);
+                GameplayEventNames.ADDITIONAL_CELLS_CHANGE, RoomId);
             var cardDispatcher = fabric.Create<CardEvent>();
-            OnCardChange += async message => await cardDispatcher.DispatchAsync(message, GameplayActionNames.CARD_CHANGE,
-                _roomId);
+            OnCardChange += async message => await cardDispatcher.DispatchAsync(message, GameplayEventNames.CARD_CHANGE,
+                RoomId);
             var movementDispatcher = fabric.Create<CardMovementEvent>();
             OnCardMovement += async message => await movementDispatcher.DispatchAsync(message,
-                GameplayActionNames.CARD_MOVE, _roomId);
+                GameplayEventNames.CARD_MOVE, RoomId);
             var chipDispatcher = fabric.Create<ChipEvent>();
             OnChipChange += async message => await chipDispatcher.DispatchAsync(message,
-                GameplayActionNames.CHIP_CHANGE, _roomId);
+                GameplayEventNames.CHIP_CHANGE, RoomId);
         }
         public void InvokeEvent(object obj)
         {
@@ -57,7 +64,6 @@ namespace berserk_online_server.Implementations.Gameplay
 
         public void Handle(Enum type, object arg, byte owner)
         {
-
             switch ((BerserkActionType)type)
             {
                 case BerserkActionType.AddChip:
@@ -130,6 +136,31 @@ namespace berserk_online_server.Implementations.Gameplay
                         State.SetFieldCard(setRequestArg.Point, setRequestArg.Card, owner);
                     }
                     return;
+                case BerserkActionType.StartGame:
+                    State.StartGame(); return;
+            }
+        }
+        public object Get(Enum type, object arg, byte owner)
+        {
+            switch ((BerserkGetterType)type)
+            {
+                case BerserkGetterType.GetFlying:
+                    return State.GetFlying((byte)arg, owner);
+                case BerserkGetterType.GetDeck:
+                    return State.GetDeck((byte)arg, owner);
+                case BerserkGetterType.GetExile:
+                    return State.GetExile((byte)arg, owner);
+                case BerserkGetterType.GetGraveyard:
+                    return State.GetGraveyard((byte)arg, owner);
+            }
+            throw new NotImplementedException();
+        }
+        private void sendPlayerIds(UserInfo[] users)
+        {
+            var dispatcher = GroupDispatcherFabric.Create<byte>(RoomId);
+            for (byte i = 0; i < 2; i++)
+            {
+                //Твоя задача состоит в том чтобы написать еще один ебаный диспатчер но только для одного конкретного подключения
             }
         }
     }

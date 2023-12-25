@@ -3,5 +3,6 @@
     public interface IGameplayContext
     {
         void Handle(Enum type, object arg, byte owner);
+        object Get(Enum type, object arg, byte owner);
     }
 }

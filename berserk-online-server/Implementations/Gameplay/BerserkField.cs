@@ -6,7 +6,6 @@ namespace berserk_online_server.Implementations.Gameplay
     public sealed class BerserkField
     {
         private readonly PlayableCard?[,] _field = new PlayableCard?[6, 5];
-
         public PlayableCard? GetCell(Point point)
         {
             return _field[point.Y, point.X];
@@ -27,5 +26,6 @@ namespace berserk_online_server.Implementations.Gameplay
             SetCell(cardToMove, newPoint);
             ClearCell(oldPoint);
         }
+        public PlayableCard?[,] GetAll() => _field;
     }
 }

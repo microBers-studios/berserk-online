@@ -93,5 +93,21 @@ namespace berserk_online_server.Implementations.Gameplay.States
         {
             throw new NotImplementedException();
         }
+        public override PlayableCard[] GetExile(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public override PlayableCard[] GetGraveyard(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public override PlayableCard[] GetDeck(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
+        public override PlayableCard[] GetFlying(byte targetOwner, byte owner)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }

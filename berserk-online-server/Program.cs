@@ -5,6 +5,7 @@ using berserk_online_server.DTO.Models;
 using berserk_online_server.Implementations;
 using berserk_online_server.Implementations.CardBase;
 using berserk_online_server.Implementations.Database;
+using berserk_online_server.Implementations.Gameplay.Dispatchers;
 using berserk_online_server.Implementations.MailSenders;
 using berserk_online_server.Implementations.Rooms;
 using berserk_online_server.Interfaces;
@@ -78,6 +79,8 @@ builder.Services.AddSingleton<ICardProvider, CardProvider>();
 builder.Services.AddTransient<IPlayableCardFabric, PlayableCardFabric>();
 builder.Services.AddTransient<IRoomFabric, RoomFabric>();
 builder.Services.AddTransient<IGroupDispatcherFabric, GroupDispatcherFabric>();
+builder.Services.AddTransient<IGroupInvoker, GroupInvoker>();
+builder.Services.AddTransient<IBerserkStateFabric, BerserkStateFabric>();
 
 builder.Services.AddCors(options =>
 {

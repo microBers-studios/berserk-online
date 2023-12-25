@@ -38,7 +38,7 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 var email = getUserInfo().Email;
                 _cancellationTokenManager.TryCancel(email);
-                _roomsManager.Join(getUserInfo(), roomId);
+                _roomsManager.Join(getUserInfo(), roomId, Context.ConnectionId);
                 _connectionManager.Add(Context.ConnectionId, roomId);
                 var room = _roomsManager.Get(roomId);
                 await Clients.Caller.SendAsync(RoomHubMethodNames.ROOM_INFO, RoomMapper.ToInfo(room));
@@ -64,7 +64,7 @@ namespace berserk_online_server.Controllers.Hubs
             {
                 _cancellationTokenManager.AddToken(user.Email, token);
                 var room = _userLocationManager.GetLocation(user);
-                if (room.Players.Any(u => u?.Id == user.Id))
+                if (room.Players.Any(u => u?.User?.Id == user.Id))
                 {
                     Task.Factory.StartNew(() => processTimeout(user, token.Token));
                 }
@@ -132,6 +132,13 @@ namespace berserk_online_server.Controllers.Hubs
             };
             room.Chat.AddMessage(chatMessage);
             await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
+        }
+
+        public void ToggleReady()
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            room.ToggleReady(user);
         }
         private void processTimeout(UserInfo user, CancellationToken token)
         {

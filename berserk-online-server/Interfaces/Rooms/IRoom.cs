@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Data_objects.Gameplay;
+﻿using berserk_online_server.Constants;
+using berserk_online_server.Data_objects.Gameplay;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Gameplay;
@@ -16,11 +17,13 @@ namespace berserk_online_server.Interfaces.Rooms
         IGameplayContext GameplayContext { get; set; }
         string Name { get; set; }
         string Id { get; set; }
+        public RoomType Type { get; }
         void MoveToSpectators(UserInfo player);
         void MoveToPlayers(UserInfo spectator);
         void AddPlayer(UserInfo player);
         void RemovePlayer(UserInfo player);
         void AddSpectator(UserInfo spectator);
         void RemoveSpectator(UserInfo spectator);
+        void ToggleReady(UserInfo player);
     }
 }

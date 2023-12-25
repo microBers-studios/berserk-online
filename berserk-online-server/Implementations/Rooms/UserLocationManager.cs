@@ -1,4 +1,5 @@
-﻿using berserk_online_server.DTO;
+﻿using berserk_online_server.Data_objects.Rooms;
+using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Rooms;
 
 namespace berserk_online_server.Implementations.Rooms
@@ -6,16 +7,21 @@ namespace berserk_online_server.Implementations.Rooms
     public class UserLocationManager : IUserLocationManager
     {
         //userEmail
-        private Dictionary<string, IRoom> _userLocations = new();
-        public void ChangeLocation(UserInfo user, IRoom room)
+        private Dictionary<string, UserLocation> _userLocations = new();
+        public void ChangeLocation(UserInfo user, IRoom room, string connectionId)
         {
             removeFromOldRoom(user);
-            writeNewLocation(user, room);
+            writeNewLocation(user, room, connectionId);
+        }
+
+        public string GetConnection(UserInfo user)
+        {
+            return _userLocations[user.Email].ConnectionId ?? throw new KeyNotFoundException();
         }
 
         public IRoom GetLocation(UserInfo user)
         {
-            return _userLocations[user.Email] ?? throw new KeyNotFoundException();
+            return _userLocations[user.Email].Room ?? throw new KeyNotFoundException();
         }
 
         public void RemoveLocation(UserInfo user)
@@ -25,16 +31,20 @@ namespace berserk_online_server.Implementations.Rooms
         }
         private void removeFromOldRoom(UserInfo user)
         {
-            if (_userLocations.TryGetValue(user.Email, out IRoom? room))
+            if (_userLocations.TryGetValue(user.Email, out UserLocation? location))
             {
-                room.RemovePlayer(user);
-                room.RemoveSpectator(user);
+                location.Room.RemovePlayer(user);
+                location.Room.RemoveSpectator(user);
                 _userLocations.Remove(user.Email);
             }
         }
-        private void writeNewLocation(UserInfo user, IRoom room)
+        private void writeNewLocation(UserInfo user, IRoom room, string connectionId)
         {
-            _userLocations[user.Email] = room;
+            _userLocations[user.Email] = new UserLocation()
+            {
+                Room = room,
+                ConnectionId = connectionId
+            };
         }
     }
 }

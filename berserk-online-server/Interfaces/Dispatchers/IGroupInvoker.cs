@@ -2,7 +2,6 @@
 {
     public interface IGroupInvoker
     {
-        string GroupId { get; set; }
-        Task InvokeClientAsync(string actionName);
+        Task InvokeClientAsync(string actionName, string roomId);
     }
 }

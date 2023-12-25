@@ -36,7 +36,7 @@ namespace berserk_online_server.Implementations.Rooms
         public async Task<IRoom> Create(string name)
         {
             var roomId = Guid.NewGuid().ToString();
-            var room = _roomFabric.Create(name, roomId);
+            var room = _roomFabric.Create(name, RoomType.ClassicBerserk, roomId);
             if (!_rooms.TryAdd(roomId, room))
                 throw new InvalidOperationException("id already taken");
             subscribeDispatchers(room);
@@ -58,10 +58,10 @@ namespace berserk_online_server.Implementations.Rooms
             return _rooms.Values.ToArray();
         }
 
-        public void Join(UserInfo user, string roomId)
+        public void Join(UserInfo user, string roomId, string connectionId)
         {
             var room = Get(roomId);
-            _userLocationManager.ChangeLocation(user, room);
+            _userLocationManager.ChangeLocation(user, room, connectionId);
             try
             {
                 room.AddPlayer(user);
@@ -92,7 +92,7 @@ namespace berserk_online_server.Implementations.Rooms
         }
         private async Task garbageRoomCheck(IRoom room)
         {
-            if (!room.Players.Any(el => el != null) && room.Spectators.Count == 0)
+            if (room.Players.All(el => el.User == null) && room.Spectators.Count == 0)
             {
                 _rooms.Remove(room.Id);
                 _logger.LogInformation($"Room with id {room.Id} and name {room.Name} removed.");

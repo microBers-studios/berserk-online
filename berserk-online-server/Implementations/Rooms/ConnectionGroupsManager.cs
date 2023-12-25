@@ -28,6 +28,11 @@ namespace berserk_online_server.Implementations.Rooms
             return _groups[roomId].ToArray();
         }
 
+        public KeyValuePair<int, string>[] GetWithUserId(string roomId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveConnection(string connectionId)
         {
             foreach (var list in _groups.Values)
