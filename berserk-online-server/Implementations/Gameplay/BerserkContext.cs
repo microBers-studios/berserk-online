@@ -7,7 +7,6 @@ using berserk_online_server.DTO.Cards;
 using berserk_online_server.Implementations.Gameplay.States;
 using berserk_online_server.Interfaces.Fabrics;
 using berserk_online_server.Interfaces.Gameplay;
-using berserk_online_server.Interfaces.Rooms;
 using System.Drawing;
 
 namespace berserk_online_server.Implementations.Gameplay
@@ -22,24 +21,22 @@ namespace berserk_online_server.Implementations.Gameplay
         public PlayableSideContext[] SideContexts { get; } = new PlayableSideContext[2];
         public BerserkField Field { get; } = new BerserkField();
         public BerserkGameplayState State { get; private set; }
-        private readonly IUserLocationManager _userLocationManager;
         private readonly string _roomId;
-        public BerserkContext(IGroupDispatcherFabric fabric, IUserLocationManager locationManager, string roomId)
+        public BerserkContext(IGroupDispatcherFabric fabric, string roomId)
         {
             _roomId = roomId;
-            _userLocationManager = locationManager;
             State = new BerserkGameNotStartedState(this);
             var additionalCellsDispatcher = fabric.Create<AdditionalCellsEvent>();
-            OnAdditionalCellsChange += async message => await additionalCellsDispatcher.DispatchAsync(message, 
+            OnAdditionalCellsChange += async message => await additionalCellsDispatcher.DispatchAsync(message,
                 GameplayActionNames.ADDITIONAL_CELLS_CHANGE, _roomId);
             var cardDispatcher = fabric.Create<CardEvent>();
             OnCardChange += async message => await cardDispatcher.DispatchAsync(message, GameplayActionNames.CARD_CHANGE,
                 _roomId);
             var movementDispatcher = fabric.Create<CardMovementEvent>();
-            OnCardMovement += async message => await movementDispatcher.DispatchAsync(message, 
+            OnCardMovement += async message => await movementDispatcher.DispatchAsync(message,
                 GameplayActionNames.CARD_MOVE, _roomId);
             var chipDispatcher = fabric.Create<ChipEvent>();
-            OnChipChange += async message => await chipDispatcher.DispatchAsync(message, 
+            OnChipChange += async message => await chipDispatcher.DispatchAsync(message,
                 GameplayActionNames.CHIP_CHANGE, _roomId);
         }
         public void InvokeEvent(object obj)

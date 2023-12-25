@@ -7,7 +7,6 @@ namespace berserk_online_server.Implementations.Rooms
     public class RoomFabric : IRoomFabric
     {
         private IGroupDispatcherFabric _dispatcherFabric;
-        private IUserLocationManager _userLocationManager;
         public RoomFabric(IGroupDispatcherFabric dispatcherFabric)
         {
             _dispatcherFabric = dispatcherFabric;
@@ -16,7 +15,7 @@ namespace berserk_online_server.Implementations.Rooms
         public IRoom Create(string name, string id)
         {
             var room = new Room(name, id);
-            room.GameplayContext = new BerserkContext(_dispatcherFabric, _userLocationManager, id);
+            room.GameplayContext = new BerserkContext(_dispatcherFabric, id);
             return room;
         }
     }

@@ -6,7 +6,7 @@ namespace berserk_online_server.Data_objects.Cards
     {
         private List<PlayableCard> _symbiotes = new List<PlayableCard>();
         public string Uid { get; } = Guid.NewGuid().ToString();
-        public int CardId { get; private set;  }
+        public int CardId { get; private set; }
         public CardType CardType { get; private set; }
         public string Image { get; set; }
         public List<Chip> Chips { get; } = new List<Chip>();

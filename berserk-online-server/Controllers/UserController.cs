@@ -67,7 +67,8 @@ namespace berserk_online_server.Controllers
             catch (InvalidOperationException)
             {
                 return Unauthorized();
-            } catch (NotFoundException)
+            }
+            catch (NotFoundException)
             {
                 _authenticationManager.LogOut();
                 return BadRequest(ApiErrorFabric.Create(ApiErrorType.NotFound, "Maybe your cookie is corrupted, you will be logged out."));

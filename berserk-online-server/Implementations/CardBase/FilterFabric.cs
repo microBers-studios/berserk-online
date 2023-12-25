@@ -7,7 +7,7 @@ namespace berserk_online_server.Implementations.CardBase
     {
         public static FilterParams Create(FilterParamsRaw param)
         {
-            var filter =  new FilterParams()
+            var filter = new FilterParams()
             {
                 Element = parseElements(param.Element),
                 Elite = param.Elite,

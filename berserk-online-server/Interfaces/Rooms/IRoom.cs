@@ -2,7 +2,6 @@
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Gameplay;
 using System.Collections.Immutable;
-using System.Text.Json.Serialization;
 
 namespace berserk_online_server.Interfaces.Rooms
 {

@@ -4,7 +4,6 @@ using berserk_online_server.Data_objects.Gameplay;
 using berserk_online_server.Data_objects.Gameplay.Events;
 using berserk_online_server.DTO.Cards;
 using berserk_online_server.Interfaces.Gameplay;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Drawing;
 
 namespace berserk_online_server.Implementations.Gameplay.States

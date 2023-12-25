@@ -129,7 +129,7 @@ namespace berserk_online_server.Implementations.CardBase
         {
             foreach (var el in el1)
             {
-                foreach(var comparableEl  in el2)
+                foreach (var comparableEl in el2)
                 {
                     if (el == comparableEl) return true;
                 }
