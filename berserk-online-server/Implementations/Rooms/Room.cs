@@ -1,4 +1,5 @@
 ﻿using berserk_online_server.Constants;
+using berserk_online_server.Data_objects.Gameplay;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.Interfaces.Gameplay;
@@ -10,14 +11,14 @@ namespace berserk_online_server.Implementations.Rooms
 {
     public class Room : IRoom
     {
-        private readonly UserInfo?[] _players = new UserInfo[2];
+        private readonly PlayerSlot[] _players = new PlayerSlot[2] { new PlayerSlot(), new PlayerSlot() };
         private readonly Dictionary<string, UserInfo> _spectators = new();
         private readonly IChat _chat = new Chat();
         private readonly List<RoomEvent> _eventLogs = new();
 
         public event Action<RoomEvent> OnChanges;
 
-        public ImmutableArray<UserInfo?> Players => _players.ToImmutableArray();
+        public ImmutableArray<PlayerSlot> Players => _players.ToImmutableArray();
 
         public List<UserInfo> Spectators => _spectators.Select(pair => pair.Value)
             .ToList();
@@ -104,7 +105,7 @@ namespace berserk_online_server.Implementations.Rooms
 
         public void MoveToPlayers(UserInfo spectator)
         {
-            if (_players.Any(p => p != null && p.Id == spectator.Id))
+            if (_players.Any(p => p.User != null && p.User.Id == spectator.Id))
                 return;
             _spectators.Remove(spectator.Email);
             addPlayer(spectator);
@@ -118,9 +119,9 @@ namespace berserk_online_server.Implementations.Rooms
         {
             for (int i = 0; i < 2; i++)
             {
-                if (_players[i] != null && _players[i].Email == player.Email)
+                if (_players[i].User != null && _players[i].User.Email == player.Email)
                 {
-                    _players[i] = null;
+                    _players[i] = new PlayerSlot();
                     return true;
                 }
             }
@@ -129,9 +130,9 @@ namespace berserk_online_server.Implementations.Rooms
         private void addPlayer(UserInfo player)
         {
             if (_players[0] == null)
-                _players[0] = player;
+                _players[0] = new PlayerSlot(player);
             else if (_players[1] == null)
-                _players[1] = player;
+                _players[1] = new PlayerSlot(player);
             else
                 throw new InvalidOperationException("room is full, but try to add player.");
         }

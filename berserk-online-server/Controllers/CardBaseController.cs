@@ -24,8 +24,8 @@ namespace berserk_online_server.Controllers
             return _cardProvider.GetAll();
         }
         [HttpGet("find")]
-        public ActionResult<DeserealizedCard[]> Find(string? query,string? rarity, bool? elite, string? type,
-            string? elements,string? price, string? health, string? moves, int? limit)
+        public ActionResult<DeserealizedCard[]> Find(string? query, string? rarity, bool? elite, string? type,
+            string? elements, string? price, string? health, string? moves, int? limit)
         {
             try
             {
@@ -40,11 +40,12 @@ namespace berserk_online_server.Controllers
                     Rarity = rarity,
                 });
                 return _cardProvider.Find(query, filterParams, limit ?? -1);
-            } catch (FormatException)
+            }
+            catch (FormatException)
             {
                 return BadRequest(ApiErrorFabric.Create(ApiErrorType.InvalidFormat));
             }
-            
+
         }
     }
 }

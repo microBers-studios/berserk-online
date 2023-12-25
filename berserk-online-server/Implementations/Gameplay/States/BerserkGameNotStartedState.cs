@@ -1,11 +1,8 @@
-﻿using berserk_online_server.Constants;
-using berserk_online_server.Data_objects.Cards;
+﻿using berserk_online_server.Data_objects.Cards;
 using berserk_online_server.Data_objects.Gameplay;
-using berserk_online_server.Data_objects.Gameplay.Events;
 using berserk_online_server.DTO.Cards;
 using berserk_online_server.Interfaces.Gameplay;
 using System.Drawing;
-using System.Security.Cryptography.Xml;
 
 namespace berserk_online_server.Implementations.Gameplay.States
 {

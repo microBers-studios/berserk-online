@@ -1,5 +1,4 @@
-﻿using berserk_online_server.DTO;
-using berserk_online_server.Interfaces;
+﻿using berserk_online_server.Interfaces;
 
 namespace berserk_online_server.Implementations
 {
@@ -47,7 +46,7 @@ namespace berserk_online_server.Implementations
             var fileName = Guid.NewGuid().ToString() + '.' + data.FileName.Split('.')[1];
             using (var fs = new FileStream(Path.Combine(AvatarsFolderPath, fileName), FileMode.Create))
             {
-                await data.CopyToAsync(fs);  
+                await data.CopyToAsync(fs);
             }
             return fileName;
         }

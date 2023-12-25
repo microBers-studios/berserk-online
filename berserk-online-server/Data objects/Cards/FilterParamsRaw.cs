@@ -1,6 +1,4 @@
-﻿using berserk_online_server.Utils;
-
-namespace berserk_online_server.Data_objects.Cards
+﻿namespace berserk_online_server.Data_objects.Cards
 {
     public class FilterParamsRaw
     {

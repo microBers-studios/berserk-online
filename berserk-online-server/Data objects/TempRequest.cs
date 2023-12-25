@@ -1,6 +1,4 @@
-﻿using berserk_online_server.Utils;
-
-namespace berserk_online_server.DTO
+﻿namespace berserk_online_server.DTO
 {
     public class TempRequest
     {
