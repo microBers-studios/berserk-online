@@ -140,13 +140,14 @@ namespace berserk_online_server.Implementations.Rooms
                     Type = slot.IsReady ? RoomEventTypes.PLAYER_READY : RoomEventTypes.PLAYER_NOT_READY,
                     Initiator = slot.User!,
                 });
+                checkGameStart();
             }
         }
-        private void checkGameStarting()
+        private void checkGameStart()
         {
             if (Players.All(p => p.IsReady))
             {
-                GameplayContext.Handle(BerserkActionType.StartGame, )
+                GameplayContext.StartGame();
             }
         }
         private void addPlayer(UserInfo player)

@@ -2,10 +2,9 @@
 {
     public static class GameplayEventNames
     {
-        public const string ADDITIONAL_CELLS_CHANGE = "AdditionalCellsChange";
         public const string CARD_CHANGE = "GameplayCardChange";
         public const string CARD_MOVE = "GameplayCardMovement";
-        public const string CHIP_CHANGE = "ChipUpdate";
-        public const string CHOOSE_DECK = "ChooseDeckClient";
+        public const string CARD_FIELD_MOVE = "GameplayCardOnFieldMovement";
+        public const string CARD_CHIP_CHANGE = "GameplayCardChipUpdate";
     }
 }

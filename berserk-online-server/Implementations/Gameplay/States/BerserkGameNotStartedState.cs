@@ -1,4 +1,5 @@
-﻿using berserk_online_server.Interfaces.Gameplay;
+﻿using berserk_online_server.Constants;
+using berserk_online_server.Interfaces.Gameplay;
 
 namespace berserk_online_server.Implementations.Gameplay.States
 {
@@ -9,6 +10,7 @@ namespace berserk_online_server.Implementations.Gameplay.States
         }
         public override void StartGame()
         {
+            Context.CommunicationHelper.SendActionGroup(GameplayClientActionNames.START_GAME);
             var state = Context.StateFabric.CreateDeckChooseState(Context);
             Context.ChangeState(state);
         }

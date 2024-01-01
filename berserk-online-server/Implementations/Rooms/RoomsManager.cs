@@ -25,6 +25,7 @@ namespace berserk_online_server.Implementations.Rooms
             _logger = logger;
             _roomListDispatcher = roomListDispatcher;
             _roomFabric = roomFabric;
+            roomFabric.Init(userLocationManager, this);
             new Timer(async (state) =>
             {
                 foreach (IRoom room in _rooms.Values)

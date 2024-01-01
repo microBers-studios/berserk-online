@@ -10,10 +10,10 @@ namespace berserk_online_server.Data_objects.Cards
         public CardType CardType { get; private set; }
         public string Image { get; set; }
         public List<Chip> Chips { get; } = new List<Chip>();
-        public byte Owner { get; set; }
+        public sbyte Owner { get; set; }
         public bool Flipped { get; set; } = false;
         public bool Tapped { get; set; } = false;
-        public PlayableCard(byte owner, int id, CardType type, string image)
+        public PlayableCard(sbyte owner, int id, CardType type, string image)
         {
             CardId = id;
             Owner = owner;

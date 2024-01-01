@@ -1,4 +1,5 @@
 ﻿using berserk_online_server.Constants;
+using berserk_online_server.Data_objects.Gameplay.Requests;
 using berserk_online_server.Data_objects.Rooms;
 using berserk_online_server.DTO;
 using berserk_online_server.DTO.Requests;
@@ -104,6 +105,11 @@ namespace berserk_online_server.Controllers.Hubs
                 await sendErrorMessage(ApiErrorType.NoAccess, "Invalid action");
             }
         }
+        public async void Serialize()
+        {
+            var user = getUserInfo();
+            await Clients.Caller.SendAsync("aaaa", RoomMapper.ToInfo(_userLocationManager.GetLocation(user)));
+        }
         public async Task Leave()
         {
             try
@@ -134,12 +140,51 @@ namespace berserk_online_server.Controllers.Hubs
             await Clients.Clients(connections).SendAsync(RoomHubMethodNames.CHAT_EVENT, chatMessage);
         }
 
+        //Gameplay
         public void ToggleReady()
         {
             var user = getUserInfo();
             var room = _userLocationManager.GetLocation(user);
             room.ToggleReady(user);
         }
+        public void SetDeck(string id)
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            room.GameplayContext.Handle(BerserkActionType.SetDeck, id, getOwner(user, room));
+        }
+        public void Reroll()
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            room.GameplayContext.Handle(BerserkActionType.Reroll, null, getOwner(user, room));
+        }
+        public void SetHand(string[] ids)
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            room.GameplayContext.Handle(BerserkActionType.SetHand, ids, getOwner(user, room));
+        }
+        public void MoveCardToField(CardMoveToFieldRequest request)
+        {
+            var user = getUserInfo();
+            var room = _userLocationManager.GetLocation(user);
+            room.GameplayContext.Handle(BerserkActionType.MoveCardToField, request, getOwner(user, room));
+        }
+
+        private sbyte getOwner(UserInfo user, IRoom room)
+        {
+            for (sbyte i = 0; i < room.Players.Length; i++)
+            {
+                if (room.Players[i].User != null && user.Id == room.Players[i].User!.Id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        //
+
         private void processTimeout(UserInfo user, CancellationToken token)
         {
             Thread.Sleep(CONNECTION_TIMEOUT);

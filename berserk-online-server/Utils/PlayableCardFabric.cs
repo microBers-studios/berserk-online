@@ -11,7 +11,7 @@ namespace berserk_online_server.Utils
         {
             _cardProvider = cardProvider;
         }
-        public PlayableCard Create(int id, byte owner)
+        public PlayableCard Create(int id, sbyte owner)
         {
             var card = _cardProvider.GetCard(id);
             return new PlayableCard(owner, id, GetCardType(card.Type), card.Image);

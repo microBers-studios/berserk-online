@@ -2,7 +2,9 @@
 {
     public interface IGameplayContext
     {
-        void Handle(Enum type, object arg, byte owner);
-        object Get(Enum type, object arg, byte owner);
+        public ICommunicationHelper CommunicationHelper { get; }
+        void Handle(Enum type, object arg, sbyte owner);
+        void StartGame();
+        object Get(Enum type, object arg, sbyte owner);
     }
 }

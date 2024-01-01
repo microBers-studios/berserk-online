@@ -9,5 +9,6 @@ namespace berserk_online_server.Interfaces.Fabrics
         BerserkDeckChooseState CreateDeckChooseState(BerserkContext ctx);
         BerserkFieldPreparingState CreateFieldPreparingState(BerserkContext ctx);
         BerserkPlayerTurn CreatePlayerTurn(BerserkContext ctx, byte owner);
+        BerserkChooseCardsState CreateChooseCardsState(BerserkContext ctx);
     }
 }

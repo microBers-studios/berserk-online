@@ -1,6 +1,5 @@
 ﻿using berserk_online_server.Data_objects.Cards;
 using berserk_online_server.Data_objects.Gameplay;
-using berserk_online_server.DTO.Cards;
 using berserk_online_server.Implementations.Gameplay;
 using System.Drawing;
 
@@ -17,78 +16,43 @@ namespace berserk_online_server.Interfaces.Gameplay
         {
             throwInvalidOperation();
         }
-
         public virtual void AddChipToCard(Point point, Chip type)
         {
             throwInvalidOperation();
         }
-
-        public virtual void AddExileCard(PlayableCard card, byte owner)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void AddGraveyardCard(byte owner, PlayableCard card)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void AddSymbioteToCard(Point point, PlayableCard card)
-        {
-            throwInvalidOperation();
-        }
-
         public virtual void EditChip(Point point, Chip chip, int id)
         {
             throwInvalidOperation();
         }
-
         public virtual void FlipCard(Point point)
         {
             throwInvalidOperation();
         }
-
-        public virtual void MoveFieldCard(Point oldPoint, Point newPoint, byte owner)
-        {
-            throwInvalidOperation();
-        }
-
         public virtual void RemoveChip(Point point, Chip chip)
         {
             throwInvalidOperation();
         }
-
-        public virtual void RemoveExileCard(PlayableCard card, byte owner)
+        public virtual void SetDeck(string deckId, sbyte owner)
         {
             throwInvalidOperation();
         }
-
-        public virtual void RemoveFieldCard(Point point, byte owner)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void RemoveGraveyardCard(byte owner, PlayableCard card)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void RemoveSymbioteFromCard(Point point, PlayableCard card)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void SetDeck(Deck deck, byte owner)
-        {
-            throwInvalidOperation();
-        }
-
-        public virtual void SetFieldCard(Point point, PlayableCard card, byte owner)
-        {
-            throwInvalidOperation();
-        }
-
         public virtual void TapCard(Point point)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void MoveCard(BerserkCardMoveTarget from, BerserkCardMoveTarget to, string cardId)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void MoveCardToField(BerserkCardMoveTarget from, Point point, string cardId)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void MoveSymbioteToCard(BerserkCardMoveTarget from, string symbioteId, string targetId)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void MoveSymbioteFromCard(BerserkCardMoveTarget to, string symbioteId)
         {
             throwInvalidOperation();
         }
@@ -96,23 +60,30 @@ namespace berserk_online_server.Interfaces.Gameplay
         {
             throwInvalidOperation();
         }
-        public virtual PlayableCard[] GetExile(byte targetOwner, byte owner)
+        public virtual void Reroll(sbyte owner)
+        {
+            throwInvalidOperation();
+        }
+        public virtual void SetHand(string[] cardIds, sbyte owner)
+        {
+            throwInvalidOperation();
+        }
+        public virtual PlayableCard[] GetExile(sbyte targetOwner, sbyte owner)
         {
             throw new InvalidOperationException();
         }
-        public virtual PlayableCard[] GetGraveyard(byte targetOwner, byte owner)
+        public virtual PlayableCard[] GetGraveyard(sbyte targetOwner, sbyte owner)
         {
             throw new InvalidOperationException();
         }
-        public virtual PlayableCard[] GetDeck(byte targetOwner, byte owner)
+        public virtual PlayableCard[] GetDeck(sbyte targetOwner, sbyte owner)
         {
             throw new InvalidOperationException();
         }
-        public virtual PlayableCard[] GetFlying(byte targetOwner, byte owner)
+        public virtual PlayableCard[] GetFlying(sbyte targetOwner, sbyte owner)
         {
             throw new InvalidOperationException();
         }
-
         protected void throwInvalidOperation()
         {
             throw new InvalidOperationException("Operation invalid due to the current state");

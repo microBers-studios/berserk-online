@@ -4,6 +4,6 @@ namespace berserk_online_server.Interfaces.Fabrics
 {
     public interface IPlayableCardFabric
     {
-        PlayableCard Create(int id, byte owner);
+        PlayableCard Create(int id, sbyte owner);
     }
 }

@@ -43,7 +43,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
-});
+}, ServiceLifetime.Singleton);
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
